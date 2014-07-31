@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsvm", "libsvm\libsvm.vcxproj", "{D293320D-0507-420E-B089-0C558CF7F46D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxproj", "{112507DD-5830-461F-B7E2-177C3DF586E3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D293320D-0507-420E-B089-0C558CF7F46D} = {D293320D-0507-420E-B089-0C558CF7F46D}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D293320D-0507-420E-B089-0C558CF7F46D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D293320D-0507-420E-B089-0C558CF7F46D}.Debug|Win32.Build.0 = Debug|Win32
+		{D293320D-0507-420E-B089-0C558CF7F46D}.Release|Win32.ActiveCfg = Release|Win32
+		{D293320D-0507-420E-B089-0C558CF7F46D}.Release|Win32.Build.0 = Release|Win32
+		{112507DD-5830-461F-B7E2-177C3DF586E3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{112507DD-5830-461F-B7E2-177C3DF586E3}.Debug|Win32.Build.0 = Debug|Win32
+		{112507DD-5830-461F-B7E2-177C3DF586E3}.Release|Win32.ActiveCfg = Release|Win32
+		{112507DD-5830-461F-B7E2-177C3DF586E3}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
