@@ -12,7 +12,7 @@
 
 namespace Shogun
 {
-	String version_string();
+	const char* version_string();
 
 	UInt32 version();
 }

@@ -126,7 +126,7 @@ namespace Shogun
 		{
 			String lower = this->data.string;
 			std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-			return lower == "true";
+			return !String(this->data.string).empty();
 		}
 
 		case USERDATA:
@@ -145,7 +145,7 @@ namespace Shogun
 			return 0;
 
 		case BOOLEAN:
-			return this->data.boolean ? 1 : 0;
+			return this->data.boolean ? 1.f : 0.f;
 
 		case NUMBER:
 			return this->data.number;
@@ -156,11 +156,16 @@ namespace Shogun
 			ss << this->data.string;
 			Number number;
 			ss >> number;
+			if (ss.fail() || ss.bad())
+				throw ObjectConversionException(FORMAT("Unable to convert from STRING %s to NUMBER", this->data.string));
 			return number;
 		}
 
 		case USERDATA:
-			return 0;
+			if (this->data.userdata == 0)
+				return 0.f;
+
+			throw ObjectConversionException("Cannot convert from NUMBER to USERDATA");
 		}
 	}
 
@@ -308,9 +313,7 @@ namespace Shogun
 
 			case STRING:
 			{
-				String lower = this->data.string;
-				std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-				return (lower == "true") == other->data.boolean;
+				return this->getBoolean() == other->data.boolean;
 			}
 
 			case USERDATA:
@@ -337,6 +340,8 @@ namespace Shogun
 				ss << this->data.string;
 				Number num;
 				ss >> num;
+				if (ss.fail() || ss.bad())
+					return false;
 				return num == other->data.number;
 			}
 
@@ -354,9 +359,7 @@ namespace Shogun
 
 			case BOOLEAN:
 			{
-				String lower = other->data.string;
-				std::transform(lower.begin(), lower.end(), lower.begin(), ::tolower);
-				return this->data.boolean == (lower == "true");
+				return this->data.boolean == other->getBoolean();
 			}
 
 			case NUMBER:
@@ -376,10 +379,17 @@ namespace Shogun
 
 		case USERDATA:
 		{
-			if (myType != USERDATA)
+			switch (myType)
+			{
+			default:
 				return false;
 
-			return this->data.userdata == other->data.userdata;
+			case NIL:
+				return other->data.userdata == 0;
+
+			case USERDATA:
+				return this->data.userdata == other->data.userdata;
+			}
 		}
 		}
 
@@ -501,7 +511,7 @@ namespace Shogun
 		{
 			WritableBool value = false;
 			stream.read(reinterpret_cast<char*>(&value), sizeof(value));
-			setBoolean(value);
+			setBoolean(value != 0 ? 1 : 0);
 			break;
 		}
 
@@ -539,5 +549,40 @@ namespace Shogun
 			this->data.string = 0;
 			break;
 		}
+	}
+
+	ObjectPtr createObject()
+	{
+		return std::make_shared<Object>();
+	}
+
+	ObjectPtr createObject(Bool value)
+	{
+		return std::make_shared<Object>(value);
+	}
+
+	ObjectPtr createObject(Number value)
+	{
+		return std::make_shared<Object>(value);
+	}
+
+	ObjectPtr createObject(const String& value)
+	{
+		return std::make_shared<Object>(value);
+	}
+
+	ObjectPtr createObject(const char* value)
+	{
+		return std::make_shared<Object>(value);
+	}
+
+	ObjectPtr createObject(void* value)
+	{
+		return std::make_shared<Object>(value);
+	}
+
+	ObjectPtr copyObject(ObjectPtr other)
+	{
+		return std::make_shared<Object>(*other.get());
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Shogun
 {
-	String version_string()
+	const char* version_string()
 	{
 		return SVM_VERSION_STR;
 	}
