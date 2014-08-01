@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Util">
       <UniqueIdentifier>{93ec236f-9ce8-48a2-94c6-0d54af46773a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Assembler">
+      <UniqueIdentifier>{d6497e7a-ea9f-4266-8ad4-9bbf2635d8ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Assembler">
+      <UniqueIdentifier>{f8478570-e981-49c7-877a-debdb72c0c2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShogunVM.h">
