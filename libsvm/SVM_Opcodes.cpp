@@ -17,6 +17,8 @@ namespace Shogun
 			OPCODE(NOOP)
 			OPCODE_END
 
+			// stack operations //
+
 			OPCODE(PUSH)
 			{
 				UInt32 i = vm->getRegPri();
@@ -44,6 +46,8 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// register operations //
+
 			OPCODE(PMMX)
 			{
 				vm->push(createObject(vm->getRegMmx()));
@@ -68,11 +72,7 @@ namespace Shogun
 			}
 			OPCODE_END
 
-			OPCODE(HALT)
-			{
-				vm->halt();
-			}
-			OPCODE_END
+			// heap operations //
 
 			OPCODE(ALLOC)
 			{
@@ -115,6 +115,96 @@ namespace Shogun
 			{
 				UInt32 address = vm->pop()->getAddress();
 				vm->push(vm->getMemory().get(vm->getRegMmx() + address));
+			}
+			OPCODE_END
+
+			// math operations //
+
+			OPCODE(ADD)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(a + b));
+			}
+			OPCODE_END
+
+			OPCODE(SUB)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(a - b));
+			}
+			OPCODE_END
+
+			OPCODE(MUL)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(a * b));
+			}
+			OPCODE_END
+
+			OPCODE(DIV)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(a / b));
+			}
+			OPCODE_END
+
+			OPCODE(MOD)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(fmod(a, b)));
+			}
+			OPCODE_END
+
+			OPCODE(AADD)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a + b));
+			}
+			OPCODE_END
+
+			OPCODE(ASUB)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a - b));
+			}
+			OPCODE_END
+
+			OPCODE(AMUL)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a * b));
+			}
+			OPCODE_END
+
+			OPCODE(ADIV)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a / b));
+			}
+			OPCODE_END
+
+			OPCODE(AMOD)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a % b));
+			}
+			OPCODE_END
+
+			// flow operations //
+
+			OPCODE(HALT)
+			{
+				vm->halt();
 			}
 			OPCODE_END
 		}

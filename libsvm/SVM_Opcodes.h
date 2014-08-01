@@ -26,13 +26,25 @@ namespace Shogun
 		SMMX, // store into MMX
 		SPRI, // store into PRI
 
-		// memory operations //
+		// heap operations //
 		ALLOC, // allocate memory
 		DEALLOC, // deallocate memory
 		STORE, // store into address
 		LOAD, // load address
 		STLO, // store into local address
 		LDLO, // load local address
+
+		// math operations //
+		ADD, // number addition
+		SUB, // number subtraction
+		MUL, // number multiplication
+		DIV, // number division
+		MOD, // number mod
+		AADD, // same as above, but for addresses
+		ASUB,
+		AMUL,
+		ADIV,
+		AMOD,
 
 		// flow operations //
 		HALT, // halt execution of the program
