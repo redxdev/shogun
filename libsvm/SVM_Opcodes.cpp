@@ -200,6 +200,15 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// branch operations //
+
+			OPCODE(JUMP)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				vm->setRegPri(a - 1);
+			}
+			OPCODE_END
+
 			// flow operations //
 
 			OPCODE(HALT)

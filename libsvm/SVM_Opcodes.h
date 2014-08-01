@@ -46,6 +46,9 @@ namespace Shogun
 		ADIV,
 		AMOD,
 
+		// branch operations //
+		JUMP,
+
 		// flow operations //
 		HALT, // halt execution of the program
 

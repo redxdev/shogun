@@ -70,7 +70,6 @@ namespace Shogun
 			SVM_PROGRAM_END;
 
 			vm.loadProgram(program);
-
 			vm.run();
 
 			ASSERT_EQ("Hello World!", vm.getMemory().get(vm.getRegMmx())->getString());
@@ -101,7 +100,6 @@ namespace Shogun
 			SVM_PROGRAM_END;
 
 			vm.loadProgram(program);
-
 			vm.run();
 
 			ASSERT_FLOAT_EQ(1.f, vm.pop()->getNumber());
@@ -135,7 +133,6 @@ namespace Shogun
 			SVM_PROGRAM_END;
 
 			vm.loadProgram(program);
-
 			vm.run();
 
 			ASSERT_EQ(1u, vm.pop()->getAddress());
@@ -143,6 +140,24 @@ namespace Shogun
 			ASSERT_EQ(50u, vm.pop()->getAddress());
 			ASSERT_EQ(5u, vm.pop()->getAddress());
 			ASSERT_EQ(15u, vm.pop()->getAddress());
+		}
+
+		TEST(VirtualMachineTests, Branching)
+		{
+			VirtualMachine vm(0);
+
+			SVM_PROGRAM_BEGIN(program);
+			SVM_PRO_PUSH(5u);
+			SVM_PRO_OP(JUMP);
+			SVM_PRO_OP(HALT);
+			SVM_PRO_PUSH(100.f);
+			SVM_PRO_OP(HALT);
+			SVM_PROGRAM_END;
+
+			vm.loadProgram(program);
+			vm.run();
+
+			ASSERT_EQ(100.f, vm.pop()->getNumber());
 		}
 	}
 }
