@@ -5,6 +5,7 @@
 #include "SVM_Types.h"
 #include "SVM_Memory.h"
 
+#include <unordered_map>
 
 namespace Shogun
 {
@@ -46,9 +47,16 @@ namespace Shogun
 		ADIV,
 		AMOD,
 
+		// string operations //
+		CONCAT, // concatinate strings
+
 		// branch operations //
 		JUMP, // sets pri to a point in memory
 		JUMPF, // jump if true
+
+		// comparison operations //
+		CMP, // compare a to b regardless of type
+		TCMP, // compare a to b, paying attention to type
 
 		// flow operations //
 		HALT, // halt execution of the program
@@ -58,6 +66,12 @@ namespace Shogun
 	};
 
 	void executeOperation(VirtualMachine* vm, Opcode opcode);
+
+	typedef std::unordered_map<String, Opcode> StringToOpcodeMap;
+	typedef std::unordered_map<Opcode, String> OpcodeToStringMap;
+
+	Opcode stringToOpcode(const String& str);
+	const String& opcodeToString(Opcode op);
 }
 
 #endif

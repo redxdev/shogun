@@ -200,6 +200,15 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// string operations //
+			OPCODE(CONCAT)
+			{
+				String a = vm->pop()->getString();
+				String b = vm->pop()->getString();
+				vm->push(createObject(a + b));
+			}
+			OPCODE_END
+
 			// branch operations //
 
 			OPCODE(JUMP)
@@ -220,6 +229,24 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// comparison operations //
+
+			OPCODE(CMP)
+			{
+				ObjectPtr a = vm->pop();
+				ObjectPtr b = vm->pop();
+				vm->push(createObject(a->equals(b)));
+			}
+			OPCODE_END
+
+			OPCODE(TCMP)
+			{
+				ObjectPtr a = vm->pop();
+				ObjectPtr b = vm->pop();
+				vm->push(createObject(a->tequals(b)));
+			}
+			OPCODE_END
+
 			// flow operations //
 
 			OPCODE(HALT)
@@ -228,6 +255,74 @@ namespace Shogun
 			}
 			OPCODE_END
 		}
+	}
+
+	static StringToOpcodeMap _str_to_opcode;
+	static OpcodeToStringMap _opcode_to_str;
+
+#define OPCODE_MAP(opcode) _str_to_opcode[#opcode] = Shogun::Opcode::opcode; \
+	_opcode_to_str[Shogun::Opcode::opcode] = #opcode
+
+	void buildOpcodeMaps()
+	{
+		if (_str_to_opcode.empty() || _opcode_to_str.empty())
+		{
+			OPCODE_MAP(NOOP);
+			OPCODE_MAP(PUSH);
+			OPCODE_MAP(POP);
+			OPCODE_MAP(DUP);
+			OPCODE_MAP(REF);
+			OPCODE_MAP(PMMX);
+			OPCODE_MAP(PPRI);
+			OPCODE_MAP(SMMX);
+			OPCODE_MAP(SPRI);
+			OPCODE_MAP(ALLOC);
+			OPCODE_MAP(DEALLOC);
+			OPCODE_MAP(STORE);
+			OPCODE_MAP(LOAD);
+			OPCODE_MAP(STLO);
+			OPCODE_MAP(LDLO);
+			OPCODE_MAP(ADD);
+			OPCODE_MAP(SUB);
+			OPCODE_MAP(MUL);
+			OPCODE_MAP(DIV);
+			OPCODE_MAP(MOD);
+			OPCODE_MAP(AADD);
+			OPCODE_MAP(ASUB);
+			OPCODE_MAP(AMUL);
+			OPCODE_MAP(ADIV);
+			OPCODE_MAP(AMOD);
+			OPCODE_MAP(CONCAT);
+			OPCODE_MAP(JUMP);
+			OPCODE_MAP(JUMPF);
+			OPCODE_MAP(CMP);
+			OPCODE_MAP(TCMP);
+			OPCODE_MAP(HALT);
+		}
+	}
+
+#undef OPCODE_MAP
+
+	Opcode stringToOpcode(const String& str)
+	{
+		buildOpcodeMaps();
+		
+		auto found = _str_to_opcode.find(str);
+		if (found == _str_to_opcode.end())
+			throw InvalidOperationException(FORMAT("Unknown opcode %s", str.c_str()));
+
+		return found->second;
+	}
+
+	const String& opcodeToString(Opcode op)
+	{
+		buildOpcodeMaps();
+
+		auto found = _opcode_to_str.find(op);
+		if (found == _opcode_to_str.end())
+			throw InvalidOperationException(FORMAT("Unknown opcode %u", (UInt32)op));
+
+		return found->second;
 	}
 }
 

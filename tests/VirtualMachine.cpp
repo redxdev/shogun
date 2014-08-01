@@ -102,11 +102,11 @@ namespace Shogun
 			vm.loadProgram(program);
 			vm.run();
 
-			ASSERT_FLOAT_EQ(1.f, vm.pop()->getNumber());
-			ASSERT_FLOAT_EQ(5.f, vm.pop()->getNumber());
-			ASSERT_FLOAT_EQ(50.f, vm.pop()->getNumber());
-			ASSERT_FLOAT_EQ(5.f, vm.pop()->getNumber());
-			ASSERT_FLOAT_EQ(15.f, vm.pop()->getNumber());
+			EXPECT_FLOAT_EQ(1.f, vm.pop()->getNumber());
+			EXPECT_FLOAT_EQ(5.f, vm.pop()->getNumber());
+			EXPECT_FLOAT_EQ(50.f, vm.pop()->getNumber());
+			EXPECT_FLOAT_EQ(5.f, vm.pop()->getNumber());
+			EXPECT_FLOAT_EQ(15.f, vm.pop()->getNumber());
 		}
 
 		TEST(VirtualMachineTests, AddressMath)
@@ -135,11 +135,11 @@ namespace Shogun
 			vm.loadProgram(program);
 			vm.run();
 
-			ASSERT_EQ(1u, vm.pop()->getAddress());
-			ASSERT_EQ(5u, vm.pop()->getAddress());
-			ASSERT_EQ(50u, vm.pop()->getAddress());
-			ASSERT_EQ(5u, vm.pop()->getAddress());
-			ASSERT_EQ(15u, vm.pop()->getAddress());
+			EXPECT_EQ(1u, vm.pop()->getAddress());
+			EXPECT_EQ(5u, vm.pop()->getAddress());
+			EXPECT_EQ(50u, vm.pop()->getAddress());
+			EXPECT_EQ(5u, vm.pop()->getAddress());
+			EXPECT_EQ(15u, vm.pop()->getAddress());
 		}
 
 		TEST(VirtualMachineTests, Branching)
@@ -175,8 +175,58 @@ namespace Shogun
 			vm.loadProgram(program);
 			vm.run();
 
-			ASSERT_EQ(100.f, vm.pop()->getNumber());
-			ASSERT_EQ(100.f, vm.pop()->getNumber());
+			EXPECT_EQ(100.f, vm.pop()->getNumber());
+			EXPECT_EQ(100.f, vm.pop()->getNumber());
+		}
+
+		TEST(VirtualMachineTests, Comparisons)
+		{
+			VirtualMachine vm(0);
+
+			SVM_PROGRAM_BEGIN(program);
+			SVM_PRO_PUSH(25.f);
+			SVM_PRO_PUSH(25.f);
+			SVM_PRO_OP(CMP);
+			SVM_PRO_PUSH(25.f);
+			SVM_PRO_PUSH(20.f);
+			SVM_PRO_OP(CMP);
+			SVM_PRO_PUSH("25");
+			SVM_PRO_PUSH(25.f);
+			SVM_PRO_OP(CMP);
+			SVM_PRO_PUSH("Hello");
+			SVM_PRO_PUSH("Hello");
+			SVM_PRO_OP(TCMP);
+			SVM_PRO_PUSH("25");
+			SVM_PRO_PUSH(25.f);
+			SVM_PRO_OP(TCMP);
+			SVM_PRO_OP(HALT);
+			SVM_PROGRAM_END;
+
+			vm.loadProgram(program);
+			vm.run();
+
+			EXPECT_FALSE(vm.pop()->getBoolean());
+			EXPECT_TRUE(vm.pop()->getBoolean());
+			EXPECT_TRUE(vm.pop()->getBoolean());
+			EXPECT_FALSE(vm.pop()->getBoolean());
+			EXPECT_TRUE(vm.pop()->getBoolean());
+		}
+
+		TEST(VirtualMachineTests, StringOperations)
+		{
+			VirtualMachine vm(0);
+
+			SVM_PROGRAM_BEGIN(program);
+			SVM_PRO_PUSH(" world!");
+			SVM_PRO_PUSH("Hello");
+			SVM_PRO_OP(CONCAT);
+			SVM_PRO_OP(HALT);
+			SVM_PROGRAM_END;
+
+			vm.loadProgram(program);
+			vm.run();
+
+			EXPECT_EQ("Hello world!", vm.pop()->getString());
 		}
 	}
 }
