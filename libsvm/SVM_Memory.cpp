@@ -19,7 +19,7 @@ namespace Shogun
 		delete[] this->memory;
 	}
 
-	Memory::MemSize Memory::getSize()
+	Memory::MemSize Memory::getSize() const
 	{
 		return this->currentSize;
 	}

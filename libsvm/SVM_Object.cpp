@@ -21,6 +21,11 @@ namespace Shogun
 		setNumber(value);
 	}
 
+	Object::Object(UInt32 value)
+	{
+		setAddress(value);
+	}
+
 	Object::Object(const String& value)
 	{
 		setString(value);
@@ -46,18 +51,27 @@ namespace Shogun
 		case BOOLEAN:
 			this->nativeType = BOOLEAN;
 			this->data.boolean = other.data.boolean;
+			break;
 
 		case NUMBER:
 			this->nativeType = NUMBER;
 			this->data.number = other.data.number;
+			break;
+
+		case ADDRESS:
+			this->nativeType = ADDRESS;
+			this->data.address = other.data.address;
+			break;
 
 		case STRING:
 			this->nativeType = STRING;
 			this->data.string = other.data.string;
+			break;
 
 		case USERDATA:
 			this->nativeType = USERDATA;
 			this->data.userdata = other.data.userdata;
+			break;
 
 		default:
 			throw ObjectTypeException(FORMAT("Unknown DataType %u", other.getNativeType()));
@@ -122,6 +136,9 @@ namespace Shogun
 		case NUMBER:
 			return this->data.number != 0;
 
+		case ADDRESS:
+			return false;
+
 		case STRING:
 		{
 			String lower = this->data.string;
@@ -150,6 +167,9 @@ namespace Shogun
 		case NUMBER:
 			return this->data.number;
 
+		case ADDRESS:
+			return 0;
+
 		case STRING:
 		{
 			std::stringstream ss;
@@ -169,6 +189,13 @@ namespace Shogun
 		}
 	}
 
+	UInt32 Object::getAddress() const
+	{
+		if (this->getNativeType() == ADDRESS)
+			return this->data.address;
+		return 0;
+	}
+
 	String Object::getString() const
 	{
 		switch (this->getNativeType())
@@ -184,6 +211,9 @@ namespace Shogun
 
 		case NUMBER:
 			return FORMAT("%f", this->data.number);
+
+		case ADDRESS:
+			return FORMAT("%u", this->data.address);
 
 		case STRING:
 			return this->data.string;
@@ -231,6 +261,9 @@ namespace Shogun
 			setNumber(getNumber());
 			break;
 
+		case ADDRESS:
+			setAddress(getAddress());
+
 		case STRING:
 			setString(getString());
 			break;
@@ -258,6 +291,13 @@ namespace Shogun
 		cleanup();
 		this->nativeType = NUMBER;
 		this->data.number = value;
+	}
+
+	void Object::setAddress(UInt32 value)
+	{
+		cleanup();
+		this->nativeType = ADDRESS;
+		this->data.address = value;
 	}
 
 	void Object::setString(const String& value)
@@ -293,6 +333,9 @@ namespace Shogun
 			case NUMBER:
 				return this->data.number == 0;
 
+			case ADDRESS:
+				return this->data.address == 0;
+
 			case USERDATA:
 				return this->data.userdata == 0;
 			}
@@ -310,6 +353,9 @@ namespace Shogun
 
 			case NUMBER:
 				return (this->data.number != 0) == other->data.boolean;
+
+			case ADDRESS:
+				return false;
 
 			case STRING:
 			{
@@ -333,6 +379,9 @@ namespace Shogun
 
 			case NUMBER:
 				return this->data.number == other->data.number;
+
+			case ADDRESS:
+				return false;
 
 			case STRING:
 			{
@@ -368,6 +417,9 @@ namespace Shogun
 				ss << this->data.number;
 				return ss.str().compare(other->data.string) == 0;
 			}
+
+			case ADDRESS:
+				return false;
 
 			case STRING:
 				return strcmp(this->data.string, other->data.string) == 0;
@@ -420,6 +472,9 @@ namespace Shogun
 		case NUMBER:
 			return this->data.number == other->data.number;
 
+		case ADDRESS:
+			return this->data.address == other->data.address;
+
 		case STRING:
 			return strcmp(this->data.string, other->data.string) == 0;
 
@@ -450,6 +505,9 @@ namespace Shogun
 		case USERDATA:
 			return getString();
 
+		case ADDRESS:
+			return FORMAT("@%u", getAddress());
+
 		case STRING:
 			return "\"" + getString() + "\"";
 		}
@@ -474,6 +532,12 @@ namespace Shogun
 		case NUMBER:
 		{
 			stream.write(reinterpret_cast<char*>(&(this->data.number)), sizeof(this->data.number));
+			break;
+		}
+
+		case ADDRESS:
+		{
+			stream.write(reinterpret_cast<char*>(&(this->data.address)), sizeof(this->data.address));
 			break;
 		}
 
@@ -523,6 +587,14 @@ namespace Shogun
 			break;
 		}
 
+		case ADDRESS:
+		{
+			UInt32 value = 0;
+			stream.read(reinterpret_cast<char*>(&value), sizeof(value));
+			setAddress(value);
+			break;
+		}
+
 		case STRING:
 		{
 			UInt32 len;
@@ -562,6 +634,11 @@ namespace Shogun
 	}
 
 	ObjectPtr createObject(Number value)
+	{
+		return std::make_shared<Object>(value);
+	}
+
+	ObjectPtr createObject(UInt32 value)
 	{
 		return std::make_shared<Object>(value);
 	}

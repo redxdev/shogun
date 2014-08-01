@@ -20,6 +20,7 @@ namespace Shogun
 			NIL,
 			BOOLEAN,
 			NUMBER,
+			ADDRESS,
 			STRING,
 			USERDATA
 		};
@@ -35,6 +36,8 @@ namespace Shogun
 		Object(Bool value);
 
 		Object(Number value);
+
+		Object(UInt32 value);
 
 		Object(const String& value);
 
@@ -56,6 +59,8 @@ namespace Shogun
 
 		Number getNumber() const;
 
+		UInt32 getAddress() const;
+
 		String getString() const;
 
 		void* getUserdata() const;
@@ -67,6 +72,8 @@ namespace Shogun
 		void setBoolean(Bool value);
 
 		void setNumber(Number value);
+
+		void setAddress(UInt32 value);
 
 		void setString(const String& value);
 
@@ -91,6 +98,7 @@ namespace Shogun
 		{
 			Bool boolean;
 			Number number;
+			UInt32 address;
 			char* string;
 			void* userdata;
 		} data;
@@ -105,6 +113,8 @@ namespace Shogun
 	ObjectPtr createObject(Bool value);
 	
 	ObjectPtr createObject(Number value);
+
+	ObjectPtr createObject(UInt32 value);
 
 	ObjectPtr createObject(const String& value);
 

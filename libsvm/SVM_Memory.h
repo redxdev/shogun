@@ -10,14 +10,14 @@ namespace Shogun
 	class Memory
 	{
 	public:
-		typedef size_t MemSize;
+		typedef UInt32 MemSize;
 
 	public:
-		Memory(MemSize initialSize = 32);
+		Memory(MemSize initialSize = 0);
 
 		~Memory();
 
-		MemSize getSize();
+		MemSize getSize() const;
 
 		void resize(MemSize newSize);
 

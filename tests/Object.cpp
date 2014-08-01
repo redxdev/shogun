@@ -65,6 +65,16 @@ namespace Shogun {
 			ASSERT_EQ(FORMAT("%f", value), object->getReadableString());
 		}
 
+		TEST(ObjectTests, AddressObject)
+		{
+			ObjectPtr object = createObject(55u);
+			ASSERT_EQ(Object::ADDRESS, object->getNativeType());
+			ASSERT_EQ(55u, object->getAddress());
+			ASSERT_EQ("@55", object->getReadableString());
+			// we don't care about any other comparisons, as the rest are
+			// undefined behavior.
+		}
+
 		TEST(ObjectTests, StringObject)
 		{
 			String value = "abcdefghijklmnopqrstuvwxyz1234567890";

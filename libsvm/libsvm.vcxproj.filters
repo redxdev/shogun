@@ -48,6 +48,12 @@
     <ClInclude Include="SVM_Memory.h">
       <Filter>Header Files\VM</Filter>
     </ClInclude>
+    <ClInclude Include="SVM_Opcodes.h">
+      <Filter>Header Files\VM</Filter>
+    </ClInclude>
+    <ClInclude Include="SVM_ProgramUtils.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShogunVM.cpp">
@@ -60,6 +66,12 @@
       <Filter>Source Files\Util</Filter>
     </ClCompile>
     <ClCompile Include="SVM_Memory.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_VirtualMachine.cpp">
+      <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_Opcodes.cpp">
       <Filter>Source Files\VM</Filter>
     </ClCompile>
   </ItemGroup>
