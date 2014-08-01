@@ -27,6 +27,9 @@ namespace Shogun
 		memory.resize(program.size() + 3);
 		setRegMmx(program.size() + 2);
 
+		while (!stack.empty())
+			stack.pop();
+
 		UInt32 i = 1;
 		for (auto it = program.cbegin(); it != program.cend(); ++it)
 		{
