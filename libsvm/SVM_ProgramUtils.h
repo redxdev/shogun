@@ -12,4 +12,6 @@
 #define SVM_PRO_ARG(argument) __svm_pro->push_back(Shogun::createObject(argument))
 #define SVM_PROGRAM_END }
 
+#define SVM_PRO_PUSH(value) SVM_PRO_OP(PUSH); SVM_PRO_ARG(value)
+
 #endif
