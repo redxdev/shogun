@@ -47,7 +47,8 @@ namespace Shogun
 		AMOD,
 
 		// branch operations //
-		JUMP,
+		JUMP, // sets pri to a point in memory
+		JUMPF, // jump if true
 
 		// flow operations //
 		HALT, // halt execution of the program

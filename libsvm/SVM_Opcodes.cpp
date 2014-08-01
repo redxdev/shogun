@@ -209,6 +209,17 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			OPCODE(JUMPF)
+			{
+				Bool a = vm->pop()->getBoolean();
+				UInt32 b = vm->pop()->getAddress();
+				if (a)
+				{
+					vm->setRegPri(b - 1);
+				}
+			}
+			OPCODE_END
+
 			// flow operations //
 
 			OPCODE(HALT)

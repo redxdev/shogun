@@ -158,6 +158,25 @@ namespace Shogun
 			vm.run();
 
 			ASSERT_EQ(100.f, vm.pop()->getNumber());
+
+			SVM_PROGRAM_RESET(program);
+			SVM_PRO_PUSH(13u);
+			SVM_PRO_PUSH(false);
+			SVM_PRO_OP(JUMPF);
+			SVM_PRO_PUSH(100.f);
+			SVM_PRO_PUSH(14u);
+			SVM_PRO_PUSH(true);
+			SVM_PRO_OP(JUMPF);
+			SVM_PRO_OP(HALT);
+			SVM_PRO_PUSH(100.f);
+			SVM_PRO_OP(HALT);
+			SVM_PROGRAM_END;
+
+			vm.loadProgram(program);
+			vm.run();
+
+			ASSERT_EQ(100.f, vm.pop()->getNumber());
+			ASSERT_EQ(100.f, vm.pop()->getNumber());
 		}
 	}
 }
