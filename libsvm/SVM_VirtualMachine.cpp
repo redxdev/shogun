@@ -22,6 +22,11 @@ namespace Shogun
 		return this->stack;
 	}
 
+	VMCallMap& VirtualMachine::getCallMap()
+	{
+		return this->callMap;
+	}
+
 	void VirtualMachine::loadProgram(const Program& program)
 	{
 		memory.resize(program.size() + 3);

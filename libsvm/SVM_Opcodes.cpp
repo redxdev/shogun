@@ -247,6 +247,15 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// call operations //
+
+			OPCODE(ECALL)
+			{
+				String a = vm->pop()->getString();
+				vm->call(a);
+			}
+			OPCODE_END
+
 			// flow operations //
 
 			OPCODE(HALT)

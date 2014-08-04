@@ -9,12 +9,19 @@
 
 #include <stack>
 #include <vector>
+#include <unordered_map>
 
 namespace Shogun
 {
+	class VirtualMachine;
+
 	typedef std::stack<ObjectPtr> Stack;
 
 	typedef std::vector<ObjectPtr> Program;
+
+	typedef void(*VMCallable)(VirtualMachine*);
+
+	typedef std::unordered_map<String, VMCallable> VMCallMap;
 
 	class VirtualMachine
 	{
@@ -26,6 +33,8 @@ namespace Shogun
 		Memory& getMemory();
 
 		Stack& getStack();
+
+		VMCallMap& getCallMap();
 
 		void loadProgram(const Program& program);
 
@@ -52,6 +61,25 @@ namespace Shogun
 			ObjectPtr result = this->getStack().top();
 			this->getStack().pop();
 			return result;
+		}
+
+		inline VMCallable getCallable(const String& name)
+		{
+			auto found = this->getCallMap().find(name);
+			if (found == this->getCallMap().end())
+				throw new UnknownVMCallException(FORMAT("Unknown VMCallable %s", name.c_str()));
+
+			return found->second;
+		}
+
+		inline void call(const String& name)
+		{
+			this->getCallable(name)(this);
+		}
+
+		inline void registerCallable(const String& name, VMCallable callable)
+		{
+			this->getCallMap()[name] = callable;
 		}
 
 		inline UInt32 getRegMmx()
@@ -83,6 +111,8 @@ namespace Shogun
 		Memory memory;
 
 		Stack stack;
+
+		VMCallMap callMap;
 
 		UInt32 reg_mmx; // local memory position
 

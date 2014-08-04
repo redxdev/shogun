@@ -80,6 +80,10 @@ namespace Shogun
 	SVM_EXCEPTION_AUTO(AddressOutOfBoundsException, MemoryException);
 
 	SVM_EXCEPTION_AUTO(InvalidOperationException, VMException);
+
+	SVM_EXCEPTION_AUTO(VMCallException, VMException);
+
+	SVM_EXCEPTION_AUTO(UnknownVMCallException, VMCallException);
 }
 
 #endif

@@ -58,6 +58,9 @@ namespace Shogun
 		CMP, // compare a to b regardless of type
 		TCMP, // compare a to b, paying attention to type
 
+		// call operations //
+		ECALL, // call external function via the call map
+
 		// flow operations //
 		HALT, // halt execution of the program
 

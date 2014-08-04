@@ -228,5 +228,32 @@ namespace Shogun
 
 			EXPECT_EQ("Hello world!", vm.pop()->getString());
 		}
+
+		void test_callable(VirtualMachine* vm)
+		{
+			String result = "You said ";
+			result += vm->pop()->getString() + "!";
+
+			vm->push(createObject(result));
+		}
+
+		TEST(VirtualMachineTests, Callables)
+		{
+			VirtualMachine vm(0);
+
+			vm.registerCallable("test", &test_callable);
+
+			SVM_PROGRAM_BEGIN(program);
+			SVM_PRO_PUSH("hi");
+			SVM_PRO_PUSH("test");
+			SVM_PRO_OP(ECALL);
+			SVM_PRO_OP(HALT);
+			SVM_PROGRAM_END;
+
+			vm.loadProgram(program);
+			vm.run();
+
+			EXPECT_EQ("You said hi!", vm.pop()->getString());
+		}
 	}
 }
