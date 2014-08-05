@@ -63,6 +63,12 @@
     <ClInclude Include="SVM_Lexer.h">
       <Filter>Header Files\Assembler</Filter>
     </ClInclude>
+    <ClInclude Include="SVM_Parser.h">
+      <Filter>Header Files\Assembler</Filter>
+    </ClInclude>
+    <ClInclude Include="SVM_AsmNode.h">
+      <Filter>Header Files\Assembler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShogunVM.cpp">
@@ -84,6 +90,9 @@
       <Filter>Source Files\VM</Filter>
     </ClCompile>
     <ClCompile Include="SVM_Lexer.cpp">
+      <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_Parser.cpp">
       <Filter>Source Files\Assembler</Filter>
     </ClCompile>
   </ItemGroup>

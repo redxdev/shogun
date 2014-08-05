@@ -14,7 +14,6 @@ namespace Shogun
 	{
 		enum TokenType
 		{
-			IGNORE,
 			NEWLINE,
 			IDENT,
 			LABEL,

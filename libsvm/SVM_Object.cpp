@@ -185,15 +185,46 @@ namespace Shogun
 			if (this->data.userdata == 0)
 				return 0.f;
 
-			throw ObjectConversionException("Cannot convert from NUMBER to USERDATA");
+			throw ObjectConversionException("Cannot convert from USERDATA to ADDRESS");
 		}
 	}
 
 	UInt32 Object::getAddress() const
 	{
-		if (this->getNativeType() == ADDRESS)
+		switch (this->getNativeType())
+		{
+		default:
+			throw ObjectConversionException(FORMAT("Unknown DataType %u", this->getNativeType()));
+
+		case NIL:
+			return 0;
+
+		case BOOLEAN:
+			throw ObjectConversionException(FORMAT("Unable to convert from BOOLEAN to ADDRESS", this->data.string));
+
+		case NUMBER:
+			throw ObjectConversionException(FORMAT("Unable to convert from NUMBER to ADDRESS", this->data.string));
+
+		case ADDRESS:
 			return this->data.address;
-		return 0;
+
+		case STRING:
+		{
+			std::stringstream ss;
+			ss << this->data.string;
+			UInt32 number;
+			ss >> number;
+			if (ss.fail() || ss.bad())
+				throw ObjectConversionException(FORMAT("Unable to convert from STRING %s to ADDRESS", this->data.string));
+			return number;
+		}
+
+		case USERDATA:
+			if (this->data.userdata == 0)
+				return 0.f;
+
+			throw ObjectConversionException("Cannot convert from USERDATA to ADDRESS");
+		}
 	}
 
 	String Object::getString() const

@@ -72,11 +72,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ShogunVM.h" />
+    <ClInclude Include="SVM_AsmNode.h" />
     <ClInclude Include="SVM_Exception.h" />
     <ClInclude Include="SVM_Lexer.h" />
     <ClInclude Include="SVM_Memory.h" />
     <ClInclude Include="SVM_Object.h" />
     <ClInclude Include="SVM_Opcodes.h" />
+    <ClInclude Include="SVM_Parser.h" />
     <ClInclude Include="SVM_ProgramUtils.h" />
     <ClInclude Include="SVM_StringUtils.h" />
     <ClInclude Include="SVM_Types.h" />
@@ -88,6 +90,7 @@
     <ClCompile Include="SVM_Memory.cpp" />
     <ClCompile Include="SVM_Object.cpp" />
     <ClCompile Include="SVM_Opcodes.cpp" />
+    <ClCompile Include="SVM_Parser.cpp" />
     <ClCompile Include="SVM_StringUtils.cpp" />
     <ClCompile Include="SVM_VirtualMachine.cpp" />
   </ItemGroup>

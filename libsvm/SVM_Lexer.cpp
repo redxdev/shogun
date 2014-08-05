@@ -10,9 +10,6 @@ namespace Shogun
 		{
 			switch (type)
 			{
-			case IGNORE:
-				return "IGNORE";
-
 			case NEWLINE:
 				return "NEWLINE";
 
