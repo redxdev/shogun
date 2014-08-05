@@ -60,9 +60,9 @@ namespace Shogun
 			{
 				node->setOpcode(stringToOpcode(value));
 			}
-			catch (InvalidOperationException& e)
+			catch (InvalidOperationException)
 			{
-				throw ParseException(token, "unknown opcode", e);
+				throw ParseException(token, "unknown opcode");
 			}
 
 			while (it != tokens.end())

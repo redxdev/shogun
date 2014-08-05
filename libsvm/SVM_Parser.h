@@ -12,13 +12,6 @@ namespace Shogun
 	namespace Assembler
 	{
 		SVM_EXCEPTION_START(ParseException, LanguageException)
-			ParseException(const Token& token, const String& error, Exception inner)
-				: ParseException(
-					FORMAT("Parse error near \"%s\" (%u:%u) - %s", token.value.c_str(), token.line, token.column, error.c_str()),
-					inner)
-			{
-			}
-
 			ParseException(const Token& token, const String& error)
 				: LanguageException(
 				FORMAT("Parse error near \"%s\" (%u:%u) - %s", token.value.c_str(), token.line, token.column, error.c_str()))

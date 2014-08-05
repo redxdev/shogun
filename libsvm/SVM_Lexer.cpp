@@ -64,7 +64,7 @@ namespace Shogun
 					++currentCol;
 					char current = *it;
 
-					if (isblank(current)) // ignore whitespace
+					if (isspace(current)) // ignore whitespace
 					{
 						continue;
 					}

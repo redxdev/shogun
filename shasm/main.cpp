@@ -21,6 +21,9 @@ int main(int argc, char** argv)
 		TCLAP::ValueArg<Shogun::String> outputArg("o", "output", "output file", true, "", "filename", cmd);
 
 		cmd.parse(argc, argv);
+
+		inputFileName = inputArg.getValue();
+		outputFileName = outputArg.getValue();
 	}
 	catch (TCLAP::ArgException e)
 	{
@@ -47,7 +50,7 @@ int main(int argc, char** argv)
 	catch (Shogun::Exception& e)
 	{
 		std::cerr << "error: caught exception while tokenizing stream" << std::endl;
-		std::cerr << e.getStackTrace() << std::endl;
+		std::cerr << e.getMessage() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -66,7 +69,7 @@ int main(int argc, char** argv)
 	catch (Shogun::Exception& e)
 	{
 		std::cerr << "error: caught exception while parsing token stream" << std::endl;
-		std::cerr << e.getStackTrace() << std::endl;
+		std::cerr << e.getMessage() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -89,7 +92,7 @@ int main(int argc, char** argv)
 	catch (Shogun::Exception& e)
 	{
 		std::cerr << "error: caught exception while compiling node tree" << std::endl;
-		std::cerr << e.getStackTrace() << std::endl;
+		std::cerr << e.getMessage() << std::endl;
 		return EXIT_FAILURE;
 	}
 
