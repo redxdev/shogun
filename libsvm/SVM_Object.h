@@ -5,9 +5,18 @@
 #include <iostream>
 
 #include "SVM_Types.h"
+#include "SVM_Exception.h"
 
 namespace Shogun
 {
+	SVM_EXCEPTION_AUTO(ObjectException, Exception);
+
+	SVM_EXCEPTION_AUTO(ObjectTypeException, ObjectException);
+
+	SVM_EXCEPTION_AUTO(ObjectConversionException, ObjectTypeException);
+
+	SVM_EXCEPTION_AUTO(ObjectReadException, ObjectException);
+
 	class Object;
 
 	typedef std::shared_ptr<Object> ObjectPtr; // TODO: The VM should take ownership of all Objects.

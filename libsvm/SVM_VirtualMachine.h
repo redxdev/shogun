@@ -13,6 +13,22 @@
 
 namespace Shogun
 {
+	SVM_EXCEPTION_AUTO(VMException, ObjectException);
+
+	SVM_EXCEPTION_AUTO(MemoryException, VMException);
+
+	SVM_EXCEPTION_AUTO(AddressOutOfBoundsException, MemoryException);
+
+	SVM_EXCEPTION_AUTO(NullPointerException, VMException);
+
+	SVM_EXCEPTION_AUTO(EmptyStackException, NullPointerException);
+
+	SVM_EXCEPTION_AUTO(InvalidOperationException, VMException);
+
+	SVM_EXCEPTION_AUTO(VMCallException, VMException);
+
+	SVM_EXCEPTION_AUTO(UnknownVMCallException, VMCallException);
+
 	class VirtualMachine;
 
 	typedef std::stack<ObjectPtr> Stack;

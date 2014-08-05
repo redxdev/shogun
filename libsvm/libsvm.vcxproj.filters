@@ -60,6 +60,9 @@
     <ClInclude Include="SVM_ProgramUtils.h">
       <Filter>Header Files\Util</Filter>
     </ClInclude>
+    <ClInclude Include="SVM_Lexer.h">
+      <Filter>Header Files\Assembler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShogunVM.cpp">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="SVM_Opcodes.cpp">
       <Filter>Source Files\VM</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_Lexer.cpp">
+      <Filter>Source Files\Assembler</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #include "SVM_Memory.h"
 #include "SVM_StringUtils.h"
+#include "SVM_VirtualMachine.h"
 
 namespace Shogun
 {

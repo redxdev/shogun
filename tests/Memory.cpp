@@ -4,6 +4,7 @@
 #include "SVM_Object.h"
 #include "SVM_Exception.h"
 #include "SVM_StringUtils.h"
+#include "SVM_VirtualMachine.h"
 
 using namespace Shogun;
 

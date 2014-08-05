@@ -73,6 +73,7 @@
   <ItemGroup>
     <ClInclude Include="ShogunVM.h" />
     <ClInclude Include="SVM_Exception.h" />
+    <ClInclude Include="SVM_Lexer.h" />
     <ClInclude Include="SVM_Memory.h" />
     <ClInclude Include="SVM_Object.h" />
     <ClInclude Include="SVM_Opcodes.h" />
@@ -83,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShogunVM.cpp" />
+    <ClCompile Include="SVM_Lexer.cpp" />
     <ClCompile Include="SVM_Memory.cpp" />
     <ClCompile Include="SVM_Object.cpp" />
     <ClCompile Include="SVM_Opcodes.cpp" />

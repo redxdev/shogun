@@ -5,12 +5,16 @@
 
 #include "SVM_Types.h"
 
-#define SVM_EXCEPTION_AUTO(classname, parent) class classname : public parent { \
+
+#define SVM_EXCEPTION_START(classname, parent) class classname : public parent { \
 	public: \
 		classname() {} \
 		classname(const String& message) : parent(message) {} \
-		classname(const String& message, Exception& inner) : parent(message, inner) {} \
-	}
+		classname(const String& message, Exception& inner) : parent(message, inner) {}
+
+#define SVM_EXCEPTION_AUTO(classname, parent) SVM_EXCEPTION_START(classname, parent) SVM_EXCEPTION_END
+
+#define SVM_EXCEPTION_END };
 
 namespace Shogun
 {
@@ -60,30 +64,6 @@ namespace Shogun
 
 		Exception* inner = 0;
 	};
-
-	SVM_EXCEPTION_AUTO(ObjectException, Exception);
-
-	SVM_EXCEPTION_AUTO(ObjectTypeException, ObjectException);
-
-	SVM_EXCEPTION_AUTO(ObjectConversionException, ObjectTypeException);
-
-	SVM_EXCEPTION_AUTO(ObjectReadException, ObjectException);
-
-	SVM_EXCEPTION_AUTO(VMException, ObjectException);
-
-	SVM_EXCEPTION_AUTO(NullPointerException, VMException);
-
-	SVM_EXCEPTION_AUTO(EmptyStackException, NullPointerException);
-
-	SVM_EXCEPTION_AUTO(MemoryException, VMException);
-
-	SVM_EXCEPTION_AUTO(AddressOutOfBoundsException, MemoryException);
-
-	SVM_EXCEPTION_AUTO(InvalidOperationException, VMException);
-
-	SVM_EXCEPTION_AUTO(VMCallException, VMException);
-
-	SVM_EXCEPTION_AUTO(UnknownVMCallException, VMCallException);
 }
 
 #endif
