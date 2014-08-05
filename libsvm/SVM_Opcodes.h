@@ -72,9 +72,11 @@ namespace Shogun
 
 	typedef std::unordered_map<String, Opcode> StringToOpcodeMap;
 	typedef std::unordered_map<Opcode, String> OpcodeToStringMap;
+	typedef std::unordered_map<Opcode, UInt8> OpcodeArgumentMap;
 
 	Opcode stringToOpcode(const String& str);
 	const String& opcodeToString(Opcode op);
+	UInt8 getOpcodeArgumentCount(Opcode op);
 }
 
 #endif

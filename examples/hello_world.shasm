@@ -1,4 +1,12 @@
-push "Hello World!"
+push "Hello world!"
+push "print"
+ecall
+push "0.5 plus 1 is:"
+push "print"
+ecall
+push 0.5
+push 1
+add
 push "print"
 ecall
 halt

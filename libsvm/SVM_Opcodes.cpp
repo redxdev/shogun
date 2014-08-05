@@ -266,48 +266,50 @@ namespace Shogun
 		}
 	}
 
-	static StringToOpcodeMap _str_to_opcode;
-	static OpcodeToStringMap _opcode_to_str;
+	StringToOpcodeMap _str_to_opcode;
+	OpcodeToStringMap _opcode_to_str;
+	OpcodeArgumentMap _opcode_args;
 
-#define OPCODE_MAP(opcode) _str_to_opcode[#opcode] = Shogun::Opcode::opcode; \
-	_opcode_to_str[Shogun::Opcode::opcode] = #opcode
+#define OPCODE_MAP(opcode, args) _str_to_opcode[#opcode] = Shogun::Opcode::opcode; \
+	_opcode_to_str[Shogun::Opcode::opcode] = #opcode; \
+	_opcode_args[Shogun::Opcode::opcode] = args
 
 	void buildOpcodeMaps()
 	{
 		if (_str_to_opcode.empty() || _opcode_to_str.empty())
 		{
-			OPCODE_MAP(NOOP);
-			OPCODE_MAP(PUSH);
-			OPCODE_MAP(POP);
-			OPCODE_MAP(DUP);
-			OPCODE_MAP(REF);
-			OPCODE_MAP(PMMX);
-			OPCODE_MAP(PPRI);
-			OPCODE_MAP(SMMX);
-			OPCODE_MAP(SPRI);
-			OPCODE_MAP(ALLOC);
-			OPCODE_MAP(DEALLOC);
-			OPCODE_MAP(STORE);
-			OPCODE_MAP(LOAD);
-			OPCODE_MAP(STLO);
-			OPCODE_MAP(LDLO);
-			OPCODE_MAP(ADD);
-			OPCODE_MAP(SUB);
-			OPCODE_MAP(MUL);
-			OPCODE_MAP(DIV);
-			OPCODE_MAP(MOD);
-			OPCODE_MAP(AADD);
-			OPCODE_MAP(ASUB);
-			OPCODE_MAP(AMUL);
-			OPCODE_MAP(ADIV);
-			OPCODE_MAP(AMOD);
-			OPCODE_MAP(CONCAT);
-			OPCODE_MAP(JUMP);
-			OPCODE_MAP(JUMPF);
-			OPCODE_MAP(CMP);
-			OPCODE_MAP(TCMP);
-			OPCODE_MAP(ECALL);
-			OPCODE_MAP(HALT);
+			OPCODE_MAP(NOOP, 0);
+			OPCODE_MAP(PUSH, 1);
+			OPCODE_MAP(POP, 0);
+			OPCODE_MAP(DUP, 0);
+			OPCODE_MAP(REF, 0);
+			OPCODE_MAP(PMMX, 0);
+			OPCODE_MAP(PPRI, 0);
+			OPCODE_MAP(SMMX, 0);
+			OPCODE_MAP(SPRI, 0);
+			OPCODE_MAP(ALLOC, 0);
+			OPCODE_MAP(DEALLOC, 0);
+			OPCODE_MAP(STORE, 0);
+			OPCODE_MAP(LOAD, 0);
+			OPCODE_MAP(STLO, 0);
+			OPCODE_MAP(LDLO, 0);
+			OPCODE_MAP(ADD, 0);
+			OPCODE_MAP(SUB, 0);
+			OPCODE_MAP(MUL, 0);
+			OPCODE_MAP(DIV, 0);
+			OPCODE_MAP(MOD, 0);
+			OPCODE_MAP(AADD, 0);
+			OPCODE_MAP(ASUB, 0);
+			OPCODE_MAP(AMUL, 0);
+			OPCODE_MAP(ADIV, 0);
+			OPCODE_MAP(AMOD, 0);
+			OPCODE_MAP(CONCAT, 0);
+			OPCODE_MAP(JUMP, 0);
+			OPCODE_MAP(JUMPF, 0);
+			OPCODE_MAP(CMP, 0);
+			OPCODE_MAP(TCMP, 0);
+			OPCODE_MAP(ECALL, 0);
+			OPCODE_MAP(HALT, 0);
 		}
 	}
 
@@ -330,6 +332,17 @@ namespace Shogun
 
 		auto found = _opcode_to_str.find(op);
 		if (found == _opcode_to_str.end())
+			throw InvalidOperationException(FORMAT("Unknown opcode %u", (UInt32)op));
+
+		return found->second;
+	}
+
+	UInt8 getOpcodeArgumentCount(Opcode op)
+	{
+		buildOpcodeMaps();
+
+		auto found = _opcode_args.find(op);
+		if (found == _opcode_args.end())
 			throw InvalidOperationException(FORMAT("Unknown opcode %u", (UInt32)op));
 
 		return found->second;

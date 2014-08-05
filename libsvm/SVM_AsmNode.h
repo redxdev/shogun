@@ -5,9 +5,11 @@
 #include "SVM_Exception.h"
 #include "SVM_Object.h"
 #include "SVM_Opcodes.h"
+#include "SVM_VirtualMachine.h"
 
 #include <iostream>
 #include <list>
+#include <unordered_map>
 
 namespace Shogun
 {
@@ -18,19 +20,39 @@ namespace Shogun
 		typedef std::list<ObjectPtr> CompileList;
 		typedef std::list<Node*> NodeList;
 
+		struct CompileInfo
+		{
+			CompileList list;
+		};
+
 		class Node
 		{
 		public:
-			virtual void compile(CompileList& compile) = 0;
+			virtual void prepass(CompileInfo& compile) = 0;
+			virtual void compile(CompileInfo& compile) = 0;
 		};
 
 		class OperationNode : public Node
 		{
 		public:
-			virtual void compile(CompileList& compile)
+			virtual void prepass(CompileInfo& compile)
 			{
-				compile.push_back(createObject(opcode));
-				compile.splice(compile.end(), arguments);
+				if (getOpcodeArgumentCount((Opcode)opcode) != arguments.size())
+				{
+					throw OperationArgumentException(
+						FORMAT(
+						"Invalid number of arguments for %s (expected %u, got %u)",
+						opcodeToString((Opcode)opcode).c_str(),
+						getOpcodeArgumentCount((Opcode)opcode),
+						arguments.size()
+						));
+				}
+			}
+
+			virtual void compile(CompileInfo& compile)
+			{
+				compile.list.push_back(createObject(opcode));
+				compile.list.splice(compile.list.end(), arguments);
 			}
 
 			UInt32 getOpcode()

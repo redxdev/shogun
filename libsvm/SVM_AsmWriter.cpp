@@ -26,17 +26,22 @@ namespace Shogun
 
 		void AsmWriter::writeNodes(std::ostream& stream, NodeList& nodes)
 		{
-			CompileList compile;
+			CompileInfo compile;
+
+			for (NodeList::iterator it = nodes.begin(); it != nodes.end(); ++it)
+			{
+				(*it)->prepass(compile);
+			}
 
 			for (NodeList::iterator it = nodes.begin(); it != nodes.end(); ++it)
 			{
 				(*it)->compile(compile);
 			}
 
-			UInt32 compileCount = compile.size();
+			UInt32 compileCount = compile.list.size();
 			stream.write(reinterpret_cast<char*>(&compileCount), sizeof(compileCount));
 
-			for (CompileList::iterator it = compile.begin(); it != compile.end(); ++it)
+			for (CompileList::iterator it = compile.list.begin(); it != compile.list.end(); ++it)
 			{
 				(*it)->writeBinary(stream);
 			}
