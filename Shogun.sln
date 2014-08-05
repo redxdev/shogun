@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests\tests.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shasm", "shasm\shasm.vcxproj", "{A55D1FD4-158D-4D00-930E-707F27585548}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shogun", "shogun\shogun.vcxproj", "{371647A9-E88D-4445-9641-40B49CE787F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -30,6 +32,10 @@ Global
 		{A55D1FD4-158D-4D00-930E-707F27585548}.Debug|Win32.Build.0 = Debug|Win32
 		{A55D1FD4-158D-4D00-930E-707F27585548}.Release|Win32.ActiveCfg = Release|Win32
 		{A55D1FD4-158D-4D00-930E-707F27585548}.Release|Win32.Build.0 = Release|Win32
+		{371647A9-E88D-4445-9641-40B49CE787F8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{371647A9-E88D-4445-9641-40B49CE787F8}.Debug|Win32.Build.0 = Debug|Win32
+		{371647A9-E88D-4445-9641-40B49CE787F8}.Release|Win32.ActiveCfg = Release|Win32
+		{371647A9-E88D-4445-9641-40B49CE787F8}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,4 @@
+push "Hello World!"
+push "print"
+ecall
+halt

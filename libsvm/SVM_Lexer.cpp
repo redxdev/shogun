@@ -124,8 +124,6 @@ namespace Shogun
 						}
 
 						tokens.push_back(Token(TokenType::STRING, value, col, currentLine));
-						--it;
-						--currentCol;
 					}
 					else if (current == '-' || isdigit(current)) // numerics
 					{

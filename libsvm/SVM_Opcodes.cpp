@@ -306,6 +306,7 @@ namespace Shogun
 			OPCODE_MAP(JUMPF);
 			OPCODE_MAP(CMP);
 			OPCODE_MAP(TCMP);
+			OPCODE_MAP(ECALL);
 			OPCODE_MAP(HALT);
 		}
 	}
