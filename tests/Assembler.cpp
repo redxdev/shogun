@@ -1,11 +1,14 @@
 #include <gtest/gtest.h>
 
 #include <sstream>
+#include <fstream>
 
 #include "SVM_Lexer.h"
 #include "SVM_Types.h"
 #include "SVM_Parser.h"
 #include "SVM_AsmNode.h"
+#include "SVM_AsmWriter.h"
+#include "SVM_VirtualMachine.h"
 
 using namespace Shogun::Assembler;
 
@@ -23,6 +26,10 @@ namespace Shogun
 			"push 5\n"
 			"push 10u\n"
 			"push \"hello world!\"\n"
+			"halt";
+
+		const char* multiTestInput =
+			"push 25.5\n"
 			"halt";
 
 		TEST(AssemblerTests, LexerTokenStream)
@@ -63,7 +70,7 @@ namespace Shogun
 			EXPECT_EQ(TokenType::END, it->type);
 		}
 
-		TEST(AssemblerTest, ParserNodeList)
+		TEST(AssemblerTests, ParserNodeList)
 		{
 			Lexer lexer;
 			std::istringstream input(parserTestInput);
@@ -80,7 +87,68 @@ namespace Shogun
 				nodes = parser.parse(tokens);
 			});
 
-			EXPECT_EQ(3, nodes.size());
+			EXPECT_EQ(4, nodes.size());
+		}
+
+		TEST(AssemblerTests, AsmReadWrite)
+		{
+			Lexer lexer;
+			std::istringstream input(parserTestInput);
+			
+			TokenStream tokens = lexer.tokenize(input);
+
+			Parser parser;
+			NodeList nodes = parser.parse(tokens);
+
+			AsmWriter writer;
+			std::ofstream outputFile("./test.sx", std::ios::out | std::ios::ate);
+
+			ASSERT_NO_THROW({
+				writer.write(outputFile, nodes);
+			});
+
+			outputFile.close();
+
+			AsmReader reader;
+			std::ifstream inputFile("./test.sx");
+			
+			CompileList compile;
+			ASSERT_NO_THROW({
+				compile = reader.read(inputFile);
+			});
+		}
+
+		TEST(AssemblerTests, Multi)
+		{
+			Lexer lexer;
+			std::istringstream input(multiTestInput);
+
+			TokenStream tokens = lexer.tokenize(input);
+
+			Parser parser;
+			NodeList nodes = parser.parse(tokens);
+
+			AsmWriter writer;
+			std::ofstream outputFile("./test.sx", std::ios::out | std::ios::ate);
+
+			writer.write(outputFile, nodes);
+			outputFile.close();
+
+			AsmReader reader;
+			std::ifstream inputFile("./test.sx");
+
+			CompileList compile;
+			compile = reader.read(inputFile);
+
+			Program program;
+			program.insert(program.begin(), compile.begin(), compile.end());
+
+			VirtualMachine vm(0);
+
+			vm.loadProgram(program);
+			vm.run();
+
+			EXPECT_FLOAT_EQ(25.5f, vm.pop()->getNumber());
 		}
 	}
 }

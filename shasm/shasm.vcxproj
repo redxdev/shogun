@@ -11,18 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{D293320D-0507-420E-B089-0C558CF7F46D}</ProjectGuid>
-    <RootNamespace>libsvm</RootNamespace>
+    <ProjectGuid>{A55D1FD4-158D-4D00-930E-707F27585548}</ProjectGuid>
+    <RootNamespace>shasm</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -38,17 +38,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetExt>.lib</TargetExt>
+  <PropertyGroup>
+    <NuGetPackageImportStamp>c68034c7</NuGetPackageImportStamp>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)libsvm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -62,6 +60,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)libsvm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -71,32 +70,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ShogunVM.h" />
-    <ClInclude Include="SVM_AsmNode.h" />
-    <ClInclude Include="SVM_AsmWriter.h" />
-    <ClInclude Include="SVM_Exception.h" />
-    <ClInclude Include="SVM_Lexer.h" />
-    <ClInclude Include="SVM_Memory.h" />
-    <ClInclude Include="SVM_Object.h" />
-    <ClInclude Include="SVM_Opcodes.h" />
-    <ClInclude Include="SVM_Parser.h" />
-    <ClInclude Include="SVM_ProgramUtils.h" />
-    <ClInclude Include="SVM_StringUtils.h" />
-    <ClInclude Include="SVM_Types.h" />
-    <ClInclude Include="SVM_VirtualMachine.h" />
+    <ProjectReference Include="..\libsvm\libsvm.vcxproj">
+      <Project>{d293320d-0507-420e-b089-0c558cf7f46d}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ShogunVM.cpp" />
-    <ClCompile Include="SVM_AsmWriter.cpp" />
-    <ClCompile Include="SVM_Lexer.cpp" />
-    <ClCompile Include="SVM_Memory.cpp" />
-    <ClCompile Include="SVM_Object.cpp" />
-    <ClCompile Include="SVM_Opcodes.cpp" />
-    <ClCompile Include="SVM_Parser.cpp" />
-    <ClCompile Include="SVM_StringUtils.cpp" />
-    <ClCompile Include="SVM_VirtualMachine.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\tclap.1.2.1.1\build\native\tclap.targets" Condition="Exists('..\packages\tclap.1.2.1.1\build\native\tclap.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\tclap.1.2.1.1\build\native\tclap.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\tclap.1.2.1.1\build\native\tclap.targets'))" />
+  </Target>
 </Project>
