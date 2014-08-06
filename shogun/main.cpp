@@ -21,7 +21,6 @@ int main(int argc, char** argv)
 		TCLAP::UnlabeledValueArg<Shogun::String> inputArg("input", "input file", true, "", "filename", cmd, false);
 		TCLAP::SwitchArg dumpOnRunArg("d", "dump-on-run", "Output a VM dump before running the program", cmd, false);
 		TCLAP::SwitchArg dumpOnExitArg("D", "dump-on-exit", "Output a VM dump when exiting the program", cmd, false);
-
 		cmd.parse(argc, argv);
 
 		inputFileName = inputArg.getValue();
@@ -58,7 +57,6 @@ int main(int argc, char** argv)
 	program.insert(program.begin(), compile.begin(), compile.end());
 
 	Shogun::VirtualMachine vm(0);
-
 	Shogun::Library::Console::register_library(&vm);
 
 	try
