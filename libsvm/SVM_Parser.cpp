@@ -28,8 +28,9 @@ namespace Shogun
 					++it;
 					if (it != tokens.end() && it->type == TokenType::LABEL)
 					{
-						// TODO: label support
-						throw ParseException("Labels are not yet implemented");
+						LabelNode* node = new LabelNode();
+						node->setLabel(token.value);
+						nodes.push_back(node);
 					}
 					else
 					{

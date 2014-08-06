@@ -17,6 +17,7 @@ namespace Shogun
 
 		// stack operations //
 		PUSH, // push a value onto the stack
+		PUSHNIL,
 		POP, // pop a value from the stack (discarding it)
 		DUP, // duplicate a value on the stack
 		REF, // copy a reference on the stack
@@ -35,6 +36,13 @@ namespace Shogun
 		STLO, // store into local address
 		LDLO, // load local address
 
+		// type conversion //
+		TBOOL,
+		TNUM,
+		TADDR,
+		TSTR,
+		TYPE,
+
 		// math operations //
 		ADD, // number addition
 		SUB, // number subtraction
@@ -46,6 +54,12 @@ namespace Shogun
 		AMUL,
 		ADIV,
 		AMOD,
+
+		// logic operations //
+		AND,
+		OR,
+		NOT,
+		XOR,
 
 		// string operations //
 		CONCAT, // concatinate strings
@@ -63,6 +77,10 @@ namespace Shogun
 
 		// flow operations //
 		HALT, // halt execution of the program
+
+		// assembler-only opcodes //
+		GOTO,
+		GOTOF,
 
 		// other //
 		COUNT // INVALID

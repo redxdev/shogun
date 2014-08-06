@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Assembler">
       <UniqueIdentifier>{f8478570-e981-49c7-877a-debdb72c0c2a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Library">
+      <UniqueIdentifier>{f70b2594-8b3a-4092-be36-a51f881f7aba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Library">
+      <UniqueIdentifier>{9c7ec142-b131-431e-ae0d-fb239b630bd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShogunVM.h">
@@ -72,6 +78,9 @@
     <ClInclude Include="SVM_AsmWriter.h">
       <Filter>Header Files\Assembler</Filter>
     </ClInclude>
+    <ClInclude Include="SVM_LibConsole.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShogunVM.cpp">
@@ -100,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="SVM_AsmWriter.cpp">
       <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_LibConsole.cpp">
+      <Filter>Source Files\Library</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

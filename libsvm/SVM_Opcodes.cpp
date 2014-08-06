@@ -28,6 +28,12 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			OPCODE(PUSHNIL)
+			{
+				vm->push(createObject());
+			}
+			OPCODE_END
+
 			OPCODE(POP)
 			{
 				vm->pop();
@@ -118,6 +124,46 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// type conversion //
+
+			OPCODE(TBOOL)
+			{
+				ObjectPtr obj = createObject(vm->pop().get());
+				obj->setNativeType(Object::BOOLEAN);
+				vm->push(obj);
+			}
+			OPCODE_END;
+
+			OPCODE(TNUM)
+			{
+				ObjectPtr obj = createObject(vm->pop().get());
+				obj->setNativeType(Object::NUMBER);
+				vm->push(obj);
+			}
+			OPCODE_END;
+
+			OPCODE(TADDR)
+			{
+				ObjectPtr obj = createObject(vm->pop().get());
+				obj->setNativeType(Object::ADDRESS);
+				vm->push(obj);
+			}
+			OPCODE_END;
+
+			OPCODE(TSTR)
+			{
+				ObjectPtr obj = createObject(vm->pop().get());
+				obj->setNativeType(Object::STRING);
+				vm->push(obj);
+			}
+			OPCODE_END;
+
+			OPCODE(TYPE)
+			{
+				vm->push(createObject((UInt32)vm->pop()->getNativeType()));
+			}
+			OPCODE_END;
+
 			// math operations //
 
 			OPCODE(ADD)
@@ -200,6 +246,39 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// logic operations //
+
+			OPCODE(AND)
+			{
+				Bool a = vm->pop()->getBoolean();
+				Bool b = vm->pop()->getBoolean();
+				vm->push(createObject(a && b));
+			}
+			OPCODE_END
+
+			OPCODE(OR)
+			{
+				Bool a = vm->pop()->getBoolean();
+				Bool b = vm->pop()->getBoolean();
+				vm->push(createObject(a || b));
+			}
+			OPCODE_END
+
+			OPCODE(NOT)
+			{
+				Bool a = vm->pop()->getBoolean();
+				vm->push(createObject(!a));
+			}
+			OPCODE_END
+
+			OPCODE(XOR)
+			{
+				Bool a = vm->pop()->getBoolean();
+				Bool b = vm->pop()->getBoolean();
+				vm->push(createObject(!(a && b) && (a || b)));
+			}
+			OPCODE_END
+
 			// string operations //
 			OPCODE(CONCAT)
 			{
@@ -220,11 +299,11 @@ namespace Shogun
 
 			OPCODE(JUMPF)
 			{
-				Bool a = vm->pop()->getBoolean();
-				UInt32 b = vm->pop()->getAddress();
-				if (a)
+				UInt32 a = vm->pop()->getAddress();
+				Bool b = vm->pop()->getBoolean();
+				if (b)
 				{
-					vm->setRegPri(b - 1);
+					vm->setRegPri(a - 1);
 				}
 			}
 			OPCODE_END
@@ -303,12 +382,18 @@ namespace Shogun
 			OPCODE_MAP(AMUL, 0);
 			OPCODE_MAP(ADIV, 0);
 			OPCODE_MAP(AMOD, 0);
+			OPCODE_MAP(AND, 0);
+			OPCODE_MAP(OR, 0);
+			OPCODE_MAP(NOT, 0);
+			OPCODE_MAP(XOR, 0);
 			OPCODE_MAP(CONCAT, 0);
 			OPCODE_MAP(JUMP, 0);
 			OPCODE_MAP(JUMPF, 0);
 			OPCODE_MAP(CMP, 0);
 			OPCODE_MAP(TCMP, 0);
 			OPCODE_MAP(ECALL, 0);
+			OPCODE_MAP(GOTO, 1);
+			OPCODE_MAP(GOTOF, 1);
 			OPCODE_MAP(HALT, 0);
 		}
 	}
