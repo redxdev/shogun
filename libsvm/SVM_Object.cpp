@@ -66,7 +66,7 @@ namespace Shogun
 
 		case STRING:
 			this->nativeType = STRING;
-			this->data.string = other.data.string;
+			this->data.string = strdup(other.data.string);
 			break;
 
 		case USERDATA:
@@ -697,6 +697,7 @@ namespace Shogun
 
 	ObjectPtr copyObject(ObjectPtr other)
 	{
-		return std::make_shared<Object>(*other.get());
+		Object& obj = *other.get();
+		return std::make_shared<Object>(obj);
 	}
 }

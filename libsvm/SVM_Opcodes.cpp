@@ -42,7 +42,7 @@ namespace Shogun
 
 			OPCODE(DUP)
 			{
-				vm->push(createObject(vm->peek().get()));
+				vm->push(copyObject(vm->peek()));
 			}
 			OPCODE_END
 
@@ -128,7 +128,7 @@ namespace Shogun
 
 			OPCODE(TBOOL)
 			{
-				ObjectPtr obj = createObject(vm->pop().get());
+				ObjectPtr obj = copyObject(vm->pop());
 				obj->setNativeType(Object::BOOLEAN);
 				vm->push(obj);
 			}
@@ -136,7 +136,7 @@ namespace Shogun
 
 			OPCODE(TNUM)
 			{
-				ObjectPtr obj = createObject(vm->pop().get());
+				ObjectPtr obj = copyObject(vm->pop());
 				obj->setNativeType(Object::NUMBER);
 				vm->push(obj);
 			}
@@ -144,7 +144,7 @@ namespace Shogun
 
 			OPCODE(TADDR)
 			{
-				ObjectPtr obj = createObject(vm->pop().get());
+				ObjectPtr obj = copyObject(vm->pop());
 				obj->setNativeType(Object::ADDRESS);
 				vm->push(obj);
 			}
@@ -152,7 +152,7 @@ namespace Shogun
 
 			OPCODE(TSTR)
 			{
-				ObjectPtr obj = createObject(vm->pop().get());
+				ObjectPtr obj = copyObject(vm->pop());
 				obj->setNativeType(Object::STRING);
 				vm->push(obj);
 			}

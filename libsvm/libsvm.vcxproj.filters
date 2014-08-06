@@ -107,11 +107,11 @@
     <ClCompile Include="SVM_Parser.cpp">
       <Filter>Source Files\Assembler</Filter>
     </ClCompile>
-    <ClCompile Include="SVM_AsmWriter.cpp">
-      <Filter>Source Files\Assembler</Filter>
-    </ClCompile>
     <ClCompile Include="SVM_LibConsole.cpp">
       <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_AsmWriter.cpp">
+      <Filter>Source Files\Assembler</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
