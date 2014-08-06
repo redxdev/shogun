@@ -7,7 +7,7 @@
 #include "SVM_Object.h"
 #include "SVM_Memory.h"
 
-#include <stack>
+#include <deque>
 #include <vector>
 #include <unordered_map>
 
@@ -33,7 +33,7 @@ namespace Shogun
 
 	class VirtualMachine;
 
-	typedef std::stack<ObjectPtr> Stack;
+	typedef std::deque<ObjectPtr> Stack;
 
 	typedef std::vector<ObjectPtr> Program;
 
@@ -63,9 +63,11 @@ namespace Shogun
 
 		void run();
 
+		void dump(std::ostream& stream);
+
 		inline void push(ObjectPtr value)
 		{
-			this->getStack().push(value);
+			this->getStack().push_back(value);
 		}
 
 		inline ObjectPtr peek()
@@ -73,7 +75,7 @@ namespace Shogun
 			if (this->getStack().empty())
 				throw EmptyStackException("Tried to peek an empty stack");
 
-			return this->getStack().top();
+			return this->getStack().back();
 		}
 
 		inline ObjectPtr pop()
@@ -81,8 +83,8 @@ namespace Shogun
 			if (this->getStack().empty())
 				throw EmptyStackException("Tried to pop an empty stack");
 
-			ObjectPtr result = this->getStack().top();
-			this->getStack().pop();
+			ObjectPtr result = this->getStack().back();
+			this->getStack().pop_back();
 			return result;
 		}
 

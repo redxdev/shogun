@@ -61,6 +61,14 @@ namespace Shogun
 		NOT,
 		XOR,
 
+		// comparison operations //
+		EQ,
+		TEQ,
+		LT,
+		GT,
+		ALT,
+		AGT,
+
 		// string operations //
 		CONCAT, // concatinate strings
 
@@ -95,6 +103,7 @@ namespace Shogun
 	Opcode stringToOpcode(const String& str);
 	const String& opcodeToString(Opcode op);
 	UInt8 getOpcodeArgumentCount(Opcode op);
+	Bool isOpcode(UInt32 op);
 }
 
 #endif

@@ -73,7 +73,7 @@ namespace Shogun
 			vm.run();
 
 			ASSERT_EQ("Hello World!", vm.getMemory().get(vm.getRegMmx())->getString());
-			ASSERT_EQ("Hello World!", vm.getStack().top()->getString());
+			ASSERT_EQ("Hello World!", vm.peek()->getString());
 		}
 
 		TEST(VirtualMachineTests, NumberMath)

@@ -1,6 +1,7 @@
 #include "SVM_Object.h"
 #include "SVM_Exception.h"
 #include "SVM_StringUtils.h"
+#include "SVM_Opcodes.h"
 
 #include <algorithm>
 
@@ -221,7 +222,7 @@ namespace Shogun
 
 		case USERDATA:
 			if (this->data.userdata == 0)
-				return 0.f;
+				return 0u;
 
 			throw ObjectConversionException("Cannot convert from USERDATA to ADDRESS");
 		}
@@ -294,6 +295,7 @@ namespace Shogun
 
 		case ADDRESS:
 			setAddress(getAddress());
+			break;
 
 		case STRING:
 			setString(getString());
@@ -537,7 +539,11 @@ namespace Shogun
 			return getString();
 
 		case ADDRESS:
-			return FORMAT("@%u", getAddress());
+		{
+			String op = isOpcode(getAddress()) ? opcodeToString((Opcode)getAddress()) : "?";
+
+			return FORMAT("%u[%s]", getAddress(), op.c_str());
+		}
 
 		case STRING:
 			return "\"" + getString() + "\"";

@@ -1,0 +1,71 @@
+; Fibonacci number generator
+; n = 0
+; u = 1
+; v = 2
+; i = 3
+; t = 4
+
+main:
+	push 5u
+	alloc
+	push "Number of iterations?"
+	push "print"
+	ecall
+	push "readline"
+	ecall
+	tnum
+	push 0u
+	stlo
+	push 1
+	push 2u
+	stlo
+	push 2
+	push 3u
+	stlo
+	push 0
+	push 4u
+	stlo
+	push 0
+	push 1u
+	stlo
+	goto "loop"
+
+loop:
+	push 0u
+	ldlo
+	push 3u
+	ldlo
+	gt
+	gotof "done"
+	push 1u
+	ldlo
+	push 2u
+	ldlo
+	add
+	push 4u
+	stlo
+	push 2u
+	ldlo
+	push 1u
+	stlo
+	push 4u
+	ldlo
+	push 2u
+	stlo
+	push 3u
+	ldlo
+	push 1
+	add
+	push 3u
+	stlo
+	goto "loop"
+	
+done:
+	push "The answer is:"
+	push "print"
+	ecall
+	push 2u
+	ldlo
+	push "print"
+	ecall
+	halt

@@ -1,5 +1,6 @@
 #include "SVM_VirtualMachine.h"
 #include "SVM_Opcodes.h"
+#include "ShogunVM.h"
 
 namespace Shogun
 {
@@ -32,8 +33,7 @@ namespace Shogun
 		memory.resize(program.size() + 3);
 		setRegMmx(program.size() + 2);
 
-		while (!stack.empty())
-			stack.pop();
+		stack.clear();
 
 		UInt32 i = 1;
 		for (auto it = program.cbegin(); it != program.cend(); ++it)
@@ -54,5 +54,31 @@ namespace Shogun
 			executeOperation(this, (Opcode)opcode);
 			this->setRegPri(this->getRegPri() + 1);
 		}
+	}
+
+	void VirtualMachine::dump(std::ostream& stream)
+	{
+		stream << "ShogunVM version " << Shogun::version_string() << "-" << Shogun::version() << std::endl;
+		stream << "----------" << std::endl;
+		stream << "Registers:" << std::endl;
+		stream << "  PRI = " << this->getRegPri() << std::endl;
+		stream << "  MMX = " << this->getRegMmx() << std::endl;
+		stream << "----------" << std::endl;
+		stream << "Stack:" << std::endl;
+		
+		for (Stack::iterator it = stack.begin(); it != stack.end(); ++it)
+		{
+			stream << "> " << (*it)->getReadableString() << std::endl;
+		}
+
+		stream << "----------" << std::endl;
+		stream << "Heap:" << std::endl;
+
+		for (Memory::MemSize i = 0; i < memory.getSize(); ++i)
+		{
+			stream << "[" << i << "] " << memory.get(i)->getReadableString() << std::endl;
+		}
+
+		stream << "- end of dump" << std::endl;
 	}
 }

@@ -279,7 +279,58 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			// comparison operations //
+
+			OPCODE(EQ)
+			{
+				ObjectPtr a = vm->pop();
+				ObjectPtr b = vm->pop();
+				vm->push(createObject(a->equals(b)));
+			}
+			OPCODE_END
+
+			OPCODE(TEQ)
+			{
+				ObjectPtr a = vm->pop();
+				ObjectPtr b = vm->pop();
+				vm->push(createObject(a->tequals(b)));
+			}
+			OPCODE_END
+
+			OPCODE(LT)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(a < b));
+			}
+			OPCODE_END
+
+			OPCODE(GT)
+			{
+				Number a = vm->pop()->getNumber();
+				Number b = vm->pop()->getNumber();
+				vm->push(createObject(a > b));
+			}
+			OPCODE_END
+
+			OPCODE(ALT)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a < b));
+			}
+			OPCODE_END
+
+			OPCODE(AGT)
+			{
+				UInt32 a = vm->pop()->getAddress();
+				UInt32 b = vm->pop()->getAddress();
+				vm->push(createObject(a > b));
+			}
+			OPCODE_END
+
 			// string operations //
+
 			OPCODE(CONCAT)
 			{
 				String a = vm->pop()->getString();
@@ -372,6 +423,11 @@ namespace Shogun
 			OPCODE_MAP(LOAD, 0);
 			OPCODE_MAP(STLO, 0);
 			OPCODE_MAP(LDLO, 0);
+			OPCODE_MAP(TBOOL, 0);
+			OPCODE_MAP(TNUM, 0);
+			OPCODE_MAP(TADDR, 0);
+			OPCODE_MAP(TSTR, 0);
+			OPCODE_MAP(TYPE, 0);
 			OPCODE_MAP(ADD, 0);
 			OPCODE_MAP(SUB, 0);
 			OPCODE_MAP(MUL, 0);
@@ -386,6 +442,12 @@ namespace Shogun
 			OPCODE_MAP(OR, 0);
 			OPCODE_MAP(NOT, 0);
 			OPCODE_MAP(XOR, 0);
+			OPCODE_MAP(EQ, 0);
+			OPCODE_MAP(TEQ, 0);
+			OPCODE_MAP(LT, 0);
+			OPCODE_MAP(GT, 0);
+			OPCODE_MAP(ALT, 0);
+			OPCODE_MAP(AGT, 0);
 			OPCODE_MAP(CONCAT, 0);
 			OPCODE_MAP(JUMP, 0);
 			OPCODE_MAP(JUMPF, 0);
@@ -431,6 +493,13 @@ namespace Shogun
 			throw InvalidOperationException(FORMAT("Unknown opcode %u", (UInt32)op));
 
 		return found->second;
+	}
+
+	Bool isOpcode(UInt32 op)
+	{
+		buildOpcodeMaps();
+
+		return _opcode_to_str.find((Opcode)op) != _opcode_to_str.end();
 	}
 }
 
