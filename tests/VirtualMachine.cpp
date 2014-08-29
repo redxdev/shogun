@@ -147,7 +147,7 @@ namespace Shogun
 			VirtualMachine vm(0);
 
 			SVM_PROGRAM_BEGIN(program);
-			SVM_PRO_PUSH(5u);
+			SVM_PRO_PUSH(VirtualMachine::getReservedAllocation() + 4u);
 			SVM_PRO_OP(JUMP);
 			SVM_PRO_OP(HALT);
 			SVM_PRO_PUSH(100.f);
@@ -160,12 +160,12 @@ namespace Shogun
 			ASSERT_EQ(100.f, vm.pop()->getNumber());
 
 			SVM_PROGRAM_RESET(program);
-			SVM_PRO_PUSH(13u);
 			SVM_PRO_PUSH(false);
+			SVM_PRO_PUSH(VirtualMachine::getReservedAllocation() + 15u);
 			SVM_PRO_OP(JUMPF);
 			SVM_PRO_PUSH(100.f);
-			SVM_PRO_PUSH(14u);
 			SVM_PRO_PUSH(true);
+			SVM_PRO_PUSH(VirtualMachine::getReservedAllocation() + 13u);
 			SVM_PRO_OP(JUMPF);
 			SVM_PRO_OP(HALT);
 			SVM_PRO_PUSH(100.f);
@@ -175,6 +175,7 @@ namespace Shogun
 			vm.loadProgram(program);
 			vm.run();
 
+			ASSERT_GE(2u, vm.getStack().size());
 			EXPECT_EQ(100.f, vm.pop()->getNumber());
 			EXPECT_EQ(100.f, vm.pop()->getNumber());
 		}

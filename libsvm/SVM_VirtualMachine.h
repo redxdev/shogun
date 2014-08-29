@@ -46,7 +46,7 @@ namespace Shogun
 	public:
 		static UInt32 getReservedAllocation()
 		{
-			return 1;
+			return 1u;
 		}
 
 		VirtualMachine(Memory::MemSize initialMemory = 0);
