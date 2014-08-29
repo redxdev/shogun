@@ -61,6 +61,8 @@ int main(int argc, char** argv)
 	Shogun::Library::Console::register_library(&vm);
 	Shogun::Library::Math::register_library(&vm);
 
+	srand(time(NULL));
+
 	try
 	{
 		vm.loadProgram(program);
