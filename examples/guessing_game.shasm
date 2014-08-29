@@ -27,7 +27,7 @@ loop:
 	push 0u
 	ldlo
 	lt
-	goto "large"
+	gotof "large"
 	pop
 	goto "small"
 
