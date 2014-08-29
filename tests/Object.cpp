@@ -70,9 +70,9 @@ namespace Shogun {
 			ObjectPtr object = createObject(55u);
 			ASSERT_EQ(Object::ADDRESS, object->getNativeType());
 			ASSERT_EQ(55u, object->getAddress());
-			ASSERT_EQ("@55", object->getReadableString());
+			ASSERT_EQ("55[?]", object->getReadableString());
 			// we don't care about any other comparisons, as the rest are
-			// undefined behavior.
+			// irrelevant
 		}
 
 		TEST(ObjectTests, StringObject)
