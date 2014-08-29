@@ -16,7 +16,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		TCLAP::CmdLine cmd("ShogunVM assembler", ' ', Shogun::version_string(), true);
+		TCLAP::CmdLine cmd("Shogun Virtual Machine", ' ', Shogun::version_string(), true);
 
 		TCLAP::UnlabeledValueArg<Shogun::String> inputArg("input", "input file", true, "", "filename", cmd, false);
 		TCLAP::SwitchArg dumpOnRunArg("d", "dump-on-run", "Output a VM dump before running the program", cmd, false);
