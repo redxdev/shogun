@@ -81,6 +81,9 @@
     <ClInclude Include="SVM_LibConsole.h">
       <Filter>Header Files\Library</Filter>
     </ClInclude>
+    <ClInclude Include="SVM_LibMath.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ShogunVM.cpp">
@@ -112,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="SVM_AsmWriter.cpp">
       <Filter>Source Files\Assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="SVM_LibMath.cpp">
+      <Filter>Source Files\Library</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

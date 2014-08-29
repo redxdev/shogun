@@ -3,6 +3,7 @@
 #include <SVM_AsmWriter.h>
 #include <SVM_VirtualMachine.h>
 #include <SVM_LibConsole.h>
+#include <SVM_LibMath.h>
 #include <ShogunVM.h>
 
 #include <iostream>
@@ -58,6 +59,7 @@ int main(int argc, char** argv)
 
 	Shogun::VirtualMachine vm(0);
 	Shogun::Library::Console::register_library(&vm);
+	Shogun::Library::Math::register_library(&vm);
 
 	try
 	{

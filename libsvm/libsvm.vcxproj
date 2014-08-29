@@ -77,6 +77,7 @@
     <ClInclude Include="SVM_Exception.h" />
     <ClInclude Include="SVM_Lexer.h" />
     <ClInclude Include="SVM_LibConsole.h" />
+    <ClInclude Include="SVM_LibMath.h" />
     <ClInclude Include="SVM_Memory.h" />
     <ClInclude Include="SVM_Object.h" />
     <ClInclude Include="SVM_Opcodes.h" />
@@ -91,6 +92,7 @@
     <ClCompile Include="SVM_AsmWriter.cpp" />
     <ClCompile Include="SVM_Lexer.cpp" />
     <ClCompile Include="SVM_LibConsole.cpp" />
+    <ClCompile Include="SVM_LibMath.cpp" />
     <ClCompile Include="SVM_Memory.cpp" />
     <ClCompile Include="SVM_Object.cpp" />
     <ClCompile Include="SVM_Opcodes.cpp" />

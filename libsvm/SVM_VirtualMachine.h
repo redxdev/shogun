@@ -92,7 +92,7 @@ namespace Shogun
 		{
 			auto found = this->getCallMap().find(name);
 			if (found == this->getCallMap().end())
-				throw new UnknownVMCallException(FORMAT("Unknown VMCallable %s", name.c_str()));
+				throw UnknownVMCallException(FORMAT("Unknown VMCallable %s", name.c_str()));
 
 			return found->second;
 		}
