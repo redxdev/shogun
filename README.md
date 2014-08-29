@@ -12,6 +12,10 @@ libsvm: The Shogun virtual machine
 
 tests: Unit tests using gtest
 
+shogun: ShogunVM executable
+
+shasm: ShogunVM assembler
+
 # Architecture
 
 SVM's architecture is made to be fairly simple. It is a stack machine with
