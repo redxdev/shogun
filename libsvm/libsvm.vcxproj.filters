@@ -37,6 +37,9 @@
     <Filter Include="Header Files\Library">
       <UniqueIdentifier>{9c7ec142-b131-431e-ae0d-fb239b630bd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Lang">
+      <UniqueIdentifier>{ea2fe1d1-1b98-4120-ab18-d5a0b0135bc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ShogunVM.h">

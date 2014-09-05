@@ -40,7 +40,7 @@ namespace Shogun
 		class OperationNode : public Node
 		{
 		public:
-			virtual void prepass(CompileInfo& compile)
+			virtual void prepass(CompileInfo& compile) override
 			{
 				if (getOpcodeArgumentCount((Opcode)opcode) != arguments.size())
 				{
@@ -70,7 +70,7 @@ namespace Shogun
 				}
 			}
 
-			virtual void compile(CompileInfo& compile)
+			virtual void compile(CompileInfo& compile) override
 			{
 				switch (opcode)
 				{
@@ -119,7 +119,7 @@ namespace Shogun
 		class LabelNode : public Node
 		{
 		public:
-			virtual void prepass(CompileInfo& compile)
+			virtual void prepass(CompileInfo& compile) override
 			{
 				if (compile.labels.find(label) != compile.labels.end())
 					throw LabelException(FORMAT("Label %s already exists", label.c_str()));
@@ -128,7 +128,7 @@ namespace Shogun
 				++compile.currentId;
 			}
 
-			virtual void compile(CompileInfo& compile)
+			virtual void compile(CompileInfo& compile) override
 			{
 				compile.list.push_back(createObject((UInt32)Opcode::NOOP));
 			}

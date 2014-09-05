@@ -16,6 +16,8 @@ shogun: ShogunVM executable
 
 shasm: ShogunVM assembler
 
+sholan: Compiler for sholan->shasm
+
 # Architecture
 
 SVM's architecture is made to be fairly simple. It is a stack machine with
