@@ -28,6 +28,16 @@ namespace sholan
                         Arguments = new List<string>(new string[] {"\"Hello World!\""})
                     }
                 );
+            root.Children.AddLast(
+                new HaltNode()
+                );
+            root.Children.AddLast(
+                new InternalFunctionNode()
+                    {
+                        Function = "hello_world",
+                        Arguments = new List<string>(new string[] {"foo", "bar"})
+                    }
+                );
 
             kernel.Compile(root);
             kernel.EndCompile();

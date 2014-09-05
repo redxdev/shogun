@@ -60,11 +60,11 @@ namespace sholan.Compiler.Nodes
         {
             for(int i = this.Arguments.Count - 1; i >= 0; i--)
             {
-                k.EmitPush(this.Arguments[i]);
+                k.EmitPush(this.Arguments[i]).Comment = "argument " + i.ToString();
             }
 
-            k.EmitPush('"' + this.Function + '"');
-            k.Emit(Opcode.ECALL);
+            k.EmitPush('"' + this.Function + '"').Comment = "function name";
+            k.Emit(Opcode.ECALL).Comment = "call function";
         }
 
         protected void CompileIntern(Kernel k)

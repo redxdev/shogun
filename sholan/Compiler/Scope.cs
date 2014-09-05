@@ -14,15 +14,22 @@ namespace sholan.Compiler
             protected set;
         }
 
-        public string Name
+        public uint MemorySpace
         {
             get;
             set;
         }
 
+        private uint currentId = 0;
+
         public Scope()
         {
             this.Symbols = new Dictionary<string, Symbol>();
+        }
+
+        public uint RequestId()
+        {
+            return currentId++;
         }
     }
 }

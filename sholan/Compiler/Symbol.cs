@@ -40,7 +40,7 @@ namespace sholan.Compiler
             set;
         }
 
-        public UInt32 Id
+        public uint Id
         {
             get;
             set;

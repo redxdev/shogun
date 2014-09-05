@@ -23,7 +23,7 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope().Name = "k";
+            PushScope();
         }
 
         public Scope PushScope()

@@ -20,15 +20,21 @@ namespace sholan.Compiler
             set;
         }
 
+        public string Comment
+        {
+            get;
+            set;
+        }
+
         public string GetOutput()
         {
             switch(this.Op)
             {
                 case Opcode.LABEL:
-                    return string.Format("{0}:", this.Argument);
+                    return string.Format("{0}: ; {1}", this.Argument, this.Comment);
 
                 default:
-                    return string.Format("\t{0} {1}", this.Op.ToString(), this.Argument);
+                    return string.Format("\t{0} {1} ; {2}", this.Op.ToString(), this.Argument, this.Comment);
             }
         }
     }

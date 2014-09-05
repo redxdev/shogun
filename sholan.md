@@ -10,8 +10,8 @@ external function called "print", then the symbol name sholan will use will be "
 
 ## Internal Variables
 
-Internal variables will are named "_{scope}_v_{name}".
+Internal variables will are named "_sl_v_{name}".
 
 ## Internal Functions
 
-Internal functions are named "_{scope}_f_{argcount}_{name}".
+Internal functions are named "_sl_f_{argcount}_{name}".
