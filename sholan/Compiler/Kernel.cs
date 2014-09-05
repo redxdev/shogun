@@ -100,7 +100,7 @@ namespace sholan.Compiler
 
         public void EndCompile()
         {
-            this.Emit(Opcode.HALT);
+            this.Emit(Opcode.HALT).Comment = "end compile";
         }
 
         public void Write(string file)
