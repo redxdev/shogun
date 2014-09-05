@@ -25,5 +25,11 @@ namespace sholan.Compiler.Nodes
             get;
             set;
         }
+
+        public abstract void PrePass(Kernel k);
+
+        public abstract void PreCompile(Kernel k);
+
+        public abstract void Compile(Kernel k);
     }
 }

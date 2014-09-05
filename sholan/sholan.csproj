@@ -41,13 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compiler\AbstractCompileNode.cs" />
-    <Compile Include="Compiler\AbstractSymbol.cs" />
-    <Compile Include="Compiler\ICompileNode.cs" />
-    <Compile Include="Compiler\ISymbol.cs" />
+    <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />
+    <Compile Include="Compiler\Nodes\ExternalFunctionNode.cs" />
+    <Compile Include="Compiler\Nodes\FunctionCallNode.cs" />
+    <Compile Include="Compiler\Nodes\ICompileNode.cs" />
+    <Compile Include="Compiler\Operation.cs" />
+    <Compile Include="Compiler\Symbol.cs" />
     <Compile Include="Compiler\Kernel.cs" />
     <Compile Include="Compiler\Scope.cs" />
-    <Compile Include="Compiler\TreeCompileNode.cs" />
+    <Compile Include="Compiler\Nodes\TreeNode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

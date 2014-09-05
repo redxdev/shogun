@@ -20,7 +20,7 @@ namespace sholan.Compiler
             set;
         }
 
-        public string getOutput()
+        public string GetOutput()
         {
             switch(this.Op)
             {

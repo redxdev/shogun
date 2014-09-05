@@ -14,7 +14,7 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public void PrePass(Kernel k)
+        public override void PrePass(Kernel k)
         {
             Symbol symbol = new Symbol()
                 {
@@ -23,14 +23,14 @@ namespace sholan.Compiler.Nodes
                     Name = this.SymbolName
                 };
 
-            k.CurrentScope.Symbols.Add(this.SymbolName, symbol);
+            k.RegisterSymbol(symbol);
         }
 
-        public void PreCompile(Kernel k)
+        public override void PreCompile(Kernel k)
         {
         }
 
-        public void Compile(Kernel k)
+        public override void Compile(Kernel k)
         {
         }
     }

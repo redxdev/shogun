@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    interface ICompileNode
+    public interface ICompileNode
     {
         int Line
         {

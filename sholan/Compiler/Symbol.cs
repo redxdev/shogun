@@ -45,5 +45,11 @@ namespace sholan.Compiler
             get;
             set;
         }
+
+        public Scope SScope
+        {
+            get;
+            set;
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace sholan.Compiler.Nodes
             this.Children = new LinkedList<ICompileNode>();
         }
 
-        public void PrePass(Kernel k)
+        public override void PrePass(Kernel k)
         {
             foreach(ICompileNode node in this.Children)
             {
@@ -27,7 +27,7 @@ namespace sholan.Compiler.Nodes
             }
         }
 
-        public void PreCompile(Kernel k)
+        public override void PreCompile(Kernel k)
         {
             foreach (ICompileNode node in this.Children)
             {
@@ -35,7 +35,7 @@ namespace sholan.Compiler.Nodes
             }
         }
 
-        public void Compile(Kernel k)
+        public override void Compile(Kernel k)
         {
             foreach (ICompileNode node in this.Children)
             {
