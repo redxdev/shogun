@@ -456,6 +456,7 @@ namespace Shogun
 			OPCODE_MAP(ECALL, 0);
 			OPCODE_MAP(GOTO, 1);
 			OPCODE_MAP(GOTOF, 1);
+			OPCODE_MAP(PLABL, 1);
 			OPCODE_MAP(HALT, 0);
 		}
 	}

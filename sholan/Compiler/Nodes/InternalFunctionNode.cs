@@ -71,9 +71,13 @@ namespace sholan.Compiler.Nodes
             base.Compile(k);
             k.PopScope();
 
-            k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "return from function";
+            k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
             k.Emit(Opcode.LDLO);
-            k.Emit(Opcode.JUMP);
+
+            k.EmitPush((this.Arguments.Count + 1).ToString() + "u").Comment = "deallocate function parameter memory";
+            k.Emit(Opcode.DEALLOC);
+
+            k.Emit(Opcode.JUMP).Comment = "return from function";
         }
     }
 }

@@ -60,6 +60,7 @@ namespace Shogun
 					break;
 
 				case PUSH:
+				case PLABL:
 					compile.currentId += 2;
 					break;
 
@@ -90,6 +91,18 @@ namespace Shogun
 					compile.list.push_back(createObject((UInt32)Opcode::PUSH));
 					compile.list.push_back(createObject(label + VirtualMachine::getReservedAllocation()));
 					compile.list.push_back(createObject((UInt32)(opcode == Opcode::GOTO ? Opcode::JUMP : Opcode::JUMPF)));
+					break;
+				}
+
+				case PLABL:
+				{
+					LabelMap::iterator found = compile.labels.find(arguments.begin()->get()->getString());
+					if (found == compile.labels.end())
+						throw LabelException(FORMAT("Unknown label %s", arguments.begin()->get()->getString().c_str()));
+
+					UInt32 label = found->second;
+					compile.list.push_back(createObject((UInt32)Opcode::PUSH));
+					compile.list.push_back(createObject(label + VirtualMachine::getReservedAllocation()));
 					break;
 				}
 				}

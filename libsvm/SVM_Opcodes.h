@@ -89,6 +89,7 @@ namespace Shogun
 		// assembler-only opcodes //
 		GOTO,
 		GOTOF,
+		PLABL,
 
 		// other //
 		COUNT // INVALID

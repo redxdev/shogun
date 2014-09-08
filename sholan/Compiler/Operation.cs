@@ -118,6 +118,7 @@ namespace sholan.Compiler
         // assembler-only opcodes //
         GOTO,
         GOTOF,
+        PLABL,
 
         // other //
         COUNT, // INVALID
