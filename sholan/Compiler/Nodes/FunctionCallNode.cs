@@ -69,7 +69,12 @@ namespace sholan.Compiler.Nodes
 
         protected void CompileIntern(Kernel k)
         {
-            throw new NotImplementedException("CompileIntern not yet implemented");
+            for(int i = 0; i < this.Arguments.Count; i++)
+            {
+                k.EmitPush(this.Arguments[i]).Comment = "argument " + i.ToString();
+
+                k.Emit(Opcode.PLABL, "sl_r_")
+            }
         }
     }
 }
