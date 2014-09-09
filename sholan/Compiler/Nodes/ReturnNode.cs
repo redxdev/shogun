@@ -29,6 +29,8 @@ namespace sholan.Compiler.Nodes
 
             if (this.Value != null)
                 k.EmitPush(this.Value);
+            else
+                k.Emit(Opcode.PUSHNIL);
 
             k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
             k.Emit(Opcode.LDLO);

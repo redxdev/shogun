@@ -8,7 +8,7 @@ namespace sholan.Compiler.Nodes
 {
     public class ImportFileNode : AbstractCompileNode
     {
-        public string File
+        public string Filepath
         {
             get;
             set;
@@ -24,7 +24,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Import(this.File);
+            k.Import(this.Filepath);
         }
     }
 }

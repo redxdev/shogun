@@ -54,6 +54,15 @@ namespace sholan.Compiler.Nodes
                     this.CompileIntern(k);
                     break;
             }
+
+            if(k.CurrentScope.UseReturn)
+            {
+                k.CurrentScope.UseReturn = false;
+            }
+            else
+            {
+                k.Emit(Opcode.POP);
+            }
         }
 
         protected void CompileExtern(Kernel k)

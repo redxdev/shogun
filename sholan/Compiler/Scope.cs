@@ -26,6 +26,12 @@ namespace sholan.Compiler
             set;
         }
 
+        public bool UseReturn
+        {
+            get;
+            set;
+        }
+
         private uint currentId = 0;
 
         private uint currentReturn = 0;

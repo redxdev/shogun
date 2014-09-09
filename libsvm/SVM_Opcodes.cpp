@@ -410,6 +410,7 @@ namespace Shogun
 		{
 			OPCODE_MAP(NOOP, 0);
 			OPCODE_MAP(PUSH, 1);
+			OPCODE_MAP(PUSHNIL, 0);
 			OPCODE_MAP(POP, 0);
 			OPCODE_MAP(DUP, 0);
 			OPCODE_MAP(REF, 0);

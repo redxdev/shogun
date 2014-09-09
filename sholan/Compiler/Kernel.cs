@@ -149,7 +149,7 @@ namespace sholan.Compiler
             try
             {
                 Nodes.ICompileNode root = LanguageUtilities.ParseFile(fullPath);
-                this.Compile(root);
+                this.Compile(root, true);
             }
             catch(Exception e)
             {
@@ -157,13 +157,18 @@ namespace sholan.Compiler
             }
         }
 
-        public void Compile(Nodes.ICompileNode root)
+        public void Compile(Nodes.ICompileNode root, bool imported = false)
         {
             root.PrePass(this);
             root.PreCompile(this);
 
-            if(this.HasEntry)
+            if (!imported)
             {
+                if (!this.HasEntry)
+                {
+                    throw new CompileException("No entry point found (is it in an imported file?)");
+                }
+
                 this.Emit(Opcode.GOTO, "\"sl_k_entry\"");
             }
 

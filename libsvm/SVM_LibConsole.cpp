@@ -17,6 +17,7 @@ namespace Shogun
 			void print(VirtualMachine* vm)
 			{
 				std::cout << vm->pop()->getString() << std::endl;
+				vm->push(createObject());
 			}
 
 			void readline(VirtualMachine* vm)

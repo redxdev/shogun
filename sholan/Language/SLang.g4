@@ -67,7 +67,7 @@ stm_import_file returns [ImportFileNode node]
 	{
 		$node = new ImportFileNode()
 			{
-				File = $fn.text.Substring(1, $fn.text.Length - 2)
+				Filepath = $fn.text.Substring(1, $fn.text.Length - 2)
 			};
 	}
 	;
