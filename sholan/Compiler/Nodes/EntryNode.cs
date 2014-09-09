@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    class EntryNode
+    public class EntryNode
     {
     }
 }
