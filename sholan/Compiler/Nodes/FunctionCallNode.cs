@@ -61,7 +61,7 @@ namespace sholan.Compiler.Nodes
             }
             else
             {
-                k.Emit(Opcode.POP);
+                k.Emit(Opcode.POP).Comment = "remove unused return value";
             }
         }
 
