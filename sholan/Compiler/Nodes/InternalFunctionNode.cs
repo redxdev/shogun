@@ -91,15 +91,10 @@ namespace sholan.Compiler.Nodes
             if (this.Body != null)
                 this.Body.Compile(k);
 
+            new ReturnNode().Compile(k);
+
             k.PopScope();
 
-            k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
-            k.Emit(Opcode.LDLO);
-
-            k.EmitPush(scope.MemorySpace + "u").Comment = "deallocate function parameter memory";
-            k.Emit(Opcode.DEALLOC);
-
-            k.Emit(Opcode.JUMP).Comment = "return from function";
             k.Emit(Opcode.NOOP).Comment = "end of function";
         }
     }

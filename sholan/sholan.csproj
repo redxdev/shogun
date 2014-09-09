@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Compiler\CompileException.cs" />
     <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />
     <Compile Include="Compiler\Nodes\AssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\EntryNode.cs" />
@@ -53,7 +54,9 @@
     <Compile Include="Compiler\Nodes\FunctionCallNode.cs" />
     <Compile Include="Compiler\Nodes\HaltNode.cs" />
     <Compile Include="Compiler\Nodes\ICompileNode.cs" />
+    <Compile Include="Compiler\Nodes\ImportFileNode.cs" />
     <Compile Include="Compiler\Nodes\InternalFunctionNode.cs" />
+    <Compile Include="Compiler\Nodes\ReturnNode.cs" />
     <Compile Include="Compiler\Operation.cs" />
     <Compile Include="Compiler\Symbol.cs" />
     <Compile Include="Compiler\Kernel.cs" />

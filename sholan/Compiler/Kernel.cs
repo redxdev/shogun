@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using sholan.Language;
 
 namespace sholan.Compiler
 {
@@ -12,6 +13,10 @@ namespace sholan.Compiler
         private Stack<Scope> scopeStack = new Stack<Scope>();
 
         private List<Operation> operations = new List<Operation>();
+
+        private bool hasEntry = false;
+
+        private HashSet<string> importedFiles = new HashSet<string>();
 
         public Scope CurrentScope
         {
@@ -26,6 +31,22 @@ namespace sholan.Compiler
             get
             {
                 return this.operations;
+            }
+        }
+
+        public bool HasEntry
+        {
+            get
+            {
+                return this.hasEntry;
+            }
+
+            set
+            {
+                if (value && this.hasEntry)
+                    throw new CompileException("Kernel already has entry point");
+
+                this.hasEntry = value;
             }
         }
 
@@ -58,8 +79,11 @@ namespace sholan.Compiler
             string result = string.Empty;
             foreach (Scope scope in scopeStack.Reverse())
             {
-                result += scope.Name;
+                result += scope.Name + "_";
             }
+
+            if (scopeStack.Count > 0)
+                result = result.Substring(0, result.Length - 1);
 
             return result;
         }
@@ -116,16 +140,40 @@ namespace sholan.Compiler
             return op;
         }
 
+        public void Import(string file)
+        {
+            string fullPath = Path.GetFullPath(file);
+            if (importedFiles.Contains(fullPath))
+                return;
+
+            try
+            {
+                Nodes.ICompileNode root = LanguageUtilities.ParseFile(fullPath);
+                this.Compile(root);
+            }
+            catch(Exception e)
+            {
+                throw new CompileException("Encountered exception while including " + fullPath, e);
+            }
+        }
+
         public void Compile(Nodes.ICompileNode root)
         {
             root.PrePass(this);
             root.PreCompile(this);
+
+            if(this.HasEntry)
+            {
+                this.Emit(Opcode.GOTO, "\"sl_k_entry\"");
+            }
+
             root.Compile(this);
         }
 
-        public void EndCompile()
+        public void EndCompile(bool halt = false)
         {
-            this.Emit(Opcode.HALT).Comment = "end compile";
+            if(halt)
+                this.Emit(Opcode.HALT).Comment = "end compile (halt=true)";
         }
 
         public void Write(string file)

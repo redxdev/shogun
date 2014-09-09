@@ -183,4 +183,4 @@ FakesAssemblies/
 
 # Shogun stuff
 *.sx
-examples/generated/*.shasm
+scripts/output/*.shasm

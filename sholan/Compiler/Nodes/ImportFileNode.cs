@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    public class ExternalFunctionNode : AbstractCompileNode
+    public class ImportFileNode : AbstractCompileNode
     {
-        public string SymbolName
+        public string File
         {
             get;
             set;
@@ -24,14 +24,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            Symbol symbol = new Symbol()
-            {
-                SMode = Symbol.Mode.Extern,
-                SType = Symbol.Type.Function,
-                Name = this.SymbolName
-            };
-
-            k.RegisterSymbol(symbol);
+            k.Import(this.File);
         }
     }
 }
