@@ -21,6 +21,14 @@ namespace sholan.Compiler
             }
         }
 
+        public List<Operation> Operations
+        {
+            get
+            {
+                return this.operations;
+            }
+        }
+
         public Kernel()
         {
             PushScope().MemorySpace = 1;

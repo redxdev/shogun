@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using sholan.Compiler;
 using sholan.Compiler.Nodes;
+using sholan.Language;
 
 namespace sholan
 {
@@ -12,59 +13,63 @@ namespace sholan
     {
         static void Main(string[] args)
         {
+            if(args.Length != 2)
+            {
+                Console.WriteLine("Usage:");
+                Console.WriteLine("sholan <input> <output>");
+                return;
+            }
+
+            Console.WriteLine("Creating kernel...");
             Kernel kernel = new Kernel();
 
-            TreeNode root = new TreeNode();
-            root.Children.AddLast(
-                new ExternalFunctionNode()
-                {
-                    SymbolName = "print"
-                }
-                );
-            root.Children.AddLast(
-                new AssemblyNode()
-                {
-                    Operation = new Operation()
-                    {
-                        Op = Opcode.GOTO,
-                        Argument = "\"sl_main\"",
-                        Comment = "go to main method"
-                    }
-                }
-                );
-            root.Children.AddLast(
-                new InternalFunctionNode()
-                {
-                    Function = "test_func",
-                    Arguments = new List<string>(new string[] { "a", "b" }),
-                    Children = new LinkedList<ICompileNode>(new ICompileNode[] { 
-                        new AssemblyNode()
-                        {
-                            Operation = new Operation() { Op = Opcode.PUSH, Argument = "\"test\""}
-                        }
-                    })
-                }
-                );
-            root.Children.AddLast(
-                new HaltNode()
-                );
-            root.Children.AddLast(
-                new AssemblyNode()
-                {
-                    Operation = new Operation() { Op = Opcode.LABEL, Argument = "sl_main"}
-                }
-                );
-            root.Children.AddLast(
-                new FunctionCallNode()
-                {
-                    Function = "test_func",
-                    Arguments = new List<string>(new string[] { "\"foo\"", "\"bar\"" })
-                }
-                );
+            Console.WriteLine("Parsing input...");
+            ICompileNode root = null;
 
-            kernel.Compile(root);
+            try
+            {
+                root = LanguageUtilities.ParseFile(args[0]);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error parsing input:");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                return;
+            }
+
+            Console.WriteLine("Compiling...");
+            try
+            {
+                kernel.Compile(root);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error compiling:");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                return;
+            }
+
             kernel.EndCompile();
-            kernel.Write("test.shasm");
+
+            Console.WriteLine("Kernel operation count: " + kernel.Operations.Count);
+
+            Console.WriteLine("Writing assembly...");
+
+            try
+            {
+                kernel.Write(args[1]);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("Error writing assembly:");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+                return;
+            }
+
+            Console.WriteLine("Finished compile");
         }
     }
 }

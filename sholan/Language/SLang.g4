@@ -1,0 +1,159 @@
+grammar SLang;
+
+@parser::header
+{
+	#pragma warning disable 3021
+
+	using sholan.Compiler;
+	using sholan.Compiler.Nodes;
+}
+
+@parser::members
+{
+	protected const int EOF = Eof;
+}
+
+@lexer::header
+{
+	#pragma warning disable 3021
+}
+
+@lexer::members
+{
+	protected const int EOF = Eof;
+	protected const int HIDDEN = Hidden;
+}
+
+/*
+ * Parser Rules
+ */
+
+compileUnit returns [ICompileNode rootNode]
+	:	stms=statements EOF { $rootNode = $stms.tree; }
+	;
+
+statements returns [TreeNode tree]
+	:
+	{
+		$tree = new TreeNode()
+			{
+				Children = new LinkedList<ICompileNode>()
+			};
+	}
+	(
+		stm=statement
+		{
+			$tree.Children.AddLast(
+				$stm.node
+				);
+		}
+	)*
+	;
+
+statement returns [ICompileNode node]
+	:
+	(
+		s_ef=stm_extern_func { $node = $s_ef.node; }
+	|	s_cf=stm_call_func { $node = $s_cf.node; }
+	)
+	;
+
+stm_extern_func returns [ExternalFunctionNode node]
+	:
+		EXTERN func=IDENT
+	{
+		$node = new ExternalFunctionNode()
+			{
+				SymbolName = $func.text,
+				Line = $func.line
+			};
+	}
+	;
+
+stm_call_func returns [FunctionCallNode node]
+	:
+		func=IDENT
+	{
+		$node = new FunctionCallNode()
+			{
+				Function = $func.text,
+				Arguments = new List<string>()
+			};
+	}
+		GROUP_START
+	(
+		arg1=atom { $node.Arguments.Add($arg1.text); }
+		(
+			',' arg=atom { $node.Arguments.Add($arg.text); }
+		)*
+	)?
+		GROUP_END
+	;
+
+atom
+	:
+		STRING
+	|	NUMBER
+	;
+
+/*
+ * Lexer Rules
+ */
+
+EXTERN
+	:	'extern'
+	;
+
+fragment ESCAPE_SEQUENCE
+	:	'\\'
+	(
+		'\\'
+	|	'"'
+	|	'\''
+	)
+	;
+
+STRING
+	:
+	(
+		'"' ( ESCAPE_SEQUENCE | . )*? '"'
+	|	'\'' ( ESCAPE_SEQUENCE | . )*? '\''
+	)
+	;
+
+NUMBER
+	:	'-'?
+	(
+		[0-9]* '.' [0-9]+
+	|	[0-9]+
+	)
+	;
+
+BLOCK_START
+	:	'{'
+	;
+
+BLOCK_END
+	:	'}'
+	;
+
+GROUP_START
+	:	'('
+	;
+
+GROUP_END
+	:	')'
+	;
+
+IDENT
+	:	([a-zA-Z]) ([0-9a-zA-Z] | '_')*
+	;
+
+WS
+	:	[ \n\t\r] -> channel(HIDDEN)
+	;
+
+COMMENT
+	:	('//' ~[\r\n]*
+	|	'/*' .*? '*/') -> channel(HIDDEN)
+	;
