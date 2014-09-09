@@ -31,13 +31,15 @@ namespace sholan.Compiler.Nodes
 
             k.RegisterSymbol(symbol);
 
-            k.Emit(Opcode.LABEL, string.Format("_sl_f_{0}", this.Function)).Comment = "function " + this.Function; // function label
-
             Scope scope = k.PushScope();
-
-            k.EmitPush((this.Arguments.Count + 1).ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location
-            k.Emit(Opcode.ALLOC);
+            scope.Name = this.Function;
             scope.MemorySpace += (uint)this.Arguments.Count + 1;
+            symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName());
+
+            k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
+
+            k.EmitPush(scope.MemorySpace.ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location
+            k.Emit(Opcode.ALLOC);
 
             Symbol returnSymbol = new Symbol()
                 {
@@ -74,7 +76,7 @@ namespace sholan.Compiler.Nodes
             k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
             k.Emit(Opcode.LDLO);
 
-            k.EmitPush((this.Arguments.Count + 1).ToString() + "u").Comment = "deallocate function parameter memory";
+            k.EmitPush(scope.MemorySpace + "u").Comment = "deallocate function parameter memory";
             k.Emit(Opcode.DEALLOC);
 
             k.Emit(Opcode.JUMP).Comment = "return from function";

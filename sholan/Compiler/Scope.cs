@@ -14,6 +14,12 @@ namespace sholan.Compiler
             protected set;
         }
 
+        public string Name
+        {
+            get;
+            set;
+        }
+
         public uint MemorySpace
         {
             get;
@@ -21,6 +27,8 @@ namespace sholan.Compiler
         }
 
         private uint currentId = 0;
+
+        private uint currentReturn = 0;
 
         public Scope()
         {
@@ -30,6 +38,11 @@ namespace sholan.Compiler
         public uint RequestId()
         {
             return currentId++;
+        }
+
+        public uint RequestReturn()
+        {
+            return currentReturn;
         }
     }
 }

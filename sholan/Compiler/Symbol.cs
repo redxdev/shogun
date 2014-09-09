@@ -40,6 +40,12 @@ namespace sholan.Compiler
             set;
         }
 
+        public string AsmName
+        {
+            get;
+            set;
+        }
+
         public uint Id
         {
             get;

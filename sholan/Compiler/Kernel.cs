@@ -23,7 +23,7 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope();
+            PushScope().MemorySpace = 1;
         }
 
         public Scope PushScope()
@@ -43,6 +43,17 @@ namespace sholan.Compiler
             symbol.SScope = this.CurrentScope;
             this.CurrentScope.Symbols.Add(symbol.Name, symbol);
             return symbol;
+        }
+
+        public string GetScopeName()
+        {
+            string result = string.Empty;
+            foreach (Scope scope in scopeStack.Reverse())
+            {
+                result += scope.Name;
+            }
+
+            return result;
         }
 
         public Symbol Lookup(string symbolName)
@@ -78,6 +89,12 @@ namespace sholan.Compiler
             };
             this.operations.Add(op);
             return op;
+        }
+
+        public Operation Emit(Operation o)
+        {
+            this.operations.Add(o);
+            return o;
         }
 
         public Operation EmitPush(string argument)

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />
+    <Compile Include="Compiler\Nodes\AssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\ExternalFunctionNode.cs" />
     <Compile Include="Compiler\Nodes\FunctionCallNode.cs" />
     <Compile Include="Compiler\Nodes\HaltNode.cs" />

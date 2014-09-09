@@ -17,26 +17,49 @@ namespace sholan
             TreeNode root = new TreeNode();
             root.Children.AddLast(
                 new ExternalFunctionNode()
-                    {
-                        SymbolName = "print"
-                    }
+                {
+                    SymbolName = "print"
+                }
                 );
             root.Children.AddLast(
-                new FunctionCallNode()
+                new AssemblyNode()
+                {
+                    Operation = new Operation()
                     {
-                        Function = "print",
-                        Arguments = new List<string>(new string[] {"\"Hello World!\""})
+                        Op = Opcode.GOTO,
+                        Argument = "\"sl_main\"",
+                        Comment = "go to main method"
                     }
+                }
+                );
+            root.Children.AddLast(
+                new InternalFunctionNode()
+                {
+                    Function = "test_func",
+                    Arguments = new List<string>(new string[] { "a", "b" }),
+                    Children = new LinkedList<ICompileNode>(new ICompileNode[] { 
+                        new AssemblyNode()
+                        {
+                            Operation = new Operation() { Op = Opcode.PUSH, Argument = "\"test\""}
+                        }
+                    })
+                }
                 );
             root.Children.AddLast(
                 new HaltNode()
                 );
             root.Children.AddLast(
-                new InternalFunctionNode()
-                    {
-                        Function = "hello_world",
-                        Arguments = new List<string>(new string[] {"foo", "bar"})
-                    }
+                new AssemblyNode()
+                {
+                    Operation = new Operation() { Op = Opcode.LABEL, Argument = "sl_main"}
+                }
+                );
+            root.Children.AddLast(
+                new FunctionCallNode()
+                {
+                    Function = "test_func",
+                    Arguments = new List<string>(new string[] { "\"foo\"", "\"bar\"" })
+                }
                 );
 
             kernel.Compile(root);

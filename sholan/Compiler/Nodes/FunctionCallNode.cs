@@ -72,9 +72,22 @@ namespace sholan.Compiler.Nodes
             for(int i = 0; i < this.Arguments.Count; i++)
             {
                 k.EmitPush(this.Arguments[i]).Comment = "argument " + i.ToString();
-
-                k.Emit(Opcode.PLABL, "sl_r_")
             }
+
+            uint returnId = k.CurrentScope.RequestReturn();
+
+            k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"");
+            k.Emit(Opcode.PMMX);
+            k.EmitPush(k.CurrentScope.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.AADD);
+            k.Emit(Opcode.SMMX);
+            k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"');
+
+            k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString());
+            k.EmitPush(k.CurrentScope.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.PMMX);
+            k.Emit(Opcode.ASUB);
+            k.Emit(Opcode.SMMX);
         }
     }
 }

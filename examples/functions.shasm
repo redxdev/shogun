@@ -39,6 +39,5 @@ sl_f_concat:
 	push 3u
 	dealloc
 	jump
-
-	halt
 	
+	halt

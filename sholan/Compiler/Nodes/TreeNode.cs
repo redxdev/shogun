@@ -11,7 +11,7 @@ namespace sholan.Compiler.Nodes
         public LinkedList<ICompileNode> Children
         {
             get;
-            protected set;
+            set;
         }
 
         public TreeNode()

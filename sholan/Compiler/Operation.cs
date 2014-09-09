@@ -31,10 +31,10 @@ namespace sholan.Compiler
             switch(this.Op)
             {
                 case Opcode.LABEL:
-                    return string.Format("{0}: ; {1}", this.Argument, this.Comment);
+                    return string.Format("{0}:{1}", this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
 
                 default:
-                    return string.Format("\t{0} {1} ; {2}", this.Op.ToString(), this.Argument, this.Comment);
+                    return string.Format("\t{0} {1}{2}", this.Op.ToString(), this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
             }
         }
     }
