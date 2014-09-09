@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    public class InternalFunctionNode : TreeNode
+    public class InternalFunctionNode : AbstractCompileNode
     {
         public string Function
         {
@@ -18,6 +18,24 @@ namespace sholan.Compiler.Nodes
         {
             get;
             set;
+        }
+
+        public ICompileNode Body
+        {
+            get;
+            set;
+        }
+
+        public override void PrePass(Kernel k)
+        {
+            if (this.Body != null)
+                this.Body.PrePass(k);
+        }
+
+        public override void PreCompile(Kernel k)
+        {
+            if (this.Body != null)
+                this.Body.PreCompile(k);
         }
 
         public override void Compile(Kernel k)
@@ -70,7 +88,9 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.NOOP).Comment = "function body";
 
-            base.Compile(k);
+            if (this.Body != null)
+                this.Body.Compile(k);
+
             k.PopScope();
 
             k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
@@ -80,6 +100,7 @@ namespace sholan.Compiler.Nodes
             k.Emit(Opcode.DEALLOC);
 
             k.Emit(Opcode.JUMP).Comment = "return from function";
+            k.Emit(Opcode.NOOP).Comment = "end of function";
         }
     }
 }

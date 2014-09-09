@@ -42,7 +42,7 @@ namespace sholan.Compiler
 
         public uint RequestReturn()
         {
-            return currentReturn;
+            return currentReturn++;
         }
     }
 }

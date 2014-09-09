@@ -55,6 +55,7 @@ statement returns [ICompileNode node]
 	(
 		s_ef=stm_extern_func { $node = $s_ef.node; }
 	|	s_cf=stm_call_func { $node = $s_cf.node; }
+	|	s_df=stm_define_func { $node = $s_df.node; }
 	)
 	;
 
@@ -90,6 +91,28 @@ stm_call_func returns [FunctionCallNode node]
 		GROUP_END
 	;
 
+stm_define_func returns [InternalFunctionNode node]
+	: FUNCTION name=IDENT
+	{
+		$node = new InternalFunctionNode()
+			{
+				Function = $name.text,
+				Arguments = new List<string>()
+			};
+	}
+		GROUP_START
+	(
+		arg1=IDENT { $node.Arguments.Add($arg1.text); }
+		(
+			',' arg=IDENT { $node.Arguments.Add($arg.text); }
+		)*
+	)?
+		GROUP_END
+		BLOCK_START
+		stms=statements { $node.Body = $stms.tree; }
+		BLOCK_END
+	;
+
 atom
 	:
 		STRING
@@ -102,6 +125,10 @@ atom
 
 EXTERN
 	:	'extern'
+	;
+
+FUNCTION
+	:	'func'
 	;
 
 fragment ESCAPE_SEQUENCE
