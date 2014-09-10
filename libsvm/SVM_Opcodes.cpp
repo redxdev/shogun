@@ -124,6 +124,21 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			OPCODE(STNLO)
+			{
+				UInt32 address = vm->pop()->getAddress();
+				ObjectPtr data = vm->pop();
+				vm->getMemory().set(vm->getRegMmx() - address, data);
+			}
+			OPCODE_END
+
+			OPCODE(LDNLO)
+			{
+				UInt32 address = vm->pop()->getAddress();
+				vm->push(vm->getMemory().get(vm->getRegMmx() - address));
+			}
+			OPCODE_END
+
 			// type conversion //
 
 			OPCODE(TBOOL)
@@ -424,6 +439,8 @@ namespace Shogun
 			OPCODE_MAP(LOAD, 0);
 			OPCODE_MAP(STLO, 0);
 			OPCODE_MAP(LDLO, 0);
+			OPCODE_MAP(STNLO, 0);
+			OPCODE_MAP(LDNLO, 0);
 			OPCODE_MAP(TBOOL, 0);
 			OPCODE_MAP(TNUM, 0);
 			OPCODE_MAP(TADDR, 0);

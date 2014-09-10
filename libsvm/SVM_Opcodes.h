@@ -35,6 +35,8 @@ namespace Shogun
 		LOAD, // load address
 		STLO, // store into local address
 		LDLO, // load local address
+		STNLO, // store into local address, negative index
+		LDNLO, // load local address, negative index
 
 		// type conversion //
 		TBOOL,

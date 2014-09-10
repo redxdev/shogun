@@ -58,6 +58,9 @@ namespace sholan.Compiler
         public Scope PushScope()
         {
             Scope scope = new Scope();
+            if(scopeStack.Count > 0)
+                scope.Parent = scopeStack.Peek();
+
             scopeStack.Push(scope);
             return scope;
         }

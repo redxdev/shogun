@@ -26,8 +26,17 @@ namespace sholan.Compiler
             set;
         }
 
+        public string Raw
+        {
+            get;
+            set;
+        }
+
         public string GetOutput()
         {
+            if (this.Raw != null)
+                return this.Raw;
+
             switch(this.Op)
             {
                 case Opcode.LABEL:
@@ -64,6 +73,8 @@ namespace sholan.Compiler
         LOAD, // load address
         STLO, // store into local address
         LDLO, // load local address
+        STNLO, // store into local address with negative index
+        LDNLO, // load local address with negative index
 
         // type conversion //
         TBOOL,

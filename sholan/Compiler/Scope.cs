@@ -32,6 +32,12 @@ namespace sholan.Compiler
             set;
         }
 
+        public Scope Parent
+        {
+            get;
+            set;
+        }
+
         private uint currentId = 0;
 
         private uint currentReturn = 0;
@@ -49,6 +55,22 @@ namespace sholan.Compiler
         public uint RequestReturn()
         {
             return currentReturn++;
+        }
+
+        public uint WalkMemoryBack(Scope until)
+        {
+            uint memory = 0;
+            Scope current = this;
+            while(current != until)
+            {
+                if (current == null)
+                    throw new InvalidOperationException("Reached top-level scope without finding needle while walking memory");
+
+                memory += current.MemorySpace;
+                current = current.Parent;
+            }
+
+            return memory;
         }
     }
 }

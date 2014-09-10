@@ -10,14 +10,12 @@ namespace sholan.Compiler
     {
         public enum Type
         {
-            Invalid,
             Function,
             Variable
         }
 
         public enum Mode
         {
-            Invalid,
             Intern,
             Extern
         }

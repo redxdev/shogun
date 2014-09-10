@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using sholan.Compiler.Nodes.Arguments;
 
 namespace sholan.Compiler.Nodes
 {
@@ -14,7 +15,7 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public List<string> Arguments
+        public List<IArgument> Arguments
         {
             get;
             set;
@@ -69,7 +70,7 @@ namespace sholan.Compiler.Nodes
         {
             for(int i = this.Arguments.Count - 1; i >= 0; i--)
             {
-                k.EmitPush(this.Arguments[i]).Comment = "argument " + i.ToString();
+                this.Arguments[i].PushValue(k);
             }
 
             k.EmitPush('"' + this.Function + '"').Comment = "function name";
@@ -80,7 +81,7 @@ namespace sholan.Compiler.Nodes
         {
             for(int i = 0; i < this.Arguments.Count; i++)
             {
-                k.EmitPush(this.Arguments[i]).Comment = "argument " + i.ToString();
+                this.Arguments[i].PushValue(k);
             }
 
             uint returnId = k.CurrentScope.RequestReturn();

@@ -6,6 +6,7 @@ grammar SLang;
 
 	using sholan.Compiler;
 	using sholan.Compiler.Nodes;
+	using sholan.Compiler.Nodes.Arguments;
 }
 
 @parser::members
@@ -91,14 +92,14 @@ stm_call_func returns [FunctionCallNode node]
 		$node = new FunctionCallNode()
 			{
 				Function = $func.text,
-				Arguments = new List<string>()
+				Arguments = new List<IArgument>()
 			};
 	}
 		GROUP_START
 	(
-		arg1=atom { $node.Arguments.Add($arg1.text); }
+		arg1=atom { $node.Arguments.Add($arg1.arg); }
 		(
-			',' arg=atom { $node.Arguments.Add($arg.text); }
+			',' arg=atom { $node.Arguments.Add($arg.arg); }
 		)*
 	)?
 		GROUP_END
@@ -138,14 +139,14 @@ stm_return returns [ReturnNode node]
 	:	{ $node = new ReturnNode(); }
 		RETURN
 	(
-		val=atom { $node.Value = $val.text; }
+		expr=atom { $node.Argument = $expr.arg; }
 	)?
 	;
 
-atom
+atom returns [IArgument arg]
 	:
-		STRING
-	|	NUMBER
+		str=STRING { $arg = new ConstantArgument() { Value = $str.text }; }
+	|	num=NUMBER { $arg = new ConstantArgument() { Value = $num.text }; }
 	;
 
 /*

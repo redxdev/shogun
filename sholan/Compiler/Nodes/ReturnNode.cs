@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using sholan.Compiler.Nodes.Arguments;
 
 namespace sholan.Compiler.Nodes
 {
     public class ReturnNode : AbstractCompileNode
     {
-        public string Value
+        public IArgument Argument
         {
             get;
             set;
@@ -27,8 +28,8 @@ namespace sholan.Compiler.Nodes
             Scope scope = k.CurrentScope;
             Symbol returnSymbol = k.Lookup("+return");
 
-            if (this.Value != null)
-                k.EmitPush(this.Value);
+            if (this.Argument != null)
+                this.Argument.PushValue(k);
             else
                 k.Emit(Opcode.PUSHNIL);
 

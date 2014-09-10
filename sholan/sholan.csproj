@@ -48,6 +48,9 @@
   <ItemGroup>
     <Compile Include="Compiler\CompileException.cs" />
     <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />
+    <Compile Include="Compiler\Nodes\Arguments\ConstantArgument.cs" />
+    <Compile Include="Compiler\Nodes\Arguments\IArgument.cs" />
+    <Compile Include="Compiler\Nodes\Arguments\VariableArgument.cs" />
     <Compile Include="Compiler\Nodes\AssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\EntryNode.cs" />
     <Compile Include="Compiler\Nodes\ExternalFunctionNode.cs" />
@@ -56,6 +59,7 @@
     <Compile Include="Compiler\Nodes\ICompileNode.cs" />
     <Compile Include="Compiler\Nodes\ImportFileNode.cs" />
     <Compile Include="Compiler\Nodes\InternalFunctionNode.cs" />
+    <Compile Include="Compiler\Nodes\RawAssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\ReturnNode.cs" />
     <Compile Include="Compiler\Operation.cs" />
     <Compile Include="Compiler\Symbol.cs" />
