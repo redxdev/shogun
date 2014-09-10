@@ -60,6 +60,8 @@ statement returns [ICompileNode node]
 	|	s_df=stm_define_func { $node = $s_df.node; }
 	|	s_de=stm_define_entry { $node = $s_de.node; }
 	|	s_re=stm_return { $node = $s_re.node; }
+	|	s_vd=stm_variable_def { $node = $s_vd.node; }
+	|	s_as=stm_assembly { $node = $s_as.node; }
 	)
 	;
 
@@ -143,6 +145,14 @@ stm_return returns [ReturnNode node]
 	)?
 	;
 
+stm_variable_def returns [DefineVariableNode node]
+	:	VAR_DEF v=IDENT { $node = new DefineVariableNode() { VariableName = $v.text }; }
+	;
+
+stm_assembly returns [RawAssemblyNode node]
+	:	ASSEMBLY str=STRING_EXT { $node = new RawAssemblyNode() { Assembly = $str.text.Substring(2, $str.text.Length - 4) }; }
+	;
+
 atom returns [IArgument arg]
 	:
 		str=STRING { $arg = new ConstantArgument() { Value = $str.text }; }
@@ -173,6 +183,14 @@ IMPORT
 	:	'import'
 	;
 
+VAR_DEF
+	:	'var'
+	;
+
+ASSEMBLY
+	:	'asm'
+	;
+
 fragment ESCAPE_SEQUENCE
 	:	'\\'
 	(
@@ -188,6 +206,10 @@ STRING
 		'"' ( ESCAPE_SEQUENCE | . )*? '"'
 	|	'\'' ( ESCAPE_SEQUENCE | . )*? '\''
 	)
+	;
+
+STRING_EXT
+	: '[[' .*? ']]'
 	;
 
 NUMBER

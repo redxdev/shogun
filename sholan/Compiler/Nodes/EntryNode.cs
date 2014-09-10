@@ -37,6 +37,9 @@ namespace sholan.Compiler.Nodes
             if (this.Body != null)
                 this.Body.Compile(k);
 
+            k.EmitPush(k.CurrentScope.MemorySpace.ToString() + "u").Comment = "deallocate memory";
+            k.Emit(Opcode.DEALLOC);
+
             k.PopScope();
 
             k.Emit(Opcode.HALT).Comment = "end entry";
