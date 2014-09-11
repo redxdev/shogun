@@ -1,8 +1,8 @@
 // SVM Standard Library
 
 // Console Libary
-extern func print
-extern func readline
+extern func print(str)
+extern func readline()
 
 // Math Library
-extern func rand_int
+extern func rand_int(min, max)

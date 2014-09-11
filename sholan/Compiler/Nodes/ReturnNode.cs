@@ -3,33 +3,52 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using sholan.Compiler.Nodes.Arguments;
 
 namespace sholan.Compiler.Nodes
 {
     public class ReturnNode : AbstractCompileNode
     {
-        public IArgument Argument
+        public ICompileNode Value
         {
             get;
             set;
         }
 
+        public ReturnNode()
+            : base()
+        {
+            this.Attributes
+                .Has("return")
+                .Has("scope-end");
+        }
+
         public override void PrePass(Kernel k)
         {
+            if (this.Value != null)
+            {
+                this.Value.Attributes
+                    .Check("value");
+
+                this.Value.PrePass(k);
+            }
         }
 
         public override void PreCompile(Kernel k)
         {
+            if(this.Value != null)
+            {
+                this.Value.PreCompile(k);
+            }
         }
 
         public override void Compile(Kernel k)
         {
             Scope scope = k.CurrentScope;
+
             Symbol returnSymbol = k.Lookup("+return");
 
-            if (this.Argument != null)
-                this.Argument.PushValue(k);
+            if (this.Value != null)
+                this.Value.Compile(k);
             else
                 k.Emit(Opcode.PUSHNIL);
 

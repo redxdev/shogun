@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler
 {
+    public enum ScopeType
+    {
+        Free,
+        Function,
+        Block
+    }
+
     public class Scope
     {
         public Dictionary<string, Symbol> Symbols
@@ -26,13 +33,13 @@ namespace sholan.Compiler
             set;
         }
 
-        public bool UseReturn
+        public Scope Parent
         {
             get;
             set;
         }
 
-        public Scope Parent
+        public ScopeType Type
         {
             get;
             set;
@@ -45,6 +52,7 @@ namespace sholan.Compiler
         public Scope()
         {
             this.Symbols = new Dictionary<string, Symbol>();
+            this.Type = ScopeType.Free;
         }
 
         public uint RequestId()

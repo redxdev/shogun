@@ -47,10 +47,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\CompileException.cs" />
+    <Compile Include="Compiler\Nodes\ConstantCompileNode.cs" />
+    <Compile Include="Compiler\NodeAttributeException.cs" />
+    <Compile Include="Compiler\NodeAttributes.cs" />
     <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />
-    <Compile Include="Compiler\Nodes\Arguments\ConstantArgument.cs" />
-    <Compile Include="Compiler\Nodes\Arguments\IArgument.cs" />
-    <Compile Include="Compiler\Nodes\Arguments\VariableArgument.cs" />
     <Compile Include="Compiler\Nodes\AssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\DefineVariableNode.cs" />
     <Compile Include="Compiler\Nodes\EntryNode.cs" />

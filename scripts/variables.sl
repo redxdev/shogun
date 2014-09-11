@@ -1,15 +1,5 @@
-// Hello world!
-import "lib/standard.sl" // import the standard library
-
-func foo() {
-	return "Hello World!"
-}
+// Variables
 
 entry {
 	var bar
-	foo()
-	asm [[
-		push "print"
-		ecall
-	]]
 }

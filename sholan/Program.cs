@@ -33,8 +33,7 @@ namespace sholan
             catch(Exception e)
             {
                 Console.WriteLine("Error parsing input:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.ToString());
                 return;
             }
 
@@ -46,8 +45,7 @@ namespace sholan
             catch(Exception e)
             {
                 Console.WriteLine("Error compiling:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.ToString());
                 return;
             }
 
@@ -64,8 +62,7 @@ namespace sholan
             catch(Exception e)
             {
                 Console.WriteLine("Error writing assembly:");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.ToString());
                 return;
             }
 

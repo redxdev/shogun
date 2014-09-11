@@ -15,6 +15,7 @@ namespace sholan.Compiler.Nodes
         }
 
         public TreeNode()
+            : base()
         {
             this.Children = new LinkedList<ICompileNode>();
         }

@@ -26,6 +26,23 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public bool UseReturn
+        {
+            get;
+            set;
+        }
+
+        public NodeAttributes Attributes
+        {
+            get;
+            protected set;
+        }
+
+        public AbstractCompileNode()
+        {
+            this.Attributes = new NodeAttributes();
+        }
+
         public abstract void PrePass(Kernel k);
 
         public abstract void PreCompile(Kernel k);

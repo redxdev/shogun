@@ -14,6 +14,20 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public List<string> Arguments
+        {
+            get;
+            set;
+        }
+
+        public ExternalFunctionNode()
+            : base()
+        {
+            this.Attributes
+                .Has("function")
+                .Has("return");
+        }
+
         public override void PrePass(Kernel k)
         {
         }
@@ -28,7 +42,8 @@ namespace sholan.Compiler.Nodes
             {
                 SMode = Symbol.Mode.Extern,
                 SType = Symbol.Type.Function,
-                Name = this.SymbolName
+                Name = this.SymbolName,
+                Id = (uint)this.Arguments.Count
             };
 
             k.RegisterSymbol(symbol);

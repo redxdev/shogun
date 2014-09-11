@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using sholan.Compiler.Nodes.Arguments;
 
 namespace sholan.Compiler.Nodes
 {
@@ -15,18 +14,40 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public List<IArgument> Arguments
+        public List<ICompileNode> Arguments
         {
             get;
             set;
         }
 
+        public FunctionCallNode()
+            : base()
+        {
+            this.Attributes
+                .Has("function-call")
+                .Has("value");
+        }
+
         public override void PrePass(Kernel k)
         {
+            foreach (ICompileNode node in this.Arguments)
+            {
+                node.Attributes
+                    .Check("value");
+            }
+
+            foreach (ICompileNode node in this.Arguments)
+            {
+                node.PrePass(k);
+            }
         }
 
         public override void PreCompile(Kernel k)
         {
+            foreach (ICompileNode node in this.Arguments)
+            {
+                node.PreCompile(k);
+            }
         }
 
         public override void Compile(Kernel k)
@@ -42,6 +63,9 @@ namespace sholan.Compiler.Nodes
                     throw new InvalidOperationException(string.Format("Tried to compile a function call on a non-function symbol \"{0}\"", this.Function));
             }
 
+            if (symbol.Id != this.Arguments.Count)
+                throw new ArgumentOutOfRangeException(string.Format("Tried to pass {0} arguments to {1} (requires: {2})", this.Arguments.Count, symbol.Name, symbol.Id));
+
             switch(symbol.SMode)
             {
                 default:
@@ -56,11 +80,7 @@ namespace sholan.Compiler.Nodes
                     break;
             }
 
-            if(k.CurrentScope.UseReturn)
-            {
-                k.CurrentScope.UseReturn = false;
-            }
-            else
+            if(!this.UseReturn)
             {
                 k.Emit(Opcode.POP).Comment = "remove unused return value";
             }
@@ -70,7 +90,7 @@ namespace sholan.Compiler.Nodes
         {
             for(int i = this.Arguments.Count - 1; i >= 0; i--)
             {
-                this.Arguments[i].PushValue(k);
+                this.Arguments[i].Compile(k);
             }
 
             k.EmitPush('"' + this.Function + '"').Comment = "function name";
@@ -81,7 +101,7 @@ namespace sholan.Compiler.Nodes
         {
             for(int i = 0; i < this.Arguments.Count; i++)
             {
-                this.Arguments[i].PushValue(k);
+                this.Arguments[i].Compile(k);
             }
 
             uint returnId = k.CurrentScope.RequestReturn();

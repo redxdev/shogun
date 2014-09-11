@@ -6,19 +6,22 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    public class ImportFileNode : AbstractCompileNode
+    public class ConstantCompileNode : AbstractCompileNode
     {
-        public string Filepath
+        public string Value
         {
             get;
             set;
         }
 
-        public ImportFileNode()
+        public ConstantCompileNode()
             : base()
         {
+            this.Value = null;
+
             this.Attributes
-                .Has("import");
+                .Has("value")
+                .Has("constant");
         }
 
         public override void PrePass(Kernel k)
@@ -31,7 +34,14 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Import(this.Filepath);
+            if(this.Value == null)
+            {
+                k.Emit(Opcode.PUSHNIL);
+            }
+            else
+            {
+                k.EmitPush(this.Value);
+            }
         }
     }
 }

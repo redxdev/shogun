@@ -8,6 +8,15 @@ namespace sholan.Compiler.Nodes
 {
     public class HaltNode : AbstractCompileNode
     {
+        public HaltNode()
+            : base()
+        {
+            this.Attributes
+                .Has("halt")
+                .Has("scope-end")
+                .Has("forceful-end");
+        }
+
         public override void PrePass(Kernel k)
         {
         }

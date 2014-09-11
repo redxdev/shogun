@@ -6,7 +6,6 @@ grammar SLang;
 
 	using sholan.Compiler;
 	using sholan.Compiler.Nodes;
-	using sholan.Compiler.Nodes.Arguments;
 }
 
 @parser::members
@@ -62,6 +61,7 @@ statement returns [ICompileNode node]
 	|	s_re=stm_return { $node = $s_re.node; }
 	|	s_vd=stm_variable_def { $node = $s_vd.node; }
 	|	s_as=stm_assembly { $node = $s_as.node; }
+	|	s_ht=stm_halt { $node = $s_ht.node; }
 	)
 	;
 
@@ -82,9 +82,18 @@ stm_extern_func returns [ExternalFunctionNode node]
 		$node = new ExternalFunctionNode()
 			{
 				SymbolName = $func.text,
-				Line = $func.line
+				Line = $func.line,
+				Arguments = new List<string>()
 			};
 	}
+		GROUP_START
+	(
+		arg1=IDENT { $node.Arguments.Add($arg1.text); }
+		(
+			',' arg=IDENT { $node.Arguments.Add($arg.text); }
+		)*
+	)?
+		GROUP_END
 	;
 
 stm_call_func returns [FunctionCallNode node]
@@ -94,14 +103,14 @@ stm_call_func returns [FunctionCallNode node]
 		$node = new FunctionCallNode()
 			{
 				Function = $func.text,
-				Arguments = new List<IArgument>()
+				Arguments = new List<ICompileNode>()
 			};
 	}
 		GROUP_START
 	(
-		arg1=atom { $node.Arguments.Add($arg1.arg); }
+		arg1=expression { $node.Arguments.Add($arg1.node); }
 		(
-			',' arg=atom { $node.Arguments.Add($arg.arg); }
+			',' arg=expression { $node.Arguments.Add($arg.node); }
 		)*
 	)?
 		GROUP_END
@@ -141,7 +150,7 @@ stm_return returns [ReturnNode node]
 	:	{ $node = new ReturnNode(); }
 		RETURN
 	(
-		expr=atom { $node.Argument = $expr.arg; }
+		expr=expression { $node.Value = $expr.node; }
 	)?
 	;
 
@@ -153,10 +162,19 @@ stm_assembly returns [RawAssemblyNode node]
 	:	ASSEMBLY str=STRING_EXT { $node = new RawAssemblyNode() { Assembly = $str.text.Substring(2, $str.text.Length - 4) }; }
 	;
 
-atom returns [IArgument arg]
+stm_halt returns [HaltNode node]
+	:	HALT { $node = new HaltNode(); }
+	;
+
+expression returns [ICompileNode node]
+	:	a=atom { $node = $atom.node; }
+	;
+
+atom returns [ICompileNode node]
 	:
-		str=STRING { $arg = new ConstantArgument() { Value = $str.text }; }
-	|	num=NUMBER { $arg = new ConstantArgument() { Value = $num.text }; }
+		str=STRING { $node = new ConstantCompileNode() { Value = $str.text }; }
+	|	num=NUMBER { $node = new ConstantCompileNode() { Value = $num.text }; }
+	|	stm=statement { $node = $stm.node; $node.UseReturn = true; }
 	;
 
 /*
@@ -189,6 +207,10 @@ VAR_DEF
 
 ASSEMBLY
 	:	'asm'
+	;
+
+HALT
+	:	'halt'
 	;
 
 fragment ESCAPE_SEQUENCE

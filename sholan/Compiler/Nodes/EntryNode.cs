@@ -14,6 +14,13 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public EntryNode()
+            : base()
+        {
+            this.Attributes
+                .Has("entry");
+        }
+
         public override void PrePass(Kernel k)
         {
             if (this.Body != null)
@@ -32,7 +39,9 @@ namespace sholan.Compiler.Nodes
         {
             k.Emit(Opcode.LABEL, "sl_k_entry").Comment = "program entry point";
 
-            k.PushScope().Name = "k_entry";
+            Scope scope = k.PushScope();
+            scope.Name = "k_entry";
+            scope.Type = ScopeType.Block;
 
             if (this.Body != null)
                 this.Body.Compile(k);

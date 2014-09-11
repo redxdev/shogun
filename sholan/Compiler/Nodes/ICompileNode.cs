@@ -23,6 +23,17 @@ namespace sholan.Compiler.Nodes
             get;
         }
 
+        bool UseReturn
+        {
+            get;
+            set;
+        }
+
+        NodeAttributes Attributes
+        {
+            get;
+        }
+
         void PrePass(Kernel k);
 
         void PreCompile(Kernel k);

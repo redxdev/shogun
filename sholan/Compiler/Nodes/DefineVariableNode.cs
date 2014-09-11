@@ -14,6 +14,13 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public DefineVariableNode()
+            : base()
+        {
+            this.Attributes
+                .Has("define-var");
+        }
+
         public override void PrePass(Kernel k)
         {
         }

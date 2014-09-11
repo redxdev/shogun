@@ -26,6 +26,14 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public InternalFunctionNode()
+            : base()
+        {
+            this.Attributes
+                .Has("function")
+                .Has("return");
+        }
+
         public override void PrePass(Kernel k)
         {
             if (this.Body != null)
@@ -44,13 +52,15 @@ namespace sholan.Compiler.Nodes
                 {
                     Name = this.Function,
                     SMode = Symbol.Mode.Intern,
-                    SType = Symbol.Type.Function
+                    SType = Symbol.Type.Function,
+                    Id = (uint)this.Arguments.Count
                 };
 
             k.RegisterSymbol(symbol);
 
             Scope scope = k.PushScope();
             scope.Name = this.Function;
+            scope.Type = ScopeType.Function;
             scope.MemorySpace += (uint)this.Arguments.Count + 1;
             symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName());
 
