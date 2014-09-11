@@ -182,8 +182,10 @@ expression returns [ICompileNode node]
 atom returns [ICompileNode node]
 	:
 		NIL { $node = new NilValueNode(); }
-	|	str=STRING { $node = new ConstantCompileNode() { Value = $str.text }; }
-	|	num=NUMBER { $node = new ConstantCompileNode() { Value = $num.text }; }
+	|	str=STRING { $node = new ConstantNode() { Value = $str.text }; }
+	|	num=NUMBER { $node = new ConstantNode() { Value = $num.text }; }
+	|	B_TRUE { $node = new ConstantBoolNode() { Value = true }; }
+	|	B_FALSE { $node = new ConstantBoolNode() { Value = false }; }
 	|	var=IDENT { $node = new RetrieveVariableNode() { VariableName = $var.text }; }
 	|	stm=statement { $node = $stm.node; $node.UseReturn = true; }
 	;
@@ -230,6 +232,14 @@ EQUAL
 
 NIL
 	:	'nil'
+	;
+
+B_TRUE
+	:	'true'
+	;
+
+B_FALSE
+	:	'false'
 	;
 
 fragment ESCAPE_SEQUENCE

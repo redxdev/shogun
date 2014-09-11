@@ -18,4 +18,8 @@ entry {
 	bar = foo
 	print(bar)
 	foobar(foo,bar)
+	
+	foo = true
+	print(foo)
+	print(bar)
 }

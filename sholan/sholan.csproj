@@ -47,7 +47,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\CompileException.cs" />
-    <Compile Include="Compiler\Nodes\ConstantCompileNode.cs" />
+    <Compile Include="Compiler\Nodes\ConstantBoolNode.cs" />
+    <Compile Include="Compiler\Nodes\ConstantNode.cs" />
     <Compile Include="Compiler\NodeAttributeException.cs" />
     <Compile Include="Compiler\NodeAttributes.cs" />
     <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />

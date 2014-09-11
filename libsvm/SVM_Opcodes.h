@@ -18,6 +18,8 @@ namespace Shogun
 		// stack operations //
 		PUSH, // push a value onto the stack
 		PUSHNIL,
+		PUSHT,
+		PUSHF,
 		POP, // pop a value from the stack (discarding it)
 		DUP, // duplicate a value on the stack
 		REF, // copy a reference on the stack

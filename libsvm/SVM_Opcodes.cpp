@@ -34,6 +34,18 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			OPCODE(PUSHT)
+			{
+				vm->push(createObject(true));
+			}
+			OPCODE_END
+
+			OPCODE(PUSHF)
+			{
+				vm->push(createObject(false));
+			}
+			OPCODE_END
+
 			OPCODE(POP)
 			{
 				vm->pop();
@@ -426,6 +438,8 @@ namespace Shogun
 			OPCODE_MAP(NOOP, 0);
 			OPCODE_MAP(PUSH, 1);
 			OPCODE_MAP(PUSHNIL, 0);
+			OPCODE_MAP(PUSHT, 0);
+			OPCODE_MAP(PUSHF, 0);
 			OPCODE_MAP(POP, 0);
 			OPCODE_MAP(DUP, 0);
 			OPCODE_MAP(REF, 0);

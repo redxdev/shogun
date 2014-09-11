@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    public class ConstantCompileNode : AbstractCompileNode
+    public class ConstantNode : AbstractCompileNode
     {
         public string Value
         {
@@ -14,7 +14,7 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ConstantCompileNode()
+        public ConstantNode()
             : base()
         {
             this.Value = null;
