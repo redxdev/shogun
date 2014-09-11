@@ -59,6 +59,7 @@
     <Compile Include="Compiler\Nodes\FunctionCallNode.cs" />
     <Compile Include="Compiler\Nodes\HaltNode.cs" />
     <Compile Include="Compiler\Nodes\ICompileNode.cs" />
+    <Compile Include="Compiler\Nodes\IfNode.cs" />
     <Compile Include="Compiler\Nodes\ImportFileNode.cs" />
     <Compile Include="Compiler\Nodes\InternalFunctionNode.cs" />
     <Compile Include="Compiler\Nodes\NilValueNode.cs" />

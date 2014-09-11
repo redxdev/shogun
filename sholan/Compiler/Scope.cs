@@ -47,7 +47,7 @@ namespace sholan.Compiler
 
         private uint currentId = 0;
 
-        private uint currentReturn = 0;
+        private uint currentLabelId = 0;
 
         public Scope()
         {
@@ -60,9 +60,9 @@ namespace sholan.Compiler
             return currentId++;
         }
 
-        public uint RequestReturn()
+        public uint RequestLabelId()
         {
-            return currentReturn++;
+            return currentLabelId++;
         }
 
         public uint WalkMemoryBack(Scope until)

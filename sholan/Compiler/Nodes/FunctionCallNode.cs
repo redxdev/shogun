@@ -104,7 +104,7 @@ namespace sholan.Compiler.Nodes
                 this.Arguments[i].Compile(k);
             }
 
-            uint returnId = k.CurrentScope.RequestReturn();
+            uint returnId = k.CurrentScope.RequestLabelId();
 
             k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call function " + this.Function;
             k.Emit(Opcode.PMMX);

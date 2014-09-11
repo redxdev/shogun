@@ -29,13 +29,13 @@ grammar SLang;
  */
 
 compileUnit returns [ICompileNode rootNode]
-	:	stms=statements EOF { $rootNode = $stms.tree; }
+	:	stms=statements EOF { $rootNode = $stms.node; }
 	;
 
-statements returns [TreeNode tree]
+statements returns [TreeNode node]
 	:
 	{
-		$tree = new TreeNode()
+		$node = new TreeNode()
 			{
 				Children = new LinkedList<ICompileNode>()
 			};
@@ -43,7 +43,7 @@ statements returns [TreeNode tree]
 	(
 		stm=statement
 		{
-			$tree.Children.AddLast(
+			$node.Children.AddLast(
 				$stm.node
 				);
 		}
@@ -53,7 +53,7 @@ statements returns [TreeNode tree]
 statement returns [ICompileNode node]
 	:
 	(
-		s_if=stm_import_file { $node = $s_if.node; }
+		s_im=stm_import_file { $node = $s_im.node; }
 	|	s_ef=stm_extern_func { $node = $s_ef.node; }
 	|	s_cf=stm_call_func { $node = $s_cf.node; }
 	|	s_df=stm_define_func { $node = $s_df.node; }
@@ -63,6 +63,7 @@ statement returns [ICompileNode node]
 	|	s_as=stm_assembly { $node = $s_as.node; }
 	|	s_ht=stm_halt { $node = $s_ht.node; }
 	|	s_sv=stm_variable_set { $node = $s_sv.node; }
+	|	s_if=stm_if { $node = $s_if.node; }
 	)
 	;
 
@@ -135,7 +136,7 @@ stm_define_func returns [InternalFunctionNode node]
 	)?
 		GROUP_END
 		BLOCK_START
-		stms=statements { $node.Body = $stms.tree; }
+		stms=statements { $node.Body = $stms.node; }
 		BLOCK_END
 	;
 
@@ -143,7 +144,7 @@ stm_define_entry returns [EntryNode node]
 	:	{ $node = new EntryNode(); }
 		ENTRY
 		BLOCK_START
-		stms=statements { $node.Body = $stms.tree; }
+		stms=statements { $node.Body = $stms.node; }
 		BLOCK_END
 	;
 
@@ -173,6 +174,25 @@ stm_halt returns [HaltNode node]
 
 stm_variable_set returns [SetVariableNode node]
 	:	var=IDENT EQUAL expr=expression { $node = new SetVariableNode() { VariableName = $var.text, Value = $expr.node }; }
+	;
+
+stm_if returns [IfNode node]
+	:	S_IF GROUP_START expr=expression GROUP_END { $node = new IfNode() { Check = $expr.node }; }
+	(
+		stm=statement { $node.BranchTrue = $stm.node; }
+	|	BLOCK_START
+		stms=statements { $node.BranchTrue = $stms.node; }
+		BLOCK_END
+	)
+	(
+		S_ELSE
+		(
+			estm=statement { $node.BranchFalse = $estm.node; }
+		|	BLOCK_START
+			estms=statements { $node.BranchFalse = $estms.node; }
+			BLOCK_END
+		)
+	)?
 	;
 
 expression returns [ICompileNode node]
@@ -240,6 +260,14 @@ B_TRUE
 
 B_FALSE
 	:	'false'
+	;
+
+S_IF
+	:	'if'
+	;
+
+S_ELSE
+	:	'else'
 	;
 
 fragment ESCAPE_SEQUENCE
