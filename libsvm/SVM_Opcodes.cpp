@@ -64,6 +64,15 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			OPCODE(SWAP)
+			{
+				ObjectPtr a = vm->pop();
+				ObjectPtr b = vm->pop();
+				vm->push(a);
+				vm->push(b);
+			}
+			OPCODE_END
+
 			// register operations //
 
 			OPCODE(PMMX)
@@ -340,6 +349,22 @@ namespace Shogun
 			}
 			OPCODE_END
 
+			OPCODE(LTEQ)
+			{
+					Number a = vm->pop()->getNumber();
+					Number b = vm->pop()->getNumber();
+					vm->push(createObject(a <= b));
+			}
+			OPCODE_END
+
+			OPCODE(GTEQ)
+			{
+					Number a = vm->pop()->getNumber();
+					Number b = vm->pop()->getNumber();
+					vm->push(createObject(a >= b));
+			}
+			OPCODE_END
+
 			OPCODE(ALT)
 			{
 				UInt32 a = vm->pop()->getAddress();
@@ -353,6 +378,22 @@ namespace Shogun
 				UInt32 a = vm->pop()->getAddress();
 				UInt32 b = vm->pop()->getAddress();
 				vm->push(createObject(a > b));
+			}
+			OPCODE_END
+
+			OPCODE(ALTEQ)
+			{
+					UInt32 a = vm->pop()->getAddress();
+					UInt32 b = vm->pop()->getAddress();
+					vm->push(createObject(a <= b));
+			}
+			OPCODE_END
+
+			OPCODE(AGTEQ)
+			{
+					UInt32 a = vm->pop()->getAddress();
+					UInt32 b = vm->pop()->getAddress();
+					vm->push(createObject(a >= b));
 			}
 			OPCODE_END
 
@@ -443,6 +484,7 @@ namespace Shogun
 			OPCODE_MAP(POP, 0);
 			OPCODE_MAP(DUP, 0);
 			OPCODE_MAP(REF, 0);
+			OPCODE_MAP(SWAP, 0);
 			OPCODE_MAP(PMMX, 0);
 			OPCODE_MAP(PPRI, 0);
 			OPCODE_MAP(SMMX, 0);
@@ -478,8 +520,12 @@ namespace Shogun
 			OPCODE_MAP(TEQ, 0);
 			OPCODE_MAP(LT, 0);
 			OPCODE_MAP(GT, 0);
+			OPCODE_MAP(LTEQ, 0);
+			OPCODE_MAP(GTEQ, 0);
 			OPCODE_MAP(ALT, 0);
 			OPCODE_MAP(AGT, 0);
+			OPCODE_MAP(ALTEQ, 0);
+			OPCODE_MAP(AGTEQ, 0);
 			OPCODE_MAP(CONCAT, 0);
 			OPCODE_MAP(JUMP, 0);
 			OPCODE_MAP(JUMPF, 0);

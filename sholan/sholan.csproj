@@ -56,12 +56,14 @@
     <Compile Include="Compiler\Nodes\DefineVariableNode.cs" />
     <Compile Include="Compiler\Nodes\EntryNode.cs" />
     <Compile Include="Compiler\Nodes\ExternalFunctionNode.cs" />
+    <Compile Include="Compiler\Nodes\ForLoopNode.cs" />
     <Compile Include="Compiler\Nodes\FunctionCallNode.cs" />
     <Compile Include="Compiler\Nodes\HaltNode.cs" />
     <Compile Include="Compiler\Nodes\ICompileNode.cs" />
     <Compile Include="Compiler\Nodes\IfNode.cs" />
     <Compile Include="Compiler\Nodes\ImportFileNode.cs" />
     <Compile Include="Compiler\Nodes\InternalFunctionNode.cs" />
+    <Compile Include="Compiler\Nodes\ExpressionNode.cs" />
     <Compile Include="Compiler\Nodes\NilValueNode.cs" />
     <Compile Include="Compiler\Nodes\RawAssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\RetrieveVariableNode.cs" />

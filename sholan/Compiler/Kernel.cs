@@ -52,11 +52,19 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope().MemorySpace = 1;
+            PushScope(true).MemorySpace = 1;
         }
 
-        public Scope PushScope()
+        public Scope PushScope(bool ignoreMemory = false)
         {
+            if (!ignoreMemory)
+            {
+                this.Emit(Opcode.PMMX);
+                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
+                this.Emit(Opcode.AADD);
+                this.Emit(Opcode.SMMX);
+            }
+
             Scope scope = new Scope();
             if(scopeStack.Count > 0)
                 scope.Parent = scopeStack.Peek();
@@ -65,8 +73,16 @@ namespace sholan.Compiler
             return scope;
         }
 
-        public Scope PopScope()
+        public Scope PopScope(bool ignoreMemory = false)
         {
+            if(!ignoreMemory)
+            {
+                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
+                this.Emit(Opcode.PMMX);
+                this.Emit(Opcode.ASUB);
+                this.Emit(Opcode.SMMX);
+            }
+
             return scopeStack.Pop();
         }
 
@@ -169,7 +185,7 @@ namespace sholan.Compiler
             {
                 if (!this.HasEntry)
                 {
-                    throw new CompileException("No entry point found (is it in an imported file?)");
+                    throw new CompileException("No entry point found");
                 }
 
                 this.Emit(Opcode.GOTO, "\"sl_k_entry\"");

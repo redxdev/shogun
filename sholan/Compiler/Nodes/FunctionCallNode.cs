@@ -107,17 +107,9 @@ namespace sholan.Compiler.Nodes
             uint returnId = k.CurrentScope.RequestLabelId();
 
             k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call function " + this.Function;
-            k.Emit(Opcode.PMMX);
-            k.EmitPush(k.CurrentScope.MemorySpace.ToString() + "u");
-            k.Emit(Opcode.AADD);
-            k.Emit(Opcode.SMMX);
             k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"');
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
-            k.EmitPush(k.CurrentScope.MemorySpace.ToString() + "u");
-            k.Emit(Opcode.PMMX);
-            k.Emit(Opcode.ASUB);
-            k.Emit(Opcode.SMMX);
         }
     }
 }

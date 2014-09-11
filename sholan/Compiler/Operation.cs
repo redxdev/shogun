@@ -42,6 +42,10 @@ namespace sholan.Compiler
                 case Opcode.LABEL:
                     return string.Format("{0}:{1}", this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
 
+                case Opcode.NEQ:
+                case Opcode.NTEQ:
+                    return string.Format("\t{0}\n{1}", this.Op.ToString(), Opcode.NOT.ToString());
+
                 default:
                     return string.Format("\t{0} {1}{2}", this.Op.ToString(), this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
             }
@@ -61,6 +65,7 @@ namespace sholan.Compiler
 		POP, // pop a value from the stack (discarding it)
 		DUP, // duplicate a value on the stack
 		REF, // copy a reference on the stack
+		SWAP, // swap the top two items on the stack
 
 		// register operations //
 		PMMX, // push the value of the MMX register
@@ -108,8 +113,12 @@ namespace sholan.Compiler
 		TEQ,
 		LT,
 		GT,
+		LTEQ,
+		GTEQ,
 		ALT,
 		AGT,
+		ALTEQ,
+		AGTEQ,
 
 		// string operations //
 		CONCAT, // concatinate strings
@@ -136,6 +145,8 @@ namespace sholan.Compiler
 		// other //
 		COUNT, // INVALID
 
-        LABEL
+        LABEL,
+        NEQ,
+        NTEQ
     }
 }

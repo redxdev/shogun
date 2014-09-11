@@ -53,26 +53,27 @@ statements returns [TreeNode node]
 statement returns [ICompileNode node]
 	:
 	(
-		s_im=stm_import_file { $node = $s_im.node; }
-	|	s_ef=stm_extern_func { $node = $s_ef.node; }
-	|	s_cf=stm_call_func { $node = $s_cf.node; }
-	|	s_df=stm_define_func { $node = $s_df.node; }
-	|	s_de=stm_define_entry { $node = $s_de.node; }
-	|	s_re=stm_return { $node = $s_re.node; }
-	|	s_vd=stm_variable_def { $node = $s_vd.node; }
-	|	s_as=stm_assembly { $node = $s_as.node; }
-	|	s_ht=stm_halt { $node = $s_ht.node; }
-	|	s_sv=stm_variable_set { $node = $s_sv.node; }
-	|	s_if=stm_if { $node = $s_if.node; }
+		stm_import_file { $node = $stm_import_file.node; }
+	|	stm_extern_func { $node = $stm_extern_func.node; }
+	|	stm_call_func { $node = $stm_call_func.node; }
+	|	stm_define_func { $node = $stm_define_func.node; }
+	|	stm_define_entry { $node = $stm_define_entry.node; }
+	|	stm_return { $node = $stm_return.node; }
+	|	stm_variable_def { $node = $stm_variable_def.node; }
+	|	stm_assembly { $node = $stm_assembly.node; }
+	|	stm_halt { $node = $stm_halt.node; }
+	|	stm_variable_set { $node = $stm_variable_set.node; }
+	|	stm_if { $node = $stm_if.node; }
+	|	stm_for_loop { $node = $stm_for_loop.node; }
 	)
 	;
 
 stm_import_file returns [ImportFileNode node]
-	:	IMPORT fn=STRING
+	:	IMPORT STRING
 	{
 		$node = new ImportFileNode()
 			{
-				Filepath = $fn.text.Substring(1, $fn.text.Length - 2)
+				Filepath = $STRING.text.Substring(1, $STRING.text.Length - 2)
 			};
 	}
 	;
@@ -100,11 +101,11 @@ stm_extern_func returns [ExternalFunctionNode node]
 
 stm_call_func returns [FunctionCallNode node]
 	:
-		func=IDENT
+		IDENT
 	{
 		$node = new FunctionCallNode()
 			{
-				Function = $func.text,
+				Function = $IDENT.text,
 				Arguments = new List<ICompileNode>()
 			};
 	}
@@ -144,7 +145,7 @@ stm_define_entry returns [EntryNode node]
 	:	{ $node = new EntryNode(); }
 		ENTRY
 		BLOCK_START
-		stms=statements { $node.Body = $stms.node; }
+		statements { $node.Body = $statements.node; }
 		BLOCK_END
 	;
 
@@ -152,20 +153,20 @@ stm_return returns [ReturnNode node]
 	:	{ $node = new ReturnNode(); }
 		RETURN
 	(
-		expr=expression { $node.Value = $expr.node; }
+		expression { $node.Value = $expression.node; }
 	)?
 	;
 
 stm_variable_def returns [DefineVariableNode node]
-	:	VAR_DEF v=IDENT { $node = new DefineVariableNode() { VariableName = $v.text }; }
+	:	VAR_DEF IDENT { $node = new DefineVariableNode() { VariableName = $IDENT.text }; }
 	(
 		EQUAL
-		expr=expression { $node.Value = $expr.node; }
+		expression { $node.Value = $expression.node; }
 	)?
 	;
 
 stm_assembly returns [RawAssemblyNode node]
-	:	ASSEMBLY str=STRING_EXT { $node = new RawAssemblyNode() { Assembly = $str.text.Substring(2, $str.text.Length - 4) }; }
+	:	ASSEMBLY STRING_EXT { $node = new RawAssemblyNode() { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; }
 	;
 
 stm_halt returns [HaltNode node]
@@ -173,11 +174,11 @@ stm_halt returns [HaltNode node]
 	;
 
 stm_variable_set returns [SetVariableNode node]
-	:	var=IDENT EQUAL expr=expression { $node = new SetVariableNode() { VariableName = $var.text, Value = $expr.node }; }
+	:	IDENT EQUAL expression { $node = new SetVariableNode() { VariableName = $IDENT.text, Value = $expression.node }; }
 	;
 
 stm_if returns [IfNode node]
-	:	S_IF GROUP_START expr=expression GROUP_END { $node = new IfNode() { Check = $expr.node }; }
+	:	S_IF GROUP_START expression GROUP_END { $node = new IfNode() { Check = $expression.node }; }
 	(
 		stm=statement { $node.BranchTrue = $stm.node; }
 	|	BLOCK_START
@@ -195,19 +196,58 @@ stm_if returns [IfNode node]
 	)?
 	;
 
-expression returns [ICompileNode node]
-	:	a=atom { $node = $atom.node; }
+stm_for_loop returns [ForLoopNode node]
+	:	S_FOR GROUP_START init=statements SECTION check=expression SECTION incr=statements GROUP_END
+		{
+			$node = new ForLoopNode()
+				{
+					Init = $init.node,
+					Check = $check.node,
+					Increment = $incr.node
+				};
+		}
+
+	(
+		stm=statement { $node.Body = $stm.node; }
+	|	BLOCK_START
+		body=statements { $node.Body = $body.node; }
+		BLOCK_END
+	)
+	;
+
+expression returns [ExpressionNode node]
+	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
+		a=addExpr { $node.Values.Add($a.node); }
+	(
+		EQUAL EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.EQ); }
+	|	EQUAL EQUAL EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.TEQ); }
+	|	NOT EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.NEQ); }
+	|	NOT EQUAL EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.NTEQ); }
+	|	GREATER b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.GT); }
+	|	GREATER EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.GTEQ); }
+	|	LESS b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.LT); }
+	|	LESS EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.LTEQ); }
+	)*
+	;
+
+addExpr returns [ExpressionNode node]
+	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
+		a=atom { $node.Values.Add($a.node); }
+	(
+		PLUS b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.ADD); }
+	|	MINUS b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.SUB); }
+	)*
 	;
 
 atom returns [ICompileNode node]
 	:
 		NIL { $node = new NilValueNode(); }
-	|	str=STRING { $node = new ConstantNode() { Value = $str.text }; }
-	|	num=NUMBER { $node = new ConstantNode() { Value = $num.text }; }
+	|	STRING { $node = new ConstantNode() { Value = $STRING.text }; }
+	|	NUMBER { $node = new ConstantNode() { Value = $NUMBER.text }; }
 	|	B_TRUE { $node = new ConstantBoolNode() { Value = true }; }
 	|	B_FALSE { $node = new ConstantBoolNode() { Value = false }; }
-	|	var=IDENT { $node = new RetrieveVariableNode() { VariableName = $var.text }; }
-	|	stm=statement { $node = $stm.node; $node.UseReturn = true; }
+	|	IDENT { $node = new RetrieveVariableNode() { VariableName = $IDENT.text }; }
+	|	statement { $node = $statement.node; $node.UseReturn = true; }
 	;
 
 /*
@@ -250,6 +290,18 @@ EQUAL
 	:	'='
 	;
 
+NOT
+	:	'!'
+	;
+
+GREATER
+	:	'>'
+	;
+
+LESS
+	:	'<'
+	;
+
 NIL
 	:	'nil'
 	;
@@ -268,6 +320,26 @@ S_IF
 
 S_ELSE
 	:	'else'
+	;
+
+S_FOR
+	:	'for'
+	;
+
+SECTION
+	:	';'
+	;
+
+SPEC
+	:	':'
+	;
+
+PLUS
+	:	'+'
+	;
+
+MINUS
+	:	'-'
 	;
 
 fragment ESCAPE_SEQUENCE

@@ -23,6 +23,7 @@ namespace Shogun
 		POP, // pop a value from the stack (discarding it)
 		DUP, // duplicate a value on the stack
 		REF, // copy a reference on the stack
+		SWAP, // swap the top two items on the stack
 
 		// register operations //
 		PMMX, // push the value of the MMX register
@@ -70,8 +71,12 @@ namespace Shogun
 		TEQ,
 		LT,
 		GT,
+		LTEQ,
+		GTEQ,
 		ALT,
 		AGT,
+		ALTEQ,
+		AGTEQ,
 
 		// string operations //
 		CONCAT, // concatinate strings

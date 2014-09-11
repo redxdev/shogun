@@ -40,7 +40,9 @@ namespace sholan.Compiler.Nodes
 
 
             this.Check.PrePass(k);
-            this.BranchTrue.PrePass(k);
+
+            if(this.BranchTrue != null)
+                this.BranchTrue.PrePass(k);
 
             if (this.BranchFalse != null)
                 this.BranchFalse.PrePass(k);
@@ -49,7 +51,9 @@ namespace sholan.Compiler.Nodes
         public override void PreCompile(Kernel k)
         {
             this.Check.PreCompile(k);
-            this.BranchTrue.PreCompile(k);
+
+            if (this.BranchTrue != null)
+                this.BranchTrue.PreCompile(k);
 
             if (this.BranchFalse != null)
                 this.BranchFalse.PreCompile(k);
@@ -76,7 +80,8 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.LABEL, trueLabel);
 
-            this.BranchTrue.Compile(k);
+            if (this.BranchTrue != null)
+                this.BranchTrue.Compile(k);
 
             k.PopScope();
 
