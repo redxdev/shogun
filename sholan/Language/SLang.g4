@@ -62,6 +62,7 @@ statement returns [ICompileNode node]
 	|	s_vd=stm_variable_def { $node = $s_vd.node; }
 	|	s_as=stm_assembly { $node = $s_as.node; }
 	|	s_ht=stm_halt { $node = $s_ht.node; }
+	|	s_sv=stm_variable_set { $node = $s_sv.node; }
 	)
 	;
 
@@ -156,6 +157,10 @@ stm_return returns [ReturnNode node]
 
 stm_variable_def returns [DefineVariableNode node]
 	:	VAR_DEF v=IDENT { $node = new DefineVariableNode() { VariableName = $v.text }; }
+	(
+		EQUAL
+		expr=expression { $node.Value = $expr.node; }
+	)?
 	;
 
 stm_assembly returns [RawAssemblyNode node]
@@ -166,14 +171,20 @@ stm_halt returns [HaltNode node]
 	:	HALT { $node = new HaltNode(); }
 	;
 
+stm_variable_set returns [SetVariableNode node]
+	:	var=IDENT EQUAL expr=expression { $node = new SetVariableNode() { VariableName = $var.text, Value = $expr.node }; }
+	;
+
 expression returns [ICompileNode node]
 	:	a=atom { $node = $atom.node; }
 	;
 
 atom returns [ICompileNode node]
 	:
-		str=STRING { $node = new ConstantCompileNode() { Value = $str.text }; }
+		NIL { $node = new NilValueNode(); }
+	|	str=STRING { $node = new ConstantCompileNode() { Value = $str.text }; }
 	|	num=NUMBER { $node = new ConstantCompileNode() { Value = $num.text }; }
+	|	var=IDENT { $node = new RetrieveVariableNode() { VariableName = $var.text }; }
 	|	stm=statement { $node = $stm.node; $node.UseReturn = true; }
 	;
 
@@ -211,6 +222,14 @@ ASSEMBLY
 
 HALT
 	:	'halt'
+	;
+
+EQUAL
+	:	'='
+	;
+
+NIL
+	:	'nil'
 	;
 
 fragment ESCAPE_SEQUENCE

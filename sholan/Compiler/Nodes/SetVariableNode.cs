@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    public class DefineVariableNode : AbstractCompileNode
+    public class SetVariableNode : AbstractCompileNode
     {
         public string VariableName
         {
@@ -20,11 +20,11 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public DefineVariableNode()
+        public SetVariableNode()
             : base()
         {
             this.Attributes
-                .Has("define-var");
+                .Has("variable");
         }
 
         public override void PrePass(Kernel k)
@@ -40,7 +40,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PreCompile(Kernel k)
         {
-            if(this.Value != null)
+            if (this.Value != null)
             {
                 this.Value.PreCompile(k);
             }
@@ -48,31 +48,21 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.EmitPush("1u").Comment = "allocate variable " + this.VariableName;
-            k.Emit(Opcode.ALLOC);
-            k.CurrentScope.MemorySpace += 1;
+            Symbol symbol = k.Lookup(this.VariableName);
+            uint mem = k.CurrentScope.WalkMemoryBack(symbol.SScope);
+            mem -= symbol.Id;
 
-            Symbol symbol = new Symbol()
-                {
-                    Name = this.VariableName,
-                    SMode = Symbol.Mode.Intern,
-                    SType = Symbol.Type.Variable,
-                    Id = k.CurrentScope.RequestId()
-                };
-
-            k.RegisterSymbol(symbol);
-
-            if (this.Value == null)
+            if(this.Value == null)
             {
-                k.Emit(Opcode.PUSHNIL).Comment = "clear memory for variable";
+                k.Emit(Opcode.PUSHNIL).Comment = "set variable to nil";
             }
             else
             {
                 this.Value.Compile(k);
             }
 
-            k.EmitPush(symbol.Id.ToString() + "u").Comment = "store into variable";
-            k.Emit(Opcode.STLO);
+            k.EmitPush(mem.ToString() + "u").Comment = "store into variable " + this.VariableName;
+            k.Emit(Opcode.STNLO);
         }
     }
 }

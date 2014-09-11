@@ -60,8 +60,11 @@
     <Compile Include="Compiler\Nodes\ICompileNode.cs" />
     <Compile Include="Compiler\Nodes\ImportFileNode.cs" />
     <Compile Include="Compiler\Nodes\InternalFunctionNode.cs" />
+    <Compile Include="Compiler\Nodes\NilValueNode.cs" />
     <Compile Include="Compiler\Nodes\RawAssemblyNode.cs" />
+    <Compile Include="Compiler\Nodes\RetrieveVariableNode.cs" />
     <Compile Include="Compiler\Nodes\ReturnNode.cs" />
+    <Compile Include="Compiler\Nodes\SetVariableNode.cs" />
     <Compile Include="Compiler\Operation.cs" />
     <Compile Include="Compiler\Symbol.cs" />
     <Compile Include="Compiler\Kernel.cs" />

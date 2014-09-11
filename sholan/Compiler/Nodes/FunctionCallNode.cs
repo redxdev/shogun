@@ -99,7 +99,7 @@ namespace sholan.Compiler.Nodes
 
         protected void CompileIntern(Kernel k)
         {
-            for(int i = 0; i < this.Arguments.Count; i++)
+            for(int i = this.Arguments.Count - 1; i >= 0; i--)
             {
                 this.Arguments[i].Compile(k);
             }
