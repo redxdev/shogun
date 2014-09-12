@@ -73,6 +73,8 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
+            k.CurrentScope.PushMemory(k);
+
             Scope scope = k.PushScope();
             scope.Name = "for" + scope.Parent.RequestLabelId();
             scope.Type = ScopeType.Block;
@@ -104,6 +106,10 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.GOTO, '"' + forLabel + '"');
             k.Emit(Opcode.LABEL, endLabel).Comment = "end for";
+
+            k.PopScope();
+
+            k.CurrentScope.PopMemory(k);
         }
     }
 }

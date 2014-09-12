@@ -43,13 +43,6 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            Scope scope = k.CurrentScope;
-
-            k.EmitPush(scope.Parent.MemorySpace.ToString() + "u");
-            k.Emit(Opcode.PMMX);
-            k.Emit(Opcode.ASUB);
-            k.Emit(Opcode.SMMX);
-
             Symbol returnSymbol = k.Lookup("+return");
 
             if (this.Value != null)
@@ -60,7 +53,7 @@ namespace sholan.Compiler.Nodes
             k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
             k.Emit(Opcode.LDLO);
 
-            k.EmitPush(scope.MemorySpace + "u").Comment = "deallocate function parameter memory";
+            k.EmitPush(k.CurrentScope.MemorySpace + "u").Comment = "deallocate function parameter memory";
             k.Emit(Opcode.DEALLOC);
 
             k.Emit(Opcode.JUMP).Comment = "return from function";

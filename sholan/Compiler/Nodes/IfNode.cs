@@ -61,6 +61,8 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
+            k.CurrentScope.PushMemory(k);
+
             Scope ifScope = k.PushScope();
             ifScope.Name = "if" + ifScope.Parent.RequestLabelId();
             ifScope.Type = ScopeType.Block;
@@ -76,6 +78,8 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.LABEL, trueLabel);
 
+            k.CurrentScope.PushMemory(k);
+
             Scope trueScope = k.PushScope();
             trueScope.Name = "true";
             trueScope.Type = ScopeType.Block;
@@ -84,6 +88,8 @@ namespace sholan.Compiler.Nodes
                 this.BranchTrue.Compile(k);
 
             k.PopScope();
+
+            k.CurrentScope.PopMemory(k);
 
             if(this.BranchFalse == null)
             {
@@ -95,6 +101,8 @@ namespace sholan.Compiler.Nodes
 
                 k.Emit(Opcode.LABEL, falseLabel);
 
+                k.CurrentScope.PushMemory(k);
+
                 Scope falseScope = k.PushScope();
                 falseScope.Name = "false";
                 falseScope.Type = ScopeType.Block;
@@ -103,10 +111,14 @@ namespace sholan.Compiler.Nodes
 
                 k.PopScope();
 
+                k.CurrentScope.PopMemory(k);
+
                 k.Emit(Opcode.LABEL, endLabel).Comment = "end if";
             }
 
             k.PopScope();
+
+            k.CurrentScope.PopMemory(k);
         }
     }
 }

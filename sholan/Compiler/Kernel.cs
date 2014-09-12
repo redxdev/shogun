@@ -52,24 +52,16 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope(false).MemorySpace = 1;
+            PushScope().MemorySpace = 1;
         }
 
-        public Scope PushScope(bool pushMemory = true)
+        public Scope PushScope()
         {
-            return this.PushScope(new Scope(), pushMemory);
+            return this.PushScope(new Scope());
         }
 
-        public Scope PushScope(Scope scope, bool pushMemory = true)
+        public Scope PushScope(Scope scope)
         {
-            if(pushMemory)
-            {
-                this.Emit(Opcode.PMMX);
-                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
-                this.Emit(Opcode.AADD);
-                this.Emit(Opcode.SMMX);
-            }
-
             if (scopeStack.Count > 0)
                 scope.Parent = scopeStack.Peek();
 
@@ -77,17 +69,9 @@ namespace sholan.Compiler
             return scope;
         }
 
-        public Scope PopScope(bool popMemory = true)
+        public Scope PopScope()
         {
             Scope scope = scopeStack.Pop();
-
-            if(popMemory)
-            {
-                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
-                this.Emit(Opcode.PMMX);
-                this.Emit(Opcode.ASUB);
-                this.Emit(Opcode.SMMX);
-            }
 
             return scope;
         }

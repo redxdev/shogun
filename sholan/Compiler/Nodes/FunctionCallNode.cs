@@ -106,10 +106,12 @@ namespace sholan.Compiler.Nodes
 
             uint returnId = k.CurrentScope.RequestLabelId();
 
+            k.CurrentScope.PushMemory(k);
             k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call function " + this.Function;
             k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"');
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
+            k.CurrentScope.PopMemory(k);
         }
     }
 }
