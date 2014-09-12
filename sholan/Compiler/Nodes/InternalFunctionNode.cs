@@ -66,6 +66,8 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
 
+            scope.Parent.PushMemory(k);
+
             k.EmitPush(scope.MemorySpace.ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location
             k.Emit(Opcode.ALLOC);
 
@@ -102,6 +104,8 @@ namespace sholan.Compiler.Nodes
                 this.Body.Compile(k);
 
             new ReturnNode().Compile(k);
+
+            scope.Parent.PopMemory(k);
 
             k.PopScope();
 

@@ -45,6 +45,8 @@ namespace sholan.Compiler.Nodes
         {
             Scope scope = k.CurrentScope;
 
+            scope.Parent.PopMemory(k);
+
             Symbol returnSymbol = k.Lookup("+return");
 
             if (this.Value != null)

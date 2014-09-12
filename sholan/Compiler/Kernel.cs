@@ -52,19 +52,11 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope(true).MemorySpace = 1;
+            PushScope().MemorySpace = 1;
         }
 
-        public Scope PushScope(bool ignoreMemory = false)
+        public Scope PushScope()
         {
-            if (!ignoreMemory)
-            {
-                this.Emit(Opcode.PMMX);
-                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
-                this.Emit(Opcode.AADD);
-                this.Emit(Opcode.SMMX);
-            }
-
             Scope scope = new Scope();
             if(scopeStack.Count > 0)
                 scope.Parent = scopeStack.Peek();
@@ -73,16 +65,8 @@ namespace sholan.Compiler
             return scope;
         }
 
-        public Scope PopScope(bool ignoreMemory = false)
+        public Scope PopScope()
         {
-            if(!ignoreMemory)
-            {
-                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
-                this.Emit(Opcode.PMMX);
-                this.Emit(Opcode.ASUB);
-                this.Emit(Opcode.SMMX);
-            }
-
             return scopeStack.Pop();
         }
 

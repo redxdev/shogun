@@ -77,11 +77,19 @@ namespace sholan.Compiler.Nodes
             scope.Name = "for" + scope.Parent.RequestLabelId();
             scope.Type = ScopeType.Block;
 
+            scope.Parent.PushMemory(k);
+
             if (this.Init != null)
                 this.Init.Compile(k);
 
             string forLabel = "sl_fl_" + k.GetScopeName();
             string endLabel = "sl_flh_" + k.GetScopeName();
+
+            Symbol breakSymbol = new Symbol()
+                {
+                    Name = "+break",
+                    AsmName = endLabel
+                };
 
             k.Emit(Opcode.LABEL, forLabel).Comment = "for loop";
 
@@ -98,6 +106,8 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.GOTO, '"' + forLabel + '"');
             k.Emit(Opcode.LABEL, endLabel).Comment = "end for";
+
+            scope.Parent.PopMemory(k);
         }
     }
 }

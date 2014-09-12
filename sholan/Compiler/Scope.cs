@@ -80,5 +80,21 @@ namespace sholan.Compiler
 
             return memory;
         }
+
+        public void PushMemory(Kernel k)
+        {
+            k.Emit(Opcode.PMMX);
+            k.EmitPush(this.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.AADD);
+            k.Emit(Opcode.SMMX);
+        }
+
+        public void PopMemory(Kernel k)
+        {
+            k.EmitPush(this.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.PMMX);
+            k.Emit(Opcode.ASUB);
+            k.Emit(Opcode.SMMX);
+        }
     }
 }

@@ -43,11 +43,15 @@ namespace sholan.Compiler.Nodes
             scope.Name = "k_entry";
             scope.Type = ScopeType.Block;
 
+            scope.Parent.PushMemory(k);
+
             if (this.Body != null)
                 this.Body.Compile(k);
 
             k.EmitPush(k.CurrentScope.MemorySpace.ToString() + "u").Comment = "deallocate memory";
             k.Emit(Opcode.DEALLOC);
+
+            scope.Parent.PopMemory(k);
 
             k.PopScope();
 
