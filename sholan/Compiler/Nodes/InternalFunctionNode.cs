@@ -58,15 +58,13 @@ namespace sholan.Compiler.Nodes
 
             k.RegisterSymbol(symbol);
 
+            symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName() + "_" + this.Function);
+            k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
+
             Scope scope = k.PushScope();
             scope.Name = this.Function;
             scope.Type = ScopeType.Function;
             scope.MemorySpace += (uint)this.Arguments.Count + 1;
-            symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName());
-
-            k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
-
-            scope.Parent.PushMemory(k);
 
             k.EmitPush(scope.MemorySpace.ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location
             k.Emit(Opcode.ALLOC);
@@ -104,8 +102,6 @@ namespace sholan.Compiler.Nodes
                 this.Body.Compile(k);
 
             new ReturnNode().Compile(k);
-
-            scope.Parent.PopMemory(k);
 
             k.PopScope();
 

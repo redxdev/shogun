@@ -45,7 +45,10 @@ namespace sholan.Compiler.Nodes
         {
             Scope scope = k.CurrentScope;
 
-            scope.Parent.PopMemory(k);
+            k.EmitPush(scope.Parent.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.PMMX);
+            k.Emit(Opcode.ASUB);
+            k.Emit(Opcode.SMMX);
 
             Symbol returnSymbol = k.Lookup("+return");
 

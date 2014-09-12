@@ -52,22 +52,44 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope().MemorySpace = 1;
+            PushScope(false).MemorySpace = 1;
         }
 
-        public Scope PushScope()
+        public Scope PushScope(bool pushMemory = true)
         {
-            Scope scope = new Scope();
-            if(scopeStack.Count > 0)
+            return this.PushScope(new Scope(), pushMemory);
+        }
+
+        public Scope PushScope(Scope scope, bool pushMemory = true)
+        {
+            if(pushMemory)
+            {
+                this.Emit(Opcode.PMMX);
+                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
+                this.Emit(Opcode.AADD);
+                this.Emit(Opcode.SMMX);
+            }
+
+            if (scopeStack.Count > 0)
                 scope.Parent = scopeStack.Peek();
 
             scopeStack.Push(scope);
             return scope;
         }
 
-        public Scope PopScope()
+        public Scope PopScope(bool popMemory = true)
         {
-            return scopeStack.Pop();
+            Scope scope = scopeStack.Pop();
+
+            if(popMemory)
+            {
+                this.EmitPush(this.CurrentScope.MemorySpace.ToString() + "u");
+                this.Emit(Opcode.PMMX);
+                this.Emit(Opcode.ASUB);
+                this.Emit(Opcode.SMMX);
+            }
+
+            return scope;
         }
 
         public Symbol RegisterSymbol(Symbol symbol)

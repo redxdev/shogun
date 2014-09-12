@@ -65,8 +65,6 @@ namespace sholan.Compiler.Nodes
             ifScope.Name = "if" + ifScope.Parent.RequestLabelId();
             ifScope.Type = ScopeType.Block;
 
-            ifScope.Parent.PushMemory(k);
-
             string trueLabel = "sl_if_" + k.GetScopeName();
             string falseLabel = "sl_fe_" + k.GetScopeName();
             string endLabel = "sl_fh_" + k.GetScopeName();
@@ -76,18 +74,14 @@ namespace sholan.Compiler.Nodes
             k.Emit(Opcode.GOTOF, '"' + trueLabel + '"').Comment = "if statement";
             k.Emit(Opcode.GOTO, '"' + falseLabel + '"');
 
+            k.Emit(Opcode.LABEL, trueLabel);
+
             Scope trueScope = k.PushScope();
             trueScope.Name = "true";
             trueScope.Type = ScopeType.Block;
 
-            trueScope.Parent.PushMemory(k);
-
-            k.Emit(Opcode.LABEL, trueLabel);
-
             if (this.BranchTrue != null)
                 this.BranchTrue.Compile(k);
-
-            trueScope.Parent.PopMemory(k);
 
             k.PopScope();
 
@@ -99,24 +93,18 @@ namespace sholan.Compiler.Nodes
             {
                 k.Emit(Opcode.GOTO, '"' + endLabel + '"');
 
+                k.Emit(Opcode.LABEL, falseLabel);
+
                 Scope falseScope = k.PushScope();
                 falseScope.Name = "false";
                 falseScope.Type = ScopeType.Block;
 
-                falseScope.Parent.PushMemory(k);
-
-                k.Emit(Opcode.LABEL, falseLabel);
-
                 this.BranchFalse.Compile(k);
-
-                falseScope.Parent.PopMemory(k);
 
                 k.PopScope();
 
                 k.Emit(Opcode.LABEL, endLabel).Comment = "end if";
             }
-
-            ifScope.Parent.PopMemory(k);
 
             k.PopScope();
         }
