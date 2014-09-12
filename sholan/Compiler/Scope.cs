@@ -83,6 +83,9 @@ namespace sholan.Compiler
 
         public void PushMemory(Kernel k)
         {
+            if (this.MemorySpace == 0)
+                return;
+
             k.Emit(Opcode.PMMX);
             k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.AADD);
@@ -91,6 +94,9 @@ namespace sholan.Compiler
 
         public void PopMemory(Kernel k)
         {
+            if (this.MemorySpace == 0)
+                return;
+
             k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.PMMX);
             k.Emit(Opcode.ASUB);

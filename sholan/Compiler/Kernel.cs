@@ -53,6 +53,7 @@ namespace sholan.Compiler
         public Kernel()
         {
             PushScope().MemorySpace = 1;
+            this.CurrentScope.PushMemory(this);
         }
 
         public Scope PushScope()
