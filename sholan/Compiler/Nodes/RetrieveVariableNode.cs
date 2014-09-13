@@ -33,11 +33,20 @@ namespace sholan.Compiler.Nodes
         public override void Compile(Kernel k)
         {
             Symbol symbol = k.Lookup(this.VariableName);
-            uint mem = k.CurrentScope.WalkMemoryBack(symbol.SScope);
-            mem -= symbol.Id;
 
-            k.EmitPush(mem.ToString() + "u").Comment = "retrieve variable " + this.VariableName;
-            k.Emit(Opcode.LDNLO);
+            if (symbol.SScope == k.CurrentScope)
+            {
+                k.EmitPush(symbol.Id.ToString() + "u").Comment = "retrieve variable " + this.VariableName;
+                k.Emit(Opcode.LDLO);
+            }
+            else
+            {
+                uint mem = k.CurrentScope.WalkMemoryBack(symbol.SScope);
+                mem -= symbol.Id;
+
+                k.EmitPush(mem.ToString() + "u").Comment = "retrieve variable " + this.VariableName;
+                k.Emit(Opcode.LDNLO);
+            }
         }
     }
 }

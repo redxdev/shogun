@@ -50,8 +50,7 @@ namespace sholan.Compiler.Nodes
             else
                 k.Emit(Opcode.PUSHNIL);
 
-            k.EmitPush(returnSymbol.Id.ToString() + "u").Comment = "get return location";
-            k.Emit(Opcode.LDLO);
+            new RetrieveVariableNode() { VariableName = "+return" }.Compile(k);
 
             k.EmitPush(k.CurrentScope.MemorySpace + "u").Comment = "deallocate function parameter memory";
             k.Emit(Opcode.DEALLOC);

@@ -69,6 +69,7 @@ namespace sholan.Compiler
         {
             uint memory = 0;
             Scope current = this;
+
             while(current != until)
             {
                 if (current == null)
@@ -77,6 +78,8 @@ namespace sholan.Compiler
                 memory += current.MemorySpace;
                 current = current.Parent;
             }
+
+            memory += current.MemorySpace;
 
             return memory;
         }
