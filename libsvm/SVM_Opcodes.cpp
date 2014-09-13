@@ -461,6 +461,15 @@ namespace Shogun
 				vm->halt();
 			}
 			OPCODE_END
+
+			OPCODE(DBRK)
+			{
+				std::cerr << "DBRK start" << std::endl;
+				vm->dump(std::cerr);
+				std::cerr << "DBRK end" << std::endl;
+				std::cin.get();
+			}
+			OPCODE_END
 		}
 	}
 
@@ -536,6 +545,7 @@ namespace Shogun
 			OPCODE_MAP(GOTOF, 1);
 			OPCODE_MAP(PLABL, 1);
 			OPCODE_MAP(HALT, 0);
+			OPCODE_MAP(DBRK, 0);
 		}
 	}
 

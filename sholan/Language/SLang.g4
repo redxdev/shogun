@@ -4,6 +4,7 @@ grammar SLang;
 {
 	#pragma warning disable 3021
 
+	using System;
 	using sholan.Compiler;
 	using sholan.Compiler.Nodes;
 }
@@ -29,7 +30,11 @@ grammar SLang;
  */
 
 compileUnit returns [ICompileNode rootNode]
-	:	stms=statements EOF { $rootNode = $stms.node; }
+	:	debugMode? stms=statements EOF { $rootNode = $stms.node; }
+	;
+
+debugMode
+	:	DIRECTIVE D_DEBUG { Console.WriteLine("Connect debugger and press [enter]"); Console.ReadLine(); }
 	;
 
 statements returns [TreeNode node]
@@ -340,6 +345,14 @@ PLUS
 
 MINUS
 	:	'-'
+	;
+
+DIRECTIVE
+	:	'#'
+	;
+
+D_DEBUG
+	:	'debug'
 	;
 
 fragment ESCAPE_SEQUENCE

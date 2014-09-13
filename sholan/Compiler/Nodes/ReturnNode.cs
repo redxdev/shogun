@@ -52,7 +52,19 @@ namespace sholan.Compiler.Nodes
 
             new RetrieveVariableNode() { VariableName = "+return" }.Compile(k);
 
-            k.EmitPush(k.CurrentScope.MemorySpace + "u").Comment = "deallocate function parameter memory";
+            uint mem = 0;
+            Scope current = k.CurrentScope;
+            while(current != returnSymbol.SScope)
+            {
+                mem += current.MemorySpace;
+                current.PopMemory(k);
+
+                current = current.Parent;
+            }
+
+            current.PopMemory(k, false);
+
+            k.EmitPush(mem + "u").Comment = "deallocate function parameter memory";
             k.Emit(Opcode.DEALLOC);
 
             k.Emit(Opcode.JUMP).Comment = "return from function";

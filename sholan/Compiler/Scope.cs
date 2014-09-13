@@ -49,6 +49,8 @@ namespace sholan.Compiler
 
         private uint currentLabelId = 0;
 
+        private int pushed = 0;
+
         public Scope()
         {
             this.Symbols = new Dictionary<string, Symbol>();
@@ -89,18 +91,23 @@ namespace sholan.Compiler
             if (this.MemorySpace == 0)
                 return;
 
-            k.Emit(Opcode.PMMX);
+            pushed++;
+
+            k.Emit(Opcode.PMMX).Comment = "push memory for " + this.Name;
             k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.AADD);
             k.Emit(Opcode.SMMX);
         }
 
-        public void PopMemory(Kernel k)
+        public void PopMemory(Kernel k, bool clearPush = true)
         {
-            if (this.MemorySpace == 0)
+            if (this.MemorySpace == 0 || pushed == 0)
                 return;
 
-            k.EmitPush(this.MemorySpace.ToString() + "u");
+            if(clearPush)
+                pushed--;
+
+            k.EmitPush(this.MemorySpace.ToString() + "u").Comment = "pop memory for " + this.Name;
             k.Emit(Opcode.PMMX);
             k.Emit(Opcode.ASUB);
             k.Emit(Opcode.SMMX);
