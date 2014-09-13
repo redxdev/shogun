@@ -5,6 +5,8 @@ grammar SLang;
 	#pragma warning disable 3021
 
 	using System;
+	using System.Diagnostics;
+	using System.Threading;
 	using sholan.Compiler;
 	using sholan.Compiler.Nodes;
 }
@@ -34,7 +36,7 @@ compileUnit returns [ICompileNode rootNode]
 	;
 
 debugMode
-	:	DIRECTIVE D_DEBUG { Console.WriteLine("Connect debugger and press [enter]"); Console.ReadLine(); }
+	:	DIRECTIVE DEBUG_COMPILER { Console.WriteLine("Waiting for debugger..."); while(!Debugger.IsAttached) { Thread.Sleep(100); } Console.WriteLine("Debugger Attached"); }
 	;
 
 statements returns [TreeNode node]
@@ -351,8 +353,8 @@ DIRECTIVE
 	:	'#'
 	;
 
-D_DEBUG
-	:	'debug'
+DEBUG_COMPILER
+	:	'debug-compiler'
 	;
 
 fragment ESCAPE_SEQUENCE
