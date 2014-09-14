@@ -49,8 +49,6 @@ namespace sholan.Compiler.Nodes
         public override void Compile(Kernel k)
         {
             Symbol symbol = k.Lookup(this.VariableName);
-            uint mem = k.CurrentScope.WalkMemoryBack(symbol.SScope);
-            mem -= symbol.Id;
 
             if(this.Value == null)
             {
@@ -61,8 +59,19 @@ namespace sholan.Compiler.Nodes
                 this.Value.Compile(k);
             }
 
-            k.EmitPush(mem.ToString() + "u").Comment = "store into variable " + this.VariableName;
-            k.Emit(Opcode.STNLO);
+            if (symbol.SScope == k.CurrentScope)
+            {
+                k.EmitPush(symbol.Id.ToString() + "u").Comment = "store into variable " + this.VariableName;
+                k.Emit(Opcode.STLO);
+            }
+            else
+            {
+                uint mem = k.CurrentScope.WalkMemoryBack(symbol.SScope);
+                mem -= symbol.Id;
+
+                k.EmitPush(mem.ToString() + "u").Comment = "store into variable " + this.VariableName;
+                k.Emit(Opcode.STNLO);
+            }
         }
     }
 }

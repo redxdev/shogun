@@ -18,6 +18,8 @@ namespace sholan.Compiler
 
         private HashSet<string> importedFiles = new HashSet<string>();
 
+        private HashSet<string> importPaths = new HashSet<string>();
+
         public Scope CurrentScope
         {
             get
@@ -150,11 +152,40 @@ namespace sholan.Compiler
             return op;
         }
 
+        public void AddImportPath(string path)
+        {
+            string fullPath = Path.GetFullPath(path);
+            this.importPaths.Add(fullPath);
+        }
+
+        public void RemoveImportPath(string path)
+        {
+            string fullPath = Path.GetFullPath(path);
+            this.importPaths.Remove(fullPath);
+        }
+
         public void Import(string file)
         {
-            string fullPath = Path.GetFullPath(file);
+            string foundFile = file;
+            if(!File.Exists(foundFile))
+            {
+                foreach (string path in this.importPaths)
+                {
+                    foundFile = Path.Combine(path, file);
+                    if (File.Exists(foundFile))
+                        break;
+                }
+
+                if (!File.Exists(foundFile))
+                    throw new CompileException(string.Format("Unable to find import \"{0}\" in import paths", file));
+            }
+
+            string fullPath = Path.GetFullPath(foundFile);
             if (importedFiles.Contains(fullPath))
                 return;
+
+            string fileDir = Path.GetDirectoryName(fullPath);
+            this.AddImportPath(fileDir);
 
             try
             {
@@ -165,6 +196,8 @@ namespace sholan.Compiler
             {
                 throw new CompileException("Encountered exception while including " + fullPath, e);
             }
+
+            this.RemoveImportPath(fileDir);
         }
 
         public void Compile(Nodes.ICompileNode root, bool imported = false)

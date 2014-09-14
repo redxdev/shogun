@@ -68,6 +68,7 @@ statement returns [ICompileNode node]
 	|	stm_return { $node = $stm_return.node; }
 	|	stm_variable_def { $node = $stm_variable_def.node; }
 	|	stm_assembly { $node = $stm_assembly.node; }
+	|	stm_assembly_var { $node = $stm_assembly_var.node; }
 	|	stm_halt { $node = $stm_halt.node; }
 	|	stm_variable_set { $node = $stm_variable_set.node; }
 	|	stm_if { $node = $stm_if.node; }
@@ -174,6 +175,11 @@ stm_variable_def returns [DefineVariableNode node]
 
 stm_assembly returns [RawAssemblyNode node]
 	:	ASSEMBLY STRING_EXT { $node = new RawAssemblyNode() { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; }
+	|	ASSEMBLY VALUE STRING_EXT { $node = new RawAssemblyNode() { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; $node.Attributes.Has("value"); }
+	;
+
+stm_assembly_var returns [RetrieveVariableNode node]
+	:	ASSEMBLY VAR_DEF IDENT { $node = new RetrieveVariableNode() { VariableName = $IDENT.text }; }
 	;
 
 stm_halt returns [HaltNode node]
@@ -239,10 +245,20 @@ expression returns [ExpressionNode node]
 
 addExpr returns [ExpressionNode node]
 	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
+		a=mulExpr { $node.Values.Add($a.node); }
+	(
+		PLUS b=mulExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.ADD); }
+	|	MINUS b=mulExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.SUB); }
+	)*
+	;
+
+mulExpr returns [ExpressionNode node]
+	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
 		a=atom { $node.Values.Add($a.node); }
 	(
-		PLUS b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.ADD); }
-	|	MINUS b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.SUB); }
+		MUL b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MUL); }
+	|	DIV b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.DIV); }
+	|	MOD b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MOD); }
 	)*
 	;
 
@@ -254,6 +270,7 @@ atom returns [ICompileNode node]
 	|	B_TRUE { $node = new ConstantBoolNode() { Value = true }; }
 	|	B_FALSE { $node = new ConstantBoolNode() { Value = false }; }
 	|	IDENT { $node = new RetrieveVariableNode() { VariableName = $IDENT.text }; }
+	|	GROUP_START expression GROUP_END { $node = $expression.node; }
 	|	statement { $node = $statement.node; $node.UseReturn = true; }
 	;
 
@@ -287,6 +304,10 @@ VAR_DEF
 
 ASSEMBLY
 	:	'asm'
+	;
+
+VALUE
+	:	'value'
 	;
 
 HALT
@@ -347,6 +368,18 @@ PLUS
 
 MINUS
 	:	'-'
+	;
+
+MUL
+	:	'*'
+	;
+
+DIV
+	:	'/'
+	;
+
+MOD
+	:	'%'
 	;
 
 DIRECTIVE

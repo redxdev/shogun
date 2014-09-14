@@ -11,5 +11,5 @@ func fibonacci(n) {
 
 entry {
 	print("N?")
-	print(fibonacci(readline()))
+	print(fibonacci(to_number(readline())))
 }

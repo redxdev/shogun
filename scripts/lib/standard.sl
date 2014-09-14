@@ -1,8 +1,4 @@
 // SVM Standard Library
 
-// Console Libary
-extern func print(str)
-extern func readline()
-
-// Math Library
-extern func rand_int(min, max)
+import "standard/extern.sl"
+import "standard/conversion.sl"
