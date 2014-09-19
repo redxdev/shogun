@@ -247,7 +247,27 @@ stm_for_loop returns [ForLoopNode node]
 	)
 	;
 
-expression returns [ExpressionNode node]
+expression returns [ICompileNode node]
+	:	orExpr { $node = $orExpr.node; }
+	;
+
+orExpr returns [ExpressionNode node]
+	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
+		a=andExpr { $node.Values.Add($a.node); }
+	(
+		OR OR b=andExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.OR); }
+	)*
+	;
+
+andExpr returns [ExpressionNode node]
+	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
+		a=equalityExpr { $node.Values.Add($a.node); }
+	(
+		AND AND b=equalityExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.AND); }
+	)*
+	;
+
+equalityExpr returns [ExpressionNode node]
 	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
 		a=addExpr { $node.Values.Add($a.node); }
 	(
@@ -273,12 +293,17 @@ addExpr returns [ExpressionNode node]
 
 mulExpr returns [ExpressionNode node]
 	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=atom { $node.Values.Add($a.node); }
+		a=notExpr { $node.Values.Add($a.node); }
 	(
-		MUL b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MUL); }
-	|	DIV b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.DIV); }
-	|	MOD b=atom { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MOD); }
+		MUL b=notExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MUL); }
+	|	DIV b=notExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.DIV); }
+	|	MOD b=notExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MOD); }
 	)*
+	;
+
+notExpr returns [ICompileNode node]
+	:	NOT atom { $node = new NotNode() { Value = $atom.node }; }
+	|	atom { $node = $atom.node; }
 	;
 
 atom returns [ICompileNode node]
@@ -403,6 +428,14 @@ DIV
 
 MOD
 	:	'%'
+	;
+
+AND
+	:	'&'
+	;
+
+OR
+	:	'|'
 	;
 
 DIRECTIVE
