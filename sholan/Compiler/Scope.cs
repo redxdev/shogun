@@ -76,8 +76,10 @@ namespace sholan.Compiler
             {
                 if (current == null)
                     throw new InvalidOperationException("Reached top-level scope without finding needle while walking memory");
+                
+                if(current != this)
+                    memory += current.MemorySpace;
 
-                memory += current.MemorySpace;
                 current = current.Parent;
             }
 

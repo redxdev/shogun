@@ -32,11 +32,7 @@ grammar SLang;
  */
 
 compileUnit returns [ICompileNode rootNode]
-	:	debugMode? stms=statements EOF { $rootNode = $stms.node; }
-	;
-
-debugMode
-	:	DIRECTIVE DEBUG_COMPILER { Console.WriteLine("Waiting for debugger..."); while(!Debugger.IsAttached) { Thread.Sleep(100); } Console.WriteLine("Debugger Attached"); }
+	:	stms=statements EOF { $rootNode = $stms.node; }
 	;
 
 statements returns [TreeNode node]
@@ -60,7 +56,8 @@ statements returns [TreeNode node]
 statement returns [ICompileNode node]
 	:
 	(
-		stm_import_file { $node = $stm_import_file.node; }
+		stm_directive { $node = $stm_directive.node; }
+	|	stm_import_file { $node = $stm_import_file.node; }
 	|	stm_extern_func { $node = $stm_extern_func.node; }
 	|	stm_call_func { $node = $stm_call_func.node; }
 	|	stm_define_func { $node = $stm_define_func.node; }
@@ -74,6 +71,28 @@ statement returns [ICompileNode node]
 	|	stm_if { $node = $stm_if.node; }
 	|	stm_for_loop { $node = $stm_for_loop.node; }
 	)
+	;
+
+stm_directive returns [ICompileNode node]
+	:
+	(
+		directive_debug_compiler { $node = new PlaceholderNode(); }
+	|	directive_debug_break { $node = $directive_debug_break.node; }
+	|	directive_compiler_break { $node = $directive_compiler_break.node; }
+	)
+	;
+
+
+directive_debug_compiler
+	:	DIRECTIVE DEBUG_COMPILER { Console.WriteLine("Waiting for debugger..."); while(!Debugger.IsAttached) { Thread.Sleep(100); } Console.WriteLine("Debugger Attached"); }
+	;
+
+directive_debug_break returns [DebugBreakNode node]
+	:	DIRECTIVE DEBUG_BREAK { $node = new DebugBreakNode(); }
+	;
+
+directive_compiler_break returns [CompilerBreakNode node]
+	:	DIRECTIVE COMPILER_BREAK { $node = new CompilerBreakNode(); }
 	;
 
 stm_import_file returns [ImportFileNode node]
@@ -282,6 +301,10 @@ EXTERN
 	:	'extern'
 	;
 
+EXPORT
+	:	'export'
+	;
+
 FUNCTION
 	:	'func'
 	;
@@ -388,6 +411,14 @@ DIRECTIVE
 
 DEBUG_COMPILER
 	:	'debug-compiler'
+	;
+
+DEBUG_BREAK
+	:	'break'
+	;
+
+COMPILER_BREAK
+	:	'cbreak'
 	;
 
 fragment ESCAPE_SEQUENCE

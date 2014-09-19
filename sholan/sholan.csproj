@@ -53,6 +53,8 @@
     <Compile Include="Compiler\NodeAttributes.cs" />
     <Compile Include="Compiler\Nodes\AbstractCompileNode.cs" />
     <Compile Include="Compiler\Nodes\AssemblyNode.cs" />
+    <Compile Include="Compiler\Nodes\CompilerBreakNode.cs" />
+    <Compile Include="Compiler\Nodes\DebugBreakNode.cs" />
     <Compile Include="Compiler\Nodes\DefineVariableNode.cs" />
     <Compile Include="Compiler\Nodes\EntryNode.cs" />
     <Compile Include="Compiler\Nodes\ExternalFunctionNode.cs" />
@@ -66,6 +68,7 @@
     <Compile Include="Compiler\Nodes\InternalFunctionNode.cs" />
     <Compile Include="Compiler\Nodes\ExpressionNode.cs" />
     <Compile Include="Compiler\Nodes\NilValueNode.cs" />
+    <Compile Include="Compiler\Nodes\PlaceholderNode.cs" />
     <Compile Include="Compiler\Nodes\RawAssemblyNode.cs" />
     <Compile Include="Compiler\Nodes\RetrieveVariableNode.cs" />
     <Compile Include="Compiler\Nodes\ReturnNode.cs" />

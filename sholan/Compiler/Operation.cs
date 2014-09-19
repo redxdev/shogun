@@ -136,6 +136,7 @@ namespace sholan.Compiler
 
 		// flow operations //
 		HALT, // halt execution of the program
+		DBRK, // debug break
 
 		// assembler-only opcodes //
 		GOTO,
