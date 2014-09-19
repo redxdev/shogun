@@ -63,7 +63,7 @@ namespace sholan.Compiler.Nodes
             scope.Type = ScopeType.Function;
             scope.MemorySpace += (uint)this.Arguments.Count + 1;
 
-            symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName() + "_" + this.Function);
+            symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName());
             k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
 
             k.EmitPush(scope.MemorySpace.ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location
