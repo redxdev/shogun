@@ -43,8 +43,10 @@ namespace sholan.Compiler
                     return string.Format("{0}:{1}", this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
 
                 case Opcode.NEQ:
+                    return string.Format("\tEQ{0}\nNOT", string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
+
                 case Opcode.NTEQ:
-                    return string.Format("\t{0}\n{1}", this.Op.ToString(), Opcode.NOT.ToString());
+                    return string.Format("\tTEQ{0}\nNOT", string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
 
                 default:
                     return string.Format("\t{0} {1}{2}", this.Op.ToString(), this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));

@@ -269,16 +269,24 @@ andExpr returns [ExpressionNode node]
 
 equalityExpr returns [ExpressionNode node]
 	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
+		a=concatExpr { $node.Values.Add($a.node); }
+	(
+		EQUAL EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.EQ); }
+	|	EQUAL EQUAL EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.TEQ); }
+	|	NOT EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.NEQ); }
+	|	NOT EQUAL EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.NTEQ); }
+	|	GREATER b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.GT); }
+	|	GREATER EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.GTEQ); }
+	|	LESS b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.LT); }
+	|	LESS EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.LTEQ); }
+	)*
+	;
+
+concatExpr returns [ExpressionNode node]
+	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
 		a=addExpr { $node.Values.Add($a.node); }
 	(
-		EQUAL EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.EQ); }
-	|	EQUAL EQUAL EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.TEQ); }
-	|	NOT EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.NEQ); }
-	|	NOT EQUAL EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.NTEQ); }
-	|	GREATER b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.GT); }
-	|	GREATER EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.GTEQ); }
-	|	LESS b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.LT); }
-	|	LESS EQUAL b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.LTEQ); }
+		DOT DOT b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.CONCAT); }
 	)*
 	;
 
@@ -436,6 +444,10 @@ AND
 
 OR
 	:	'|'
+	;
+
+DOT
+	:	'.'
 	;
 
 DIRECTIVE

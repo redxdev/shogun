@@ -6,12 +6,21 @@ entry {
 	print("N?")
 	var count = readline()
 	
-	for(var i = 0; i < count; i = i + 1) {
+	for(var i = 1; i <= count; i = i + 1) {
+		var output = ""
+		
 		if(i % 3 === 0) {
-			print("Fizz")
+			output = "Fizz"
 		}
-		else {
-			print(i)
+		
+		if(i % 5 === 0) {
+			output = output .. "Buzz"
 		}
+		
+		if(i % 3 !== 0 && i % 5 !== 0) {
+			output = i
+		}
+		
+		print(output)
 	}
 }
