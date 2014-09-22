@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	}
 
 	Shogun::Assembler::AsmReader reader;
-	Shogun::Assembler::CompileList compile;
+	Shogun::Assembler::CompileInfo compile;
 	try
 	{
 		compile = reader.read(inputFile);
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
 	}
 
 	Shogun::Program program;
-	program.insert(program.begin(), compile.begin(), compile.end());
+	program.insert(program.begin(), compile.list.begin(), compile.list.end());
 
 	Shogun::VirtualMachine vm(0);
 	Shogun::Library::Console::register_library(&vm);
@@ -72,6 +72,25 @@ int main(int argc, char** argv)
 		std::cerr << "error: caught exception while loading program" << std::endl;
 		std::cerr << e.getMessage() << std::endl;
 		return EXIT_FAILURE;
+	}
+
+	for (Shogun::Assembler::ImportList::iterator it = compile.imports.begin(); it != compile.imports.end(); ++it)
+	{
+		Shogun::String import = *it;
+		try
+		{
+			Shogun::Assembler::AsmReader reader;
+			Shogun::Assembler::CompileInfo compile = reader.read(std::ifstream((import + ".sx").c_str(), std::ios::in | std::ios::binary));
+			Shogun::Program program;
+			program.insert(program.begin(), compile.list.begin(), compile.list.end());
+			vm.importProgram(program);
+		}
+		catch (Shogun::Exception& e)
+		{
+			std::cerr << "error: caught exception while importing " << import << std::endl;
+			std::cerr << e.getMessage() << std::endl;
+			return EXIT_FAILURE;
+		}
 	}
 
 	if (dumpOnRun)

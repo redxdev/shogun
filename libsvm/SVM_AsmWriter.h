@@ -34,12 +34,12 @@ namespace Shogun
 		public:
 			AsmReader();
 
-			CompileList read(std::istream& stream);
+			CompileInfo read(std::istream& stream);
 
 		private:
 			void readHeader(std::istream& stream);
 
-			void readObjects(std::istream& stream, CompileList& compile);
+			void readObjects(std::istream& stream, CompileInfo& compile);
 		};
 	}
 }

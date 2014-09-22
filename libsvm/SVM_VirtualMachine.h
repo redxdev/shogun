@@ -61,6 +61,8 @@ namespace Shogun
 
 		void loadProgram(const Program& program);
 
+		void importProgram(const Program& program);
+
 		void run();
 
 		void dump(std::ostream& stream);

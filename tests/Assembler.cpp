@@ -112,7 +112,7 @@ namespace Shogun
 			AsmReader reader;
 			std::ifstream inputFile("./test.sx");
 			
-			CompileList compile;
+			CompileInfo compile;
 			ASSERT_NO_THROW({
 				compile = reader.read(inputFile);
 			});
@@ -137,11 +137,11 @@ namespace Shogun
 			AsmReader reader;
 			std::ifstream inputFile("./test.sx");
 
-			CompileList compile;
+			CompileInfo compile;
 			compile = reader.read(inputFile);
 
 			Program program;
-			program.insert(program.begin(), compile.begin(), compile.end());
+			program.insert(program.begin(), compile.list.begin(), compile.list.end());
 
 			VirtualMachine vm(0);
 

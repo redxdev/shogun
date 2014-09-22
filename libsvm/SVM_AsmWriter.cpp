@@ -51,11 +51,11 @@ namespace Shogun
 		{
 		}
 
-		CompileList AsmReader::read(std::istream& stream)
+		CompileInfo AsmReader::read(std::istream& stream)
 		{
 			readHeader(stream);
 
-			CompileList compile;
+			CompileInfo compile;
 			readObjects(stream, compile);
 			return compile;
 		}
@@ -75,7 +75,7 @@ namespace Shogun
 				throw VersionMismatchException(FORMAT("Version mismatch, expected %u but got %u", Shogun::version(), version));
 		}
 
-		void AsmReader::readObjects(std::istream& stream, CompileList& compile)
+		void AsmReader::readObjects(std::istream& stream, CompileInfo& compile)
 		{
 			UInt32 objCount;
 			stream.read(reinterpret_cast<char*>(&objCount), sizeof(objCount));
@@ -84,7 +84,7 @@ namespace Shogun
 			{
 				ObjectPtr obj = createObject();
 				obj->readBinary(stream);
-				compile.push_back(obj);
+				compile.list.push_back(obj);
 			}
 		}
 	}

@@ -37,6 +37,7 @@ namespace Shogun
 						--it;
 						parseOperation(tokens, it, nodes);
 					}
+					break;
 				}
 
 				case TokenType::NEWLINE:

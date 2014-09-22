@@ -20,6 +20,8 @@ namespace sholan.Compiler
 
         private HashSet<string> importPaths = new HashSet<string>();
 
+        private Stack<bool> importMode = new Stack<bool>();
+
         public Scope CurrentScope
         {
             get
@@ -49,6 +51,14 @@ namespace sholan.Compiler
                     throw new CompileException("Kernel already has entry point");
 
                 this.hasEntry = value;
+            }
+        }
+
+        public bool IsImporting
+        {
+            get
+            {
+                return this.importMode.Count > 0 ? this.importMode.Peek() : false;
             }
         }
 
@@ -187,25 +197,29 @@ namespace sholan.Compiler
             string fileDir = Path.GetDirectoryName(fullPath);
             this.AddImportPath(fileDir);
 
+            this.importMode.Push(true);
+
             try
             {
                 Nodes.ICompileNode root = LanguageUtilities.ParseFile(fullPath);
-                this.Compile(root, true);
+                this.Compile(root);
             }
             catch(Exception e)
             {
                 throw new CompileException("Encountered exception while including " + fullPath, e);
             }
 
+            this.importMode.Pop();
+
             this.RemoveImportPath(fileDir);
         }
 
-        public void Compile(Nodes.ICompileNode root, bool imported = false)
+        public void Compile(Nodes.ICompileNode root)
         {
             root.PrePass(this);
             root.PreCompile(this);
 
-            if (!imported)
+            if (!this.IsImporting)
             {
                 if (!this.HasEntry)
                 {

@@ -20,6 +20,7 @@ namespace Shogun
 			NUMBER,
 			ADDRESS,
 			STRING,
+			DIRECTIVE,
 			END
 		};
 

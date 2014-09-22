@@ -95,6 +95,10 @@ namespace Shogun
 		// flow operations //
 		HALT, // halt execution of the program
 		DBRK, // debug break
+		ERR,
+
+		// import operations //
+		IMPRT, // import binary
 
 		// assembler-only opcodes //
 		GOTO,

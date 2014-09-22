@@ -28,6 +28,9 @@ namespace Shogun
 			case STRING:
 				return "STRING";
 
+			case DIRECTIVE:
+				return "DIRECTIVE";
+
 			case END:
 				return "END";
 			}
@@ -75,6 +78,10 @@ namespace Shogun
 					else if (current == ':') // LABEL token
 					{
 						tokens.push_back(Token(TokenType::LABEL, ":", currentLine, currentCol));
+					}
+					else if (current == '#')
+					{
+						tokens.push_back(Token(TokenType::DIRECTIVE, "#", currentLine, currentCol));
 					}
 					else if (current == '"') // STRING token
 					{
