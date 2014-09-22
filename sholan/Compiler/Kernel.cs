@@ -4,10 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using sholan.Compiler.Nodes;
 using sholan.Language;
 
 namespace sholan.Compiler
 {
+    public enum ImportMode
+    {
+        None,
+        Import,
+        Inherit,
+        Library,
+        Export
+    }
+
     public class Kernel
     {
         private Stack<Scope> scopeStack = new Stack<Scope>();
@@ -20,7 +30,9 @@ namespace sholan.Compiler
 
         private HashSet<string> importPaths = new HashSet<string>();
 
-        private Stack<bool> importMode = new Stack<bool>();
+        private LinkedList<ImportMode> importModes = new LinkedList<ImportMode>();
+
+        private List<Symbol> exports = new List<Symbol>();
 
         public Scope CurrentScope
         {
@@ -38,27 +50,44 @@ namespace sholan.Compiler
             }
         }
 
-        public bool HasEntry
+        public ImportMode CurrentImportMode
         {
             get
             {
-                return this.hasEntry;
-            }
+                if (importModes.Count == 0)
+                    return ImportMode.None;
 
-            set
-            {
-                if (value && this.hasEntry)
-                    throw new CompileException("Kernel already has entry point");
+                LinkedListNode<ImportMode> current = importModes.First;
+                while(true)
+                {
+                    switch(current.Value)
+                    {
+                        case ImportMode.None:
+                            return ImportMode.None;
 
-                this.hasEntry = value;
+                        case ImportMode.Import:
+                            return ImportMode.Import;
+
+                        case ImportMode.Library:
+                            return ImportMode.Library;
+
+                        case ImportMode.Export:
+                            return ImportMode.Export;
+                    }
+
+                    if (current.Next == null)
+                        return ImportMode.Import;
+
+                    current = current.Next;
+                }
             }
         }
 
-        public bool IsImporting
+        public List<Symbol> Exports
         {
             get
             {
-                return this.importMode.Count > 0 ? this.importMode.Peek() : false;
+                return this.exports;
             }
         }
 
@@ -174,7 +203,7 @@ namespace sholan.Compiler
             this.importPaths.Remove(fullPath);
         }
 
-        public void Import(string file)
+        public void Import(string file, ImportMode mode)
         {
             string foundFile = file;
             if(!File.Exists(foundFile))
@@ -197,7 +226,7 @@ namespace sholan.Compiler
             string fileDir = Path.GetDirectoryName(fullPath);
             this.AddImportPath(fileDir);
 
-            this.importMode.Push(true);
+            PushImportMode(mode);
 
             try
             {
@@ -209,9 +238,24 @@ namespace sholan.Compiler
                 throw new CompileException("Encountered exception while including " + fullPath, e);
             }
 
-            this.importMode.Pop();
+            PopImportMode();
 
             this.RemoveImportPath(fileDir);
+        }
+
+        public void PushImportMode(ImportMode mode)
+        {
+            this.importModes.AddFirst(mode);
+        }
+
+        public void PopImportMode()
+        {
+            this.importModes.RemoveFirst();
+        }
+
+        public void AddExport(Symbol symbol)
+        {
+            this.exports.Add(symbol);
         }
 
         public void Compile(Nodes.ICompileNode root)
@@ -219,14 +263,15 @@ namespace sholan.Compiler
             root.PrePass(this);
             root.PreCompile(this);
 
-            if (!this.IsImporting)
+            if (this.CurrentImportMode == ImportMode.None)
             {
-                if (!this.HasEntry)
-                {
-                    throw new CompileException("No entry point found");
-                }
-
-                this.Emit(Opcode.GOTO, "\"sl_k_entry\"");
+                FunctionCallNode node = new FunctionCallNode()
+                    {
+                        Function = "+entry",
+                        Arguments = new List<ICompileNode>()
+                    };
+                node.Compile(this);
+                this.Emit(Opcode.HALT);
             }
 
             root.Compile(this);

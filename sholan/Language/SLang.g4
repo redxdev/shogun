@@ -100,9 +100,14 @@ stm_import_file returns [ImportFileNode node]
 	{
 		$node = new ImportFileNode()
 			{
-				Filepath = $STRING.text.Substring(1, $STRING.text.Length - 2)
+				Filepath = $STRING.text.Substring(1, $STRING.text.Length - 2),
+				Mode = ImportMode.Inherit
 			};
 	}
+	(
+		EXPORT { $node.Mode = ImportMode.Export; }
+	|	LIB	{ $node.Mode = ImportMode.Library; }
+	)?
 	;
 
 stm_extern_func returns [ExternalFunctionNode node]
@@ -168,11 +173,17 @@ stm_define_func returns [InternalFunctionNode node]
 		BLOCK_END
 	;
 
-stm_define_entry returns [EntryNode node]
-	:	{ $node = new EntryNode(); }
-		ENTRY
+stm_define_entry returns [InternalFunctionNode node]
+	:	ENTRY
+	{
+		$node = new InternalFunctionNode()
+			{
+				Function = "+entry",
+				Arguments = new List<string>()
+			};
+	}
 		BLOCK_START
-		statements { $node.Body = $statements.node; }
+		stms=statements { $node.Body = $stms.node; }
 		BLOCK_END
 	;
 
@@ -336,6 +347,10 @@ EXTERN
 
 EXPORT
 	:	'export'
+	;
+
+LIB
+	:	'lib'
 	;
 
 FUNCTION

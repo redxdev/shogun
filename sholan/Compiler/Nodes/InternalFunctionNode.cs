@@ -64,6 +64,19 @@ namespace sholan.Compiler.Nodes
             scope.MemorySpace += (uint)this.Arguments.Count + 1;
 
             symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName());
+
+            switch(k.CurrentImportMode)
+            {
+                case ImportMode.Library:
+                    k.PopScope();
+                    symbol.SMode = Symbol.Mode.Library;
+                    return;
+
+                case ImportMode.Export:
+                    k.AddExport(symbol);
+                    break;
+            }
+
             k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
 
             k.EmitPush(scope.MemorySpace.ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location

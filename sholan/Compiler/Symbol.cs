@@ -17,7 +17,8 @@ namespace sholan.Compiler
         public enum Mode
         {
             Intern,
-            Extern
+            Extern,
+            Library
         }
 
         public Type SType

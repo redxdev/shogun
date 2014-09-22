@@ -14,6 +14,12 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public ImportMode Mode
+        {
+            get;
+            set;
+        }
+
         public ImportFileNode()
             : base()
         {
@@ -31,7 +37,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Import(this.Filepath);
+            k.Import(this.Filepath, this.Mode);
         }
     }
 }
