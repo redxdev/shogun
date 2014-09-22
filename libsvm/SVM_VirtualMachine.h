@@ -31,6 +31,8 @@ namespace Shogun
 
 	SVM_EXCEPTION_AUTO(UnknownVMCallException, VMCallException);
 
+	SVM_EXCEPTION_AUTO(ProgramErrorException, VMException);
+
 	class VirtualMachine;
 
 	typedef std::deque<ObjectPtr> Stack;

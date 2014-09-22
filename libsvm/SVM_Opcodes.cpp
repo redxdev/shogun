@@ -1,6 +1,9 @@
 #include "SVM_Opcodes.h"
 #include "SVM_VirtualMachine.h"
 #include "SVM_Exception.h"
+#include "SVM_AsmWriter.h"
+
+#include <fstream>
 
 #define OPCODE(op) case Opcode::op:
 #define OPCODE_END break;
@@ -470,6 +473,27 @@ namespace Shogun
 				std::cin.get();
 			}
 			OPCODE_END
+
+			OPCODE(ERR)
+			{
+				String err = vm->pop()->getString();
+				throw ProgramErrorException(err);
+			}
+			OPCODE_END
+			
+			// import operations //
+
+			OPCODE(IMPRT)
+			{
+				String filename = vm->pop()->getString();
+
+				Shogun::Assembler::AsmReader reader;
+				Shogun::Assembler::CompileInfo compile = reader.read(std::ifstream(filename.c_str(), std::ios::in | std::ios::binary));
+				Shogun::Program program;
+				program.insert(program.begin(), compile.list.begin(), compile.list.end());
+				vm->importProgram(program);
+			}
+			OPCODE_END
 		}
 	}
 
@@ -546,6 +570,8 @@ namespace Shogun
 			OPCODE_MAP(PLABL, 1);
 			OPCODE_MAP(HALT, 0);
 			OPCODE_MAP(DBRK, 0);
+			OPCODE_MAP(ERR, 0);
+			OPCODE_MAP(IMPRT, 0);
 		}
 	}
 

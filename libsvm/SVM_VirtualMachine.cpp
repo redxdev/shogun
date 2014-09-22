@@ -50,7 +50,6 @@ namespace Shogun
 		memory.resize(memory.getSize() + program.size());
 
 		UInt32 i = getRegMmx();
-		push(createObject(i));
 		setRegMmx(memory.getSize());
 
 		for (auto it = program.cbegin(); it != program.cend(); ++it)
