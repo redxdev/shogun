@@ -36,6 +36,8 @@ namespace sholan.Compiler
 
         private List<Operation> holding = new List<Operation>();
 
+        private List<string> importedLibraries = new List<string>();
+
         public Scope CurrentScope
         {
             get
@@ -218,6 +220,9 @@ namespace sholan.Compiler
 
             PushImportMode(mode);
 
+            if (this.CurrentImportMode == ImportMode.Library)
+                this.importedLibraries.Add(fullPath);
+
             try
             {
                 Nodes.ICompileNode root = LanguageUtilities.ParseFile(fullPath);
@@ -258,6 +263,13 @@ namespace sholan.Compiler
             {
                 holding = this.operations;
                 this.operations = new List<Operation>();
+
+                foreach(string import in this.importedLibraries)
+                {
+                    this.EmitPush(Path.GetFileNameWithoutExtension(import) + ".sxl");
+                    this.Emit(Opcode.IMPRT);
+                }
+
                 FunctionCallNode node = new FunctionCallNode()
                 {
                     Function = "+entry",
@@ -265,6 +277,7 @@ namespace sholan.Compiler
                 };
                 node.Compile(this);
                 this.Emit(Opcode.HALT);
+
                 this.holding.InsertRange(0, this.operations);
                 this.operations = this.holding;
                 this.holding = null;

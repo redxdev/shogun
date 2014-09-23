@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace sholan
             }
 
             Console.WriteLine("Compiling...");
+            kernel.AddImportPath(Path.GetDirectoryName(Path.GetFullPath(args[0])));
             try
             {
                 kernel.Compile(root);
