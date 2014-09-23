@@ -43,7 +43,7 @@ namespace sholan.Compiler.Nodes
                 SMode = Symbol.Mode.Extern,
                 SType = Symbol.Type.Function,
                 Name = this.SymbolName,
-                Id = (uint)this.Arguments.Count
+                Args = (uint)this.Arguments.Count
             };
 
             k.RegisterSymbol(symbol);

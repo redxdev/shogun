@@ -1,5 +1,5 @@
 // Hello world!
-extern func print(str)
+import "lib/standard.sl" lib
 
 entry {
 	print("Hello World!")

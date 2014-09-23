@@ -24,8 +24,6 @@ namespace sholan.Compiler
 
         private List<Operation> operations = new List<Operation>();
 
-        private bool hasEntry = false;
-
         private HashSet<string> importedFiles = new HashSet<string>();
 
         private HashSet<string> importPaths = new HashSet<string>();
@@ -33,6 +31,8 @@ namespace sholan.Compiler
         private LinkedList<ImportMode> importModes = new LinkedList<ImportMode>();
 
         private List<Symbol> exports = new List<Symbol>();
+
+        private List<Symbol> imports = new List<Symbol>();
 
         private List<Operation> holding = new List<Operation>();
 
@@ -93,6 +93,12 @@ namespace sholan.Compiler
             {
                 return this.exports;
             }
+        }
+
+        public bool IsBuildingExports
+        {
+            get;
+            set;
         }
 
         public Kernel()
@@ -220,8 +226,8 @@ namespace sholan.Compiler
 
             PushImportMode(mode);
 
-            if (this.CurrentImportMode == ImportMode.Library)
-                this.importedLibraries.Add(fullPath);
+            if (mode == ImportMode.Library)
+                this.importedLibraries.Add(file);
 
             try
             {
@@ -253,6 +259,11 @@ namespace sholan.Compiler
             this.exports.Add(symbol);
         }
 
+        public void AddImport(Symbol symbol)
+        {
+            this.imports.Add(symbol);
+        }
+
         public void Compile(Nodes.ICompileNode root)
         {
             root.PrePass(this);
@@ -264,18 +275,61 @@ namespace sholan.Compiler
                 holding = this.operations;
                 this.operations = new List<Operation>();
 
-                foreach(string import in this.importedLibraries)
+                if(this.IsBuildingExports)
                 {
-                    this.EmitPush(Path.GetFileNameWithoutExtension(import) + ".sxl");
-                    this.Emit(Opcode.IMPRT);
+                    this.EmitPush("1u");
+                    this.Emit(Opcode.ALLOC);
+                    this.EmitPush("0u");
+                    this.Emit(Opcode.STLO);
                 }
 
-                FunctionCallNode node = new FunctionCallNode()
+                foreach(Symbol export in this.exports)
                 {
-                    Function = "+entry",
-                    Arguments = new List<ICompileNode>()
-                };
-                node.Compile(this);
+                    this.Emit(Opcode.PLABL, "\"" + export.AsmName + "\"");
+                }
+
+                foreach(string import in this.importedLibraries)
+                {
+                    string label = "sl_imprt_" + this.GetScopeName() + this.CurrentScope.RequestLabelId().ToString();
+                    this.Emit(Opcode.PMMX);
+                    this.Emit(Opcode.PLABL, "\"" + label + "\"");
+                    this.EmitPush("\"" + Path.Combine(Path.GetDirectoryName(import), Path.GetFileNameWithoutExtension(import)).Replace('\\', '/') + ".sxl\"");
+                    this.Emit(Opcode.IMPRT);
+                    this.Emit(Opcode.JUMP);
+                    this.Emit(Opcode.LABEL, label);
+                }
+
+                if(this.imports.Count > 0)
+                {
+                    this.EmitPush(this.imports.Count.ToString() + "u");
+                    this.Emit(Opcode.ALLOC);
+                    this.CurrentScope.MemorySpace += (uint)this.imports.Count;
+                    this.imports.Reverse();
+                    foreach (Symbol import in this.imports)
+                    {
+                        this.EmitPush(import.Id.ToString() + "u");
+                        this.Emit(Opcode.STLO);
+                    }
+                }
+
+                if (this.IsBuildingExports)
+                {
+                    this.EmitPush("0u");
+                    this.Emit(Opcode.LDLO);
+                    this.EmitPush("1u");
+                    this.Emit(Opcode.DEALLOC);
+                    this.Emit(Opcode.JUMP);
+                }
+                else
+                {
+                    FunctionCallNode node = new FunctionCallNode()
+                    {
+                        Function = "+entry",
+                        Arguments = new List<ICompileNode>()
+                    };
+                    node.Compile(this);
+                }
+
                 this.Emit(Opcode.HALT);
 
                 this.holding.InsertRange(0, this.operations);

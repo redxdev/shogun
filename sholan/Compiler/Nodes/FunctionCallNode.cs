@@ -63,8 +63,8 @@ namespace sholan.Compiler.Nodes
                     throw new InvalidOperationException(string.Format("Tried to compile a function call on a non-function symbol \"{0}\"", this.Function));
             }
 
-            if (symbol.Id != this.Arguments.Count)
-                throw new ArgumentOutOfRangeException(string.Format("Tried to pass {0} arguments to {1} (requires: {2})", this.Arguments.Count, symbol.Name, symbol.Id));
+            if (symbol.Args != this.Arguments.Count)
+                throw new ArgumentOutOfRangeException(string.Format("Tried to pass {0} arguments to {1} (requires: {2})", this.Arguments.Count, symbol.Name, symbol.Args));
 
             switch(symbol.SMode)
             {

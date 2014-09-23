@@ -53,7 +53,7 @@ namespace sholan.Compiler.Nodes
                     Name = this.Function,
                     SMode = Symbol.Mode.Intern,
                     SType = Symbol.Type.Function,
-                    Id = (uint)this.Arguments.Count
+                    Args = (uint)this.Arguments.Count
                 };
 
             k.RegisterSymbol(symbol);
@@ -70,6 +70,8 @@ namespace sholan.Compiler.Nodes
                 case ImportMode.Library:
                     k.PopScope();
                     symbol.SMode = Symbol.Mode.Library;
+                    symbol.Id = k.CurrentScope.RequestId();
+                    k.AddImport(symbol);
                     return;
 
                 case ImportMode.Export:

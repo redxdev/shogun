@@ -79,6 +79,7 @@ stm_directive returns [ICompileNode node]
 		directive_debug_compiler { $node = new PlaceholderNode(); }
 	|	directive_debug_break { $node = $directive_debug_break.node; }
 	|	directive_compiler_break { $node = $directive_compiler_break.node; }
+	|	directive_build_exports { $node = new BuildExportsNode(); }
 	)
 	;
 
@@ -93,6 +94,10 @@ directive_debug_break returns [DebugBreakNode node]
 
 directive_compiler_break returns [CompilerBreakNode node]
 	:	DIRECTIVE COMPILER_BREAK { $node = new CompilerBreakNode(); }
+	;
+
+directive_build_exports
+	:	DIRECTIVE BUILD_EXPORTS
 	;
 
 stm_import_file returns [ImportFileNode node]
@@ -479,6 +484,10 @@ DEBUG_BREAK
 
 COMPILER_BREAK
 	:	'cbreak'
+	;
+
+BUILD_EXPORTS
+	:	'build-exports'
 	;
 
 fragment ESCAPE_SEQUENCE

@@ -51,6 +51,12 @@ namespace sholan.Compiler
             set;
         }
 
+        public uint Args
+        {
+            get;
+            set;
+        }
+
         public Scope SScope
         {
             get;
