@@ -184,7 +184,7 @@ namespace Shogun
 						while (it != line.end())
 						{
 							current = *it;
-							if (!isalnum(current) && current != '_')
+							if (!isalnum(current) && current != '_' && current != '+')
 							{
 								break;
 							}

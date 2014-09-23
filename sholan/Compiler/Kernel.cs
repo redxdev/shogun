@@ -34,6 +34,8 @@ namespace sholan.Compiler
 
         private List<Symbol> exports = new List<Symbol>();
 
+        private List<Operation> holding = new List<Operation>();
+
         public Scope CurrentScope
         {
             get
@@ -94,7 +96,6 @@ namespace sholan.Compiler
         public Kernel()
         {
             PushScope().MemorySpace = 1;
-            this.CurrentScope.PushMemory(this);
         }
 
         public Scope PushScope()
@@ -154,13 +155,7 @@ namespace sholan.Compiler
 
         public Operation Emit(Opcode o)
         {
-            Operation op = new Operation()
-                {
-                    Op = o,
-                    Argument = string.Empty
-                };
-            this.operations.Add(op);
-            return op;
+            return this.Emit(o, string.Empty);
         }
 
         public Operation Emit(Opcode o, string argument)
@@ -170,6 +165,7 @@ namespace sholan.Compiler
                 Op = o,
                 Argument = argument
             };
+
             this.operations.Add(op);
             return op;
         }
@@ -182,13 +178,7 @@ namespace sholan.Compiler
 
         public Operation EmitPush(string argument)
         {
-            Operation op = new Operation()
-            {
-                Op = Opcode.PUSH,
-                Argument = argument
-            };
-            this.operations.Add(op);
-            return op;
+            return this.Emit(Opcode.PUSH, argument);
         }
 
         public void AddImportPath(string path)
@@ -262,19 +252,23 @@ namespace sholan.Compiler
         {
             root.PrePass(this);
             root.PreCompile(this);
+            root.Compile(this);
 
             if (this.CurrentImportMode == ImportMode.None)
             {
+                holding = this.operations;
+                this.operations = new List<Operation>();
                 FunctionCallNode node = new FunctionCallNode()
-                    {
-                        Function = "+entry",
-                        Arguments = new List<ICompileNode>()
-                    };
+                {
+                    Function = "+entry",
+                    Arguments = new List<ICompileNode>()
+                };
                 node.Compile(this);
                 this.Emit(Opcode.HALT);
+                this.holding.InsertRange(0, this.operations);
+                this.operations = this.holding;
+                this.holding = null;
             }
-
-            root.Compile(this);
         }
 
         public void EndCompile(bool halt = false)
