@@ -297,11 +297,10 @@ namespace sholan.Compiler
                 {
                     string label = "sl_imprt_" + this.GetScopeName() + this.CurrentScope.RequestLabelId().ToString();
                     this.Emit(Opcode.PMMX);
-                    this.Emit(Opcode.DUP);
                     this.Emit(Opcode.PLABL, "\"" + label + "\"");
+                    this.Emit(Opcode.PMMX);
                     this.EmitPush("\"" + Path.Combine(Path.GetDirectoryName(import), Path.GetFileNameWithoutExtension(import)).Replace('\\', '/') + ".sxl\"");
                     this.Emit(Opcode.IMPRT);
-                    this.Emit(Opcode.SWAP);
                     this.Emit(Opcode.JUMP);
                     this.Emit(Opcode.LABEL, label);
                 }
@@ -310,7 +309,7 @@ namespace sholan.Compiler
                 {
                     this.EmitPush(this.imports.Count.ToString() + "u");
                     this.Emit(Opcode.ALLOC);
-                    this.CurrentScope.MemorySpace += (uint)this.imports.Count;
+                    this.CurrentScope.MemorySpace += (uint)this.imports.Count - 1;
                     this.imports.Reverse();
                     foreach (Symbol import in this.imports)
                     {

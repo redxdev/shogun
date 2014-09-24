@@ -2,5 +2,5 @@
 import "lib/standard.sl" lib
 
 entry {
-	print("Hello World!")
+	print(to_string(true))
 }
