@@ -277,24 +277,31 @@ namespace sholan.Compiler
 
                 if(this.IsBuildingExports)
                 {
-                    this.EmitPush("1u");
+                    this.EmitPush("2u");
                     this.Emit(Opcode.ALLOC);
                     this.EmitPush("0u");
+                    this.Emit(Opcode.STLO);
+                    this.EmitPush("1u");
                     this.Emit(Opcode.STLO);
                 }
 
                 foreach(Symbol export in this.exports)
                 {
                     this.Emit(Opcode.PLABL, "\"" + export.AsmName + "\"");
+                    this.EmitPush("1u");
+                    this.Emit(Opcode.LDLO);
+                    this.Emit(Opcode.AADD);
                 }
 
                 foreach(string import in this.importedLibraries)
                 {
                     string label = "sl_imprt_" + this.GetScopeName() + this.CurrentScope.RequestLabelId().ToString();
                     this.Emit(Opcode.PMMX);
+                    this.Emit(Opcode.DUP);
                     this.Emit(Opcode.PLABL, "\"" + label + "\"");
                     this.EmitPush("\"" + Path.Combine(Path.GetDirectoryName(import), Path.GetFileNameWithoutExtension(import)).Replace('\\', '/') + ".sxl\"");
                     this.Emit(Opcode.IMPRT);
+                    this.Emit(Opcode.SWAP);
                     this.Emit(Opcode.JUMP);
                     this.Emit(Opcode.LABEL, label);
                 }
@@ -316,7 +323,7 @@ namespace sholan.Compiler
                 {
                     this.EmitPush("0u");
                     this.Emit(Opcode.LDLO);
-                    this.EmitPush("1u");
+                    this.EmitPush("2u");
                     this.Emit(Opcode.DEALLOC);
                     this.Emit(Opcode.JUMP);
                 }
