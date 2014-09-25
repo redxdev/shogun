@@ -1,1 +1,1 @@
-SET PATH=%PATH%;..\Debug;..\sholan\bin\Debug;..\shun\bin\Debug
+SET PATH=%PATH%;..\Release;..\sholan\bin\Release;..\shun\bin\Release
