@@ -67,7 +67,11 @@ namespace Shogun
 
 		void run();
 
-		void dump(std::ostream& stream);
+		void dump();
+
+		void dumpStack(std::ostream& stream);
+
+		void dumpHeap(std::ostream& stream);
 
 		inline void push(ObjectPtr value)
 		{

@@ -468,7 +468,7 @@ namespace Shogun
 			OPCODE(DBRK)
 			{
 				std::cerr << "DBRK start" << std::endl;
-				vm->dump(std::cerr);
+				vm->dump();
 				std::cerr << "DBRK end" << std::endl;
 				std::cin.get();
 			}

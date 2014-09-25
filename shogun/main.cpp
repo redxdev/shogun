@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 
 	if (dumpOnRun)
 	{
-		vm.dump(std::cout);
+		vm.dump();
 	}
 
 	try
@@ -87,13 +87,13 @@ int main(int argc, char** argv)
 	{
 		std::cerr << "error: caught exception while running program" << std::endl;
 		std::cerr << e.getMessage() << std::endl;
-		vm.dump(std::cerr);
+		vm.dump();
 		return EXIT_FAILURE;
 	}
 
 	if (dumpOnExit)
 	{
-		vm.dump(std::cout);
+		vm.dump();
 	}
 
 	return EXIT_SUCCESS;
