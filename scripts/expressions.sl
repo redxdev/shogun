@@ -1,5 +1,5 @@
 // Expressions
-import "lib/standard.sl"
+extern func print(str)
 
 entry {
 	print(1 + 3)

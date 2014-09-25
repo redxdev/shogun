@@ -1,5 +1,6 @@
 // FizzBuzz
-import "lib/standard.sl"
+extern func print(str)
+extern func readline()
 
 entry {
 	print("N?")

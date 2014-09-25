@@ -1,5 +1,5 @@
 // Variables
-import "lib/standard.sl"
+import "lib/standard.sl" lib
 
 func foobar(a,b) {
 	print(a)

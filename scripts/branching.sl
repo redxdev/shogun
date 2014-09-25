@@ -1,5 +1,5 @@
 // Branching
-import "lib/standard.sl"
+extern func print(str)
 
 entry {
 	if(true)

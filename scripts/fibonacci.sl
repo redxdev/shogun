@@ -1,5 +1,5 @@
 // Iterative Fibonacci
-import "lib/standard.sl"
+import "lib/standard.sl" lib
 
 func fibonacci(n) {
 	var first = 1

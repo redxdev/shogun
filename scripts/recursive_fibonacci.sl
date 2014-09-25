@@ -1,5 +1,5 @@
 // Recursive Fibonacci
-import "lib/standard.sl"
+import "lib/standard.sl" lib
 
 func fibonacci(n) {
 	if(n <= 1) {

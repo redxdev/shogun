@@ -185,3 +185,4 @@ FakesAssemblies/
 *.sx
 *.sxl
 *.shasm
+*.dump

@@ -1,6 +1,5 @@
 // Playing with raw assembly
-
-import "lib/standard.sl"
+import "lib/standard.sl" lib
 
 func foo() {
 	asm [[
