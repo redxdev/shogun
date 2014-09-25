@@ -62,6 +62,8 @@ namespace sholan.Compiler.Nodes
                 current = current.Parent;
             }
 
+            mem += current.MemorySpace;
+
             current.PopMemory(k, false);
 
             k.EmitPush(mem + "u").Comment = "deallocate function parameter memory";

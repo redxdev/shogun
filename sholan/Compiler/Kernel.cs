@@ -266,6 +266,8 @@ namespace sholan.Compiler
 
         public void Compile(Nodes.ICompileNode root)
         {
+            this.CurrentScope.MemorySpace += (uint)this.imports.Count();
+
             root.PrePass(this);
             root.PreCompile(this);
             root.Compile(this);
@@ -287,7 +289,9 @@ namespace sholan.Compiler
 
                 foreach(Symbol export in this.exports)
                 {
+                    this.EmitPush("1u");
                     this.Emit(Opcode.PLABL, "\"" + export.AsmName + "\"");
+                    this.Emit(Opcode.ASUB);
                     this.EmitPush("1u");
                     this.Emit(Opcode.LDLO);
                     this.Emit(Opcode.AADD);
@@ -309,7 +313,6 @@ namespace sholan.Compiler
                 {
                     this.EmitPush(this.imports.Count.ToString() + "u");
                     this.Emit(Opcode.ALLOC);
-                    this.CurrentScope.MemorySpace += (uint)this.imports.Count - 1;
                     this.imports.Reverse();
                     foreach (Symbol import in this.imports)
                     {

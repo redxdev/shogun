@@ -127,14 +127,15 @@ namespace sholan.Compiler.Nodes
 
             uint returnId = k.CurrentScope.RequestLabelId();
 
-            k.CurrentScope.PushMemory(k);
-            RetrieveVariableNode rvn = new RetrieveVariableNode()
+            k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call library function " + this.Function;
+            var rvn = new RetrieveVariableNode()
                 {
                     VariableName = this.Function
                 };
             rvn.PrePass(k);
             rvn.PreCompile(k);
             rvn.Compile(k);
+            k.CurrentScope.PushMemory(k);
             k.Emit(Opcode.JUMP).Comment = "call function " + this.Function;
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
