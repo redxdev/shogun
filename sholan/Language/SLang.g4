@@ -71,6 +71,7 @@ statement returns [ICompileNode node]
 	|	stm_variable_set { $node = $stm_variable_set.node; }
 	|	stm_if { $node = $stm_if.node; }
 	|	stm_for_loop { $node = $stm_for_loop.node; }
+	|	stm_while_loop { $node = $stm_while_loop.node; }
 	)
 	;
 
@@ -268,6 +269,22 @@ stm_for_loop returns [ForLoopNode node]
 	)
 	;
 
+stm_while_loop returns [WhileLoopNode node]
+	:	S_WHILE GROUP_START check=expression GROUP_END
+		{
+			$node = new WhileLoopNode()
+				{
+					Check = $check.node
+				};
+		}
+	(
+		stm=statement { $node.Body = $stm.node; }
+	|	BLOCK_START
+		body=statements { $node.Body = $body.node; }
+		BLOCK_END
+	)
+	;
+
 expression returns [ICompileNode node]
 	:	orExpr { $node = $orExpr.node; }
 	;
@@ -437,6 +454,10 @@ S_ELSE
 
 S_FOR
 	:	'for'
+	;
+
+S_WHILE
+	:	'while'
 	;
 
 SECTION

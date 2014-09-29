@@ -75,6 +75,7 @@
     <Compile Include="Compiler\Nodes\RetrieveVariableNode.cs" />
     <Compile Include="Compiler\Nodes\ReturnNode.cs" />
     <Compile Include="Compiler\Nodes\SetVariableNode.cs" />
+    <Compile Include="Compiler\Nodes\WhileLoopNode.cs" />
     <Compile Include="Compiler\Operation.cs" />
     <Compile Include="Compiler\Symbol.cs" />
     <Compile Include="Compiler\Kernel.cs" />
