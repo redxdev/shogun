@@ -58,6 +58,7 @@
     <Compile Include="Compiler\Nodes\CompilerBreakNode.cs" />
     <Compile Include="Compiler\Nodes\DebugBreakNode.cs" />
     <Compile Include="Compiler\Nodes\DefineVariableNode.cs" />
+    <Compile Include="Compiler\Nodes\DoWhileLoopNode.cs" />
     <Compile Include="Compiler\Nodes\ExternalFunctionNode.cs" />
     <Compile Include="Compiler\Nodes\FakeValueNode.cs" />
     <Compile Include="Compiler\Nodes\ForLoopNode.cs" />

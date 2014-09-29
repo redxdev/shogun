@@ -72,6 +72,7 @@ statement returns [ICompileNode node]
 	|	stm_if { $node = $stm_if.node; }
 	|	stm_for_loop { $node = $stm_for_loop.node; }
 	|	stm_while_loop { $node = $stm_while_loop.node; }
+	|	stm_do_while_loop { $node = $stm_do_while_loop.node; }
 	)
 	;
 
@@ -285,6 +286,21 @@ stm_while_loop returns [WhileLoopNode node]
 	)
 	;
 
+stm_do_while_loop returns [DoWhileLoopNode node]
+	:	S_DO
+		{
+			$node = new DoWhileLoopNode();
+		}
+	(
+		stm=statement { $node.Body = $stm.node; }
+	|	BLOCK_START
+		body=statements { $node.Body = $body.node; }
+		BLOCK_END
+	)
+		S_WHILE GROUP_START check=expression GROUP_END
+		{ $node.Check = $check.node; }
+	;
+
 expression returns [ICompileNode node]
 	:	orExpr { $node = $orExpr.node; }
 	;
@@ -458,6 +474,10 @@ S_FOR
 
 S_WHILE
 	:	'while'
+	;
+
+S_DO
+	:	'do'
 	;
 
 SECTION

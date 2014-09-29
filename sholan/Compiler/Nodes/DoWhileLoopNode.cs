@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sholan.Compiler.Nodes
 {
-    public class WhileLoopNode : AbstractCompileNode
+    public class DoWhileLoopNode : AbstractCompileNode
     {
         public ICompileNode Check
         {
@@ -20,12 +20,11 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public WhileLoopNode()
+        public DoWhileLoopNode()
             : base()
         {
             this.Attributes
-                .Has("loop")
-                .Has("while");
+                .Has("loop");
         }
 
         public override void PrePass(Kernel k)
@@ -33,18 +32,18 @@ namespace sholan.Compiler.Nodes
             this.Check.Attributes
                 .Check("value");
 
-            this.Check.PrePass(k);
-
             if (this.Body != null)
                 this.Body.PrePass(k);
+
+            this.Check.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)
         {
-            this.Check.PreCompile(k);
-
             if (this.Body != null)
                 this.Body.PreCompile(k);
+
+            this.Check.PreCompile(k);
         }
 
         public override void Compile(Kernel k)
@@ -52,31 +51,28 @@ namespace sholan.Compiler.Nodes
             k.CurrentScope.PushMemory(k);
 
             Scope scope = k.PushScope();
-            scope.Name = "while" + scope.Parent.RequestLabelId();
+            scope.Name = "dowhile" + scope.Parent.RequestLabelId();
             scope.Type = ScopeType.Block;
 
-            string whileLabel = "sl_wl_" + k.GetScopeName();
-            string endLabel = "sl_wlh_" + k.GetScopeName();
+            string doWhileLabel = "sl_dwl_" + k.GetScopeName();
+            string endLabel = "sl_dwlh_" + k.GetScopeName();
 
             Symbol breakSymbol = new Symbol()
-                {
-                    Name = "+break",
-                    AsmName = endLabel
-                };
+            {
+                Name = "+break",
+                AsmName = endLabel
+            };
             k.RegisterSymbol(breakSymbol);
 
-            k.Emit(Opcode.LABEL, whileLabel).Comment = "while loop";
-
-            this.Check.Compile(k);
-
-            k.Emit(Opcode.NOT);
-            k.Emit(Opcode.GOTOF, '"' + endLabel + '"');
+            k.Emit(Opcode.LABEL, doWhileLabel).Comment = "do while loop";
 
             if (this.Body != null)
                 this.Body.Compile(k);
 
-            k.Emit(Opcode.GOTO, '"' + whileLabel + '"');
-            k.Emit(Opcode.LABEL, endLabel).Comment = "end while";
+            this.Check.Compile(k);
+
+            k.Emit(Opcode.GOTOF, '"' + doWhileLabel + '"');
+            k.Emit(Opcode.LABEL, endLabel).Comment = "end do while";
 
             k.PopScope();
 
