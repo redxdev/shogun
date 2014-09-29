@@ -487,6 +487,10 @@ namespace Shogun
 			{
 				String filename = vm->pop()->getString();
 
+				std::ifstream input(filename.c_str(), std::ios::in | std::ios::binary);
+				if (!input.is_open())
+					throw ImportException("Unable to open import \"" + filename + "\"");
+
 				Shogun::Assembler::AsmReader reader;
 				Shogun::Assembler::CompileInfo compile = reader.read(std::ifstream(filename.c_str(), std::ios::in | std::ios::binary));
 				Shogun::Program program;

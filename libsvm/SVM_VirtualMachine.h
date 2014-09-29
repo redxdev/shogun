@@ -33,6 +33,8 @@ namespace Shogun
 
 	SVM_EXCEPTION_AUTO(ProgramErrorException, VMException);
 
+	SVM_EXCEPTION_AUTO(ImportException, VMException);
+
 	class VirtualMachine;
 
 	typedef std::deque<ObjectPtr> Stack;
