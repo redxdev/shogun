@@ -31,10 +31,12 @@ namespace sholan.Compiler.Nodes
             while (current != breakSymbol.SScope)
             {
                 mem += current.MemorySpace;
-                current.PopMemory(k);
+                current.PopMemory(k, false);
 
                 current = current.Parent;
             }
+
+            current.PopMemory(k, false);
 
             k.EmitPush(mem + "u").Comment = "deallocate scope memory";
             k.Emit(Opcode.DEALLOC);
