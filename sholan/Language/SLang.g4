@@ -63,6 +63,7 @@ statement returns [ICompileNode node]
 	|	stm_define_func { $node = $stm_define_func.node; }
 	|	stm_define_entry { $node = $stm_define_entry.node; }
 	|	stm_return { $node = $stm_return.node; }
+	|	stm_break { $node = $stm_break.node; }
 	|	stm_variable_def { $node = $stm_variable_def.node; }
 	|	stm_assembly { $node = $stm_assembly.node; }
 	|	stm_assembly_var { $node = $stm_assembly_var.node; }
@@ -89,7 +90,7 @@ directive_debug_compiler
 	;
 
 directive_debug_break returns [DebugBreakNode node]
-	:	DIRECTIVE DEBUG_BREAK { $node = new DebugBreakNode(); }
+	:	DIRECTIVE BREAK { $node = new DebugBreakNode(); }
 	;
 
 directive_compiler_break returns [CompilerBreakNode node]
@@ -198,6 +199,10 @@ stm_return returns [ReturnNode node]
 	(
 		expression { $node.Value = $expression.node; }
 	)?
+	;
+
+stm_break returns [BreakNode node]
+	:	BREAK { $node = new BreakNode(); }
 	;
 
 stm_variable_def returns [DefineVariableNode node]
@@ -370,6 +375,10 @@ RETURN
 	:	'return'
 	;
 
+BREAK
+	:	'break'
+	;
+
 IMPORT
 	:	'import'
 	;
@@ -476,10 +485,6 @@ DIRECTIVE
 
 DEBUG_COMPILER
 	:	'debug-compiler'
-	;
-
-DEBUG_BREAK
-	:	'break'
 	;
 
 COMPILER_BREAK

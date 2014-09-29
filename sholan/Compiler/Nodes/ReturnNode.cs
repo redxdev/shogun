@@ -18,8 +18,7 @@ namespace sholan.Compiler.Nodes
             : base()
         {
             this.Attributes
-                .Has("return")
-                .Has("scope-end");
+                .Has("return");
         }
 
         public override void PrePass(Kernel k)
@@ -66,7 +65,7 @@ namespace sholan.Compiler.Nodes
 
             current.PopMemory(k, false);
 
-            k.EmitPush(mem + "u").Comment = "deallocate function parameter memory";
+            k.EmitPush(mem + "u").Comment = "deallocate function memory";
             k.Emit(Opcode.DEALLOC);
 
             k.Emit(Opcode.JUMP).Comment = "return from function";

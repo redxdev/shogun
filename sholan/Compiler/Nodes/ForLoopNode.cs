@@ -90,6 +90,7 @@ namespace sholan.Compiler.Nodes
                     Name = "+break",
                     AsmName = endLabel
                 };
+            k.RegisterSymbol(breakSymbol);
 
             k.Emit(Opcode.LABEL, forLabel).Comment = "for loop";
 
