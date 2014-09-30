@@ -1,4 +1,4 @@
 // SVM Standard Library
 
-import "standard/extern.sl"
-import "standard/conversion.sl"
+import "private/standard/extern.sl"
+import "private/standard/conversion.sl"

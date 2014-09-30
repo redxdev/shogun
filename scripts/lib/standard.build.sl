@@ -2,5 +2,4 @@
 // Build script
 
 #build-exports
-import "standard/extern.sl" export
-import "standard/conversion.sl" export
+import "standard.sl" export
