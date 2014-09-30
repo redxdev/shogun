@@ -75,6 +75,9 @@ namespace sholan.Compiler.Nodes
             if (this.Body != null)
                 this.Body.Compile(k);
 
+            k.EmitPush(scope.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.DEALLOC);
+
             k.Emit(Opcode.GOTO, '"' + whileLabel + '"');
             k.Emit(Opcode.LABEL, endLabel).Comment = "end while";
 

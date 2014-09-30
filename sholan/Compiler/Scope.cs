@@ -86,10 +86,10 @@ namespace sholan.Compiler
 
         public void PushMemory(Kernel k)
         {
+            pushed++;
+
             if (this.MemorySpace == 0)
                 return;
-
-            pushed++;
 
             k.Emit(Opcode.PMMX).Comment = "push memory for " + this.Name;
             k.EmitPush(this.MemorySpace.ToString() + "u");
@@ -99,11 +99,14 @@ namespace sholan.Compiler
 
         public void PopMemory(Kernel k, bool clearPush = true)
         {
-            if (this.MemorySpace == 0 || pushed == 0)
-                return;
+            if(clearPush && pushed <= 0)
+                throw new InvalidOperationException("Unbalanced memory pop; compiler bug?");
 
-            if(clearPush)
+            if (clearPush)
                 pushed--;
+
+            if (this.MemorySpace == 0)
+                return;
 
             k.EmitPush(this.MemorySpace.ToString() + "u").Comment = "pop memory for " + this.Name;
             k.Emit(Opcode.PMMX);

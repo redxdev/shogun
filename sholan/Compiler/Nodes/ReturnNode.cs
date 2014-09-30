@@ -56,7 +56,7 @@ namespace sholan.Compiler.Nodes
             while(current != returnSymbol.SScope)
             {
                 mem += current.MemorySpace;
-                current.PopMemory(k);
+                current.PopMemory(k, false);
 
                 current = current.Parent;
             }
