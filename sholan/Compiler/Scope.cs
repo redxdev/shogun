@@ -27,11 +27,7 @@ namespace sholan.Compiler
             set;
         }
 
-        public uint MemorySpace
-        {
-            get;
-            set;
-        }
+        public uint MemorySpace { get; set; }
 
         public Scope Parent
         {

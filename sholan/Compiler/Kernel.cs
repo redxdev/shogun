@@ -103,7 +103,7 @@ namespace sholan.Compiler
 
         public Kernel()
         {
-            PushScope().MemorySpace = 1;
+            PushScope().MemorySpace = 0;
         }
 
         public Scope PushScope()
@@ -266,8 +266,6 @@ namespace sholan.Compiler
 
         public void Compile(Nodes.ICompileNode root)
         {
-            this.CurrentScope.MemorySpace += (uint)this.imports.Count();
-
             root.PrePass(this);
             root.PreCompile(this);
             root.Compile(this);

@@ -71,6 +71,7 @@ namespace sholan.Compiler.Nodes
                     k.PopScope();
                     symbol.SMode = Symbol.Mode.Library;
                     symbol.Id = k.CurrentScope.RequestId();
+                    k.CurrentScope.MemorySpace++;
                     k.AddImport(symbol);
                     return;
 
