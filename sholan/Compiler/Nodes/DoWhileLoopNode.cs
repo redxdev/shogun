@@ -52,7 +52,6 @@ namespace sholan.Compiler.Nodes
 
             Scope scope = k.PushScope();
             scope.Name = "dowhile" + scope.Parent.RequestLabelId();
-            scope.Type = ScopeType.Block;
 
             string doWhileLabel = "sl_dwl_" + k.GetScopeName();
             string endLabel = "sl_dwlh_" + k.GetScopeName();
@@ -66,8 +65,20 @@ namespace sholan.Compiler.Nodes
 
             k.Emit(Opcode.LABEL, doWhileLabel).Comment = "do while loop";
 
+            scope.PushMemory(k);
+
+            Scope innerScope = k.PushScope();
+            innerScope.Name = "in";
+
             if (this.Body != null)
                 this.Body.Compile(k);
+
+            k.EmitPush(innerScope.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.DEALLOC);
+
+            k.PopScope();
+
+            scope.PopMemory(k);
 
             this.Check.Compile(k);
 

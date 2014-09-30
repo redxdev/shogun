@@ -65,7 +65,6 @@ namespace sholan.Compiler.Nodes
 
             Scope ifScope = k.PushScope();
             ifScope.Name = "if" + ifScope.Parent.RequestLabelId();
-            ifScope.Type = ScopeType.Block;
 
             string trueLabel = "sl_if_" + k.GetScopeName();
             string falseLabel = "sl_fe_" + k.GetScopeName();
@@ -82,7 +81,6 @@ namespace sholan.Compiler.Nodes
 
             Scope trueScope = k.PushScope();
             trueScope.Name = "true";
-            trueScope.Type = ScopeType.Block;
 
             if (this.BranchTrue != null)
                 this.BranchTrue.Compile(k);
@@ -105,7 +103,6 @@ namespace sholan.Compiler.Nodes
 
                 Scope falseScope = k.PushScope();
                 falseScope.Name = "false";
-                falseScope.Type = ScopeType.Block;
 
                 this.BranchFalse.Compile(k);
 

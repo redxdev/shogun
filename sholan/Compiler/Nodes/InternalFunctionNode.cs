@@ -60,7 +60,6 @@ namespace sholan.Compiler.Nodes
 
             Scope scope = k.PushScope();
             scope.Name = this.Function;
-            scope.Type = ScopeType.Function;
             scope.MemorySpace += (uint)this.Arguments.Count + 1;
 
             symbol.AsmName = string.Format("sl_f_{0}", k.GetScopeName());

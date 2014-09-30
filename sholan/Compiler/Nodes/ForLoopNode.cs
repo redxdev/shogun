@@ -77,7 +77,6 @@ namespace sholan.Compiler.Nodes
 
             Scope scope = k.PushScope();
             scope.Name = "for" + scope.Parent.RequestLabelId();
-            scope.Type = ScopeType.Block;
 
             if (this.Init != null)
                 this.Init.Compile(k);
@@ -99,8 +98,19 @@ namespace sholan.Compiler.Nodes
             k.Emit(Opcode.NOT);
             k.Emit(Opcode.GOTOF, '"' + endLabel + '"');
 
+            scope.PushMemory(k);
+
+            Scope innerScope = k.PushScope();
+            innerScope.Name = "in";
+
             if (this.Body != null)
                 this.Body.Compile(k);
+
+            k.EmitPush(innerScope.MemorySpace.ToString() + "u");
+            k.Emit(Opcode.DEALLOC);
+
+            k.PopScope();
+            scope.PopMemory(k);
 
             if (this.Increment != null)
                 this.Increment.Compile(k);
