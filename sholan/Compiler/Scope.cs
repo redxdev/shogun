@@ -99,5 +99,11 @@ namespace sholan.Compiler
             k.Emit(Opcode.ASUB);
             k.Emit(Opcode.SMMX);
         }
+
+        public void Popped()
+        {
+            if(pushed > 0)
+                throw new InvalidOperationException("Unbalanced memory push; compiler bug?");
+        }
     }
 }

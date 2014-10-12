@@ -123,6 +123,7 @@ namespace sholan.Compiler
         public Scope PopScope()
         {
             Scope scope = scopeStack.Pop();
+            scope.Popped();
 
             return scope;
         }
