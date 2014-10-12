@@ -191,7 +191,7 @@ stm_define_entry returns [InternalFunctionNode node]
 			};
 	}
 		BLOCK_START
-		stms=statements { $node.Body = $stms.node; }
+		stms=statements { $stms.node.Children.AddLast(new HaltNode()); $node.Body = $stms.node; }
 		BLOCK_END
 	;
 
