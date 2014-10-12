@@ -104,7 +104,7 @@ namespace Shogun
 			std::ofstream outputFile("./test.sx", std::ios::out | std::ios::ate);
 
 			ASSERT_NO_THROW({
-				writer.write(outputFile, nodes);
+				writer.write(outputFile, nodes, false);
 			});
 
 			outputFile.close();
@@ -131,7 +131,7 @@ namespace Shogun
 			AsmWriter writer;
 			std::ofstream outputFile("./test.sx", std::ios::out | std::ios::ate);
 
-			writer.write(outputFile, nodes);
+			writer.write(outputFile, nodes, false);
 			outputFile.close();
 
 			AsmReader reader;

@@ -10,21 +10,24 @@ namespace Shogun
 		{
 		}
 
-		void AsmWriter::write(std::ostream& stream, NodeList& nodes)
+		void AsmWriter::write(std::ostream& stream, NodeList& nodes, bool debug)
 		{
-			writeHeader(stream, nodes);
-			writeNodes(stream, nodes);
+			writeHeader(stream, nodes, debug);
+			writeNodes(stream, nodes, debug);
 		}
 
-		void AsmWriter::writeHeader(std::ostream& stream, NodeList& nodes)
+		void AsmWriter::writeHeader(std::ostream& stream, NodeList& nodes, bool debug)
 		{
 			stream.write(SVM_HEADER_ID, sizeof(SVM_HEADER_ID));
 
 			UInt32 version = Shogun::version();
 			stream.write(reinterpret_cast<char*>(&version), sizeof(version));
+
+			WritableBool dMode = debug;
+			stream.write(reinterpret_cast<char*>(&dMode), sizeof(dMode));
 		}
 
-		void AsmWriter::writeNodes(std::ostream& stream, NodeList& nodes)
+		void AsmWriter::writeNodes(std::ostream& stream, NodeList& nodes, bool debug)
 		{
 			CompileInfo compile;
 
@@ -43,7 +46,7 @@ namespace Shogun
 
 			for (CompileList::iterator it = compile.list.begin(); it != compile.list.end(); ++it)
 			{
-				(*it)->writeBinary(stream);
+				(*it)->writeBinary(stream, debug);
 			}
 		}
 
@@ -73,6 +76,11 @@ namespace Shogun
 
 			if (version != Shogun::version())
 				throw VersionMismatchException(FORMAT("Version mismatch, expected %u but got %u", Shogun::version(), version));
+
+			WritableBool dMode = false;
+			stream.read(reinterpret_cast<char*>(&dMode), sizeof(dMode));
+
+			debug = dMode;
 		}
 
 		void AsmReader::readObjects(std::istream& stream, CompileInfo& compile)
@@ -83,7 +91,7 @@ namespace Shogun
 			for (UInt32 i = 0; i < objCount; ++i)
 			{
 				ObjectPtr obj = createObject();
-				obj->readBinary(stream);
+				obj->readBinary(stream, debug);
 				compile.list.push_back(obj);
 			}
 		}

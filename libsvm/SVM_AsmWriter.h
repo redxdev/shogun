@@ -21,12 +21,12 @@ namespace Shogun
 		public:
 			AsmWriter();
 
-			void write(std::ostream& stream, NodeList& nodes);
+			void write(std::ostream& stream, NodeList& nodes, bool debug);
 
 		private:
-			void writeHeader(std::ostream& stream, NodeList& nodes);
+			void writeHeader(std::ostream& stream, NodeList& nodes, bool debug);
 
-			void writeNodes(std::ostream& stream, NodeList& nodes);
+			void writeNodes(std::ostream& stream, NodeList& nodes, bool debug);
 		};
 
 		class AsmReader
@@ -40,6 +40,8 @@ namespace Shogun
 			void readHeader(std::istream& stream);
 
 			void readObjects(std::istream& stream, CompileInfo& compile);
+
+			bool debug = false;
 		};
 	}
 }

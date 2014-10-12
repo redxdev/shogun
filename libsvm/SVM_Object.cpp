@@ -550,8 +550,21 @@ namespace Shogun
 		}
 	}
 
-	void Object::writeBinary(std::ostream& stream)
+	void Object::writeBinary(std::ostream& stream, bool debug)
 	{
+		if (debug)
+		{
+			WritableBool hasDebug = this->debug != 0;
+			stream.write(reinterpret_cast<char*>(&hasDebug), sizeof(hasDebug));
+
+			if (hasDebug)
+			{
+				UInt32 len = this->debug->string.size();
+				stream.write(reinterpret_cast<char*>(&len), sizeof(len));
+				stream.write(this->debug->string.c_str(), len);
+			}
+		}
+
 		stream.write(reinterpret_cast<char*>(&this->nativeType), sizeof(this->nativeType)); // write type
 
 		switch (this->getNativeType())
@@ -593,8 +606,30 @@ namespace Shogun
 		}
 	}
 
-	void Object::readBinary(std::istream& stream)
+	void Object::readBinary(std::istream& stream, bool debug)
 	{
+		if (debug)
+		{
+			WritableBool hasDebug = false;
+			stream.read(reinterpret_cast<char*>(&hasDebug), sizeof(hasDebug));
+
+			if (hasDebug)
+			{
+				UInt32 len;
+				stream.read(reinterpret_cast<char*>(&len), sizeof(len));
+				char* data = new char[len];
+				stream.read(data, len);
+				data[len - 1] = '\0';
+				this->debug = new DebugInfo();
+				this->debug->string = String(data);
+				delete[] data;
+			}
+			else
+			{
+				this->debug = 0;
+			}
+		}
+
 		DataType type;
 		stream.read(reinterpret_cast<char*>(&type), sizeof(type));
 

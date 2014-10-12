@@ -12,6 +12,7 @@ int main(int argc, char** argv)
 {
 	Shogun::String inputFileName;
 	Shogun::String outputFileName;
+	bool debugMode = false;
 
 	try
 	{
@@ -20,10 +21,13 @@ int main(int argc, char** argv)
 		TCLAP::ValueArg<Shogun::String> inputArg("i", "input", "input file", true, "", "filename", cmd);
 		TCLAP::ValueArg<Shogun::String> outputArg("o", "output", "output file", true, "", "filename", cmd);
 
+		TCLAP::SwitchArg debugArg("d", "debug", "write debug information", cmd, false);
+
 		cmd.parse(argc, argv);
 
 		inputFileName = inputArg.getValue();
 		outputFileName = outputArg.getValue();
+		debugMode = debugArg.getValue();
 	}
 	catch (TCLAP::ArgException e)
 	{
@@ -87,7 +91,7 @@ int main(int argc, char** argv)
 
 	try
 	{
-		writer.write(outputFile, nodes);
+		writer.write(outputFile, nodes, debugMode);
 	}
 	catch (Shogun::Exception& e)
 	{

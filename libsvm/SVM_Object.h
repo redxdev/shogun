@@ -36,6 +36,11 @@ namespace Shogun
 
 		typedef UInt8 DataType;
 
+		struct DebugInfo
+		{
+			String string;
+		};
+
 	public:
 		/**
 		 * Initialize with nil.
@@ -98,9 +103,9 @@ namespace Shogun
 
 		String getReadableString() const;
 
-		void writeBinary(std::ostream& stream);
+		void writeBinary(std::ostream& stream, bool debug);
 
-		void readBinary(std::istream& stream);
+		void readBinary(std::istream& stream, bool debug);
 
 	private:
 		union
@@ -113,6 +118,8 @@ namespace Shogun
 		} data;
 
 		DataType nativeType;
+
+		DebugInfo* debug = 0;
 
 		void cleanup();
 	};
