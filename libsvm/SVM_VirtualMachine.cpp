@@ -129,7 +129,18 @@ namespace Shogun
 
 		for (Memory::MemSize i = 0; i < memory.getSize(); ++i)
 		{
-			stream << "[" << i << "] " << memory.get(i)->getReadableString() << std::endl;
+			stream << "[" << i << "] " << memory.get(i)->getReadableString();
+			if (i == this->getRegPri())
+			{
+				stream << " !PRI!";
+			}
+			
+			if (i == this->getRegMmx())
+			{
+				stream << " !MMX!";
+			}
+
+			stream << std::endl;
 		}
 
 		stream << "- end of heap dump" << std::endl;
