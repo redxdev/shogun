@@ -96,7 +96,7 @@ namespace Shogun
 		auto tm = *std::localtime(&t);
 
 		stream << "ShogunVM version " << Shogun::version_string() << "-" << Shogun::version() << std::endl;
-		stream << "dump time - " << std::put_time(&tm, "%Y-%m-%d %H-%M-%S") << std::endl;
+		stream << "dump time - " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << std::endl;
 		stream << "----------" << std::endl;
 		stream << "Registers:" << std::endl;
 		stream << "  PRI = " << this->getRegPri() << std::endl;
@@ -119,7 +119,7 @@ namespace Shogun
 		auto tm = *std::localtime(&t);
 
 		stream << "ShogunVM version " << Shogun::version_string() << "-" << Shogun::version() << std::endl;
-		stream << "dump time - " << std::put_time(&tm, "%Y-%m-%d %H-%M-%S") << std::endl;
+		stream << "dump time - " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S") << std::endl;
 		stream << "----------" << std::endl;
 		stream << "Registers:" << std::endl;
 		stream << "  PRI = " << this->getRegPri() << std::endl;
