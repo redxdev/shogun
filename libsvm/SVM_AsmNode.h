@@ -73,6 +73,12 @@ namespace Shogun
 
 			virtual void compile(CompileInfo& compile) override
 			{
+				if (this->debug == 0)
+				{
+					this->debug = new Object::DebugInfo();
+					this->debug->string = "!opcode!";
+				}
+
 				switch (opcode)
 				{
 				default:
