@@ -34,6 +34,11 @@ int main(int argc, char** argv)
 		std::cerr << "error: " << e.error() << " for arg " << e.argId() << std::endl;
 		return EXIT_FAILURE;
 	}
+	
+	if (debugMode)
+	{
+		std::cout << "!!! COMPILING DEBUG BINARY !!!" << std::endl;
+	}
 
 	std::cout << "Starting lexer..." << std::endl;
 
