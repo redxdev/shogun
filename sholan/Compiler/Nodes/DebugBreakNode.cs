@@ -26,7 +26,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Emit(Opcode.DBRK).SetDebug(Line, Column, DebugType.Debug, "");
+            k.Emit(Opcode.DBRK).SetDebug(File, Line, Column, DebugType.Debug, "");
         }
     }
 }

@@ -100,7 +100,7 @@ namespace sholan.Compiler.Nodes
             }
 
             k.EmitPush('"' + this.Function + '"');
-            k.Emit(Opcode.ECALL).SetDebug(Line, Column, DebugType.ECall, this.Function);
+            k.Emit(Opcode.ECALL).SetDebug(File, Line, Column, DebugType.ECall, this.Function);
         }
 
         protected void CompileIntern(Kernel k)
@@ -114,7 +114,7 @@ namespace sholan.Compiler.Nodes
 
             k.CurrentScope.PushMemory(k);
             k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"");
-            k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"').SetDebug(Line, Column, DebugType.Call, this.Function);
+            k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"').SetDebug(File, Line, Column, DebugType.Call, this.Function);
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
             k.CurrentScope.PopMemory(k);
@@ -138,7 +138,7 @@ namespace sholan.Compiler.Nodes
             rvn.PreCompile(k);
             rvn.Compile(k);
             k.CurrentScope.PushMemory(k);
-            k.Emit(Opcode.JUMP).SetDebug(Line, Column, DebugType.LCall, this.Function);
+            k.Emit(Opcode.JUMP).SetDebug(File, Line, Column, DebugType.LCall, this.Function);
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
             k.CurrentScope.PopMemory(k);

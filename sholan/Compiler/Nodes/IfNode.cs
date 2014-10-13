@@ -74,7 +74,7 @@ namespace sholan.Compiler.Nodes
 
             this.Check.Compile(k);
 
-            k.Emit(Opcode.GOTOF, '"' + trueLabel + '"').SetDebug(Line, Column, DebugType.Branch, "");
+            k.Emit(Opcode.GOTOF, '"' + trueLabel + '"').SetDebug(File, Line, Column, DebugType.Branch, "");
             k.Emit(Opcode.GOTO, '"' + falseLabel + '"');
 
             k.Emit(Opcode.LABEL, trueLabel);

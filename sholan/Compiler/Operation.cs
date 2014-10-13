@@ -62,9 +62,9 @@ namespace sholan.Compiler
             }
         }
 
-        public Operation SetDebug(int line, int col, DebugType type, string data)
+        public Operation SetDebug(string file, int line, int col, DebugType type, string data)
         {
-            this.Debug = string.Format("{0}.{1}:{2}:{3}", line, col, type, data);
+            this.Debug = string.Format("{0}:{1}.{2}:{3}:{4}", file, line, col, type, data);
             return this;
         }
 

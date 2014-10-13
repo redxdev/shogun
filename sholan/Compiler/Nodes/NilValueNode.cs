@@ -28,7 +28,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Emit(Opcode.PUSHNIL).SetDebug(Line, Column, DebugType.Value, "nil");
+            k.Emit(Opcode.PUSHNIL).SetDebug(File, Line, Column, DebugType.Value, "nil");
         }
     }
 }

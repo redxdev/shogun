@@ -81,7 +81,7 @@ namespace sholan.Compiler
             k.Emit(Opcode.PMMX);
             k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.AADD);
-            k.Emit(Opcode.SMMX).SetDebug(-1, -1, DebugType.PushMem, this.Name);
+            k.Emit(Opcode.SMMX).SetDebug(k.FileStack.Peek(), -1, -1, DebugType.PushMem, this.Name);
         }
 
         public void PopMemory(Kernel k, bool clearPush = true)
@@ -98,7 +98,7 @@ namespace sholan.Compiler
             k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.PMMX);
             k.Emit(Opcode.ASUB);
-            k.Emit(Opcode.SMMX).SetDebug(-1, -1, DebugType.PopMem, this.Name);
+            k.Emit(Opcode.SMMX).SetDebug(k.FileStack.Peek(), -1, -1, DebugType.PopMem, this.Name);
         }
 
         public void Popped()

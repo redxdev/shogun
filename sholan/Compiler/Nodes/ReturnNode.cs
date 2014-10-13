@@ -51,7 +51,10 @@ namespace sholan.Compiler.Nodes
             else
                 k.Emit(Opcode.PUSHNIL);
 
-            new RetrieveVariableNode(-1, -1) { VariableName = "+return" }.Compile(k);
+            var rvn = new RetrieveVariableNode(-1, -1) {VariableName = "+return"};
+            rvn.PrePass(k);
+            rvn.PreCompile(k);
+            rvn.Compile(k);
 
             uint mem = 0;
             Scope current = k.CurrentScope;
@@ -70,7 +73,7 @@ namespace sholan.Compiler.Nodes
             k.EmitPush(mem + "u").Comment = "deallocate function memory";
             k.Emit(Opcode.DEALLOC);
 
-            k.Emit(Opcode.JUMP).SetDebug(Line, Column, DebugType.Return, "");
+            k.Emit(Opcode.JUMP).SetDebug(File, Line, Column, DebugType.Return, "");
         }
     }
 }

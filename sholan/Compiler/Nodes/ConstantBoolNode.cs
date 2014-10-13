@@ -35,11 +35,11 @@ namespace sholan.Compiler.Nodes
         {
             if(this.Value)
             {
-                k.Emit(Opcode.PUSHT).SetDebug(Line, Column, DebugType.Value, "true");
+                k.Emit(Opcode.PUSHT).SetDebug(File, Line, Column, DebugType.Value, "true");
             }
             else
             {
-                k.Emit(Opcode.PUSHF).SetDebug(Line, Column, DebugType.Value, "false");
+                k.Emit(Opcode.PUSHF).SetDebug(File, Line, Column, DebugType.Value, "false");
             }
         }
     }

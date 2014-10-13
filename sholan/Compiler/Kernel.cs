@@ -109,6 +109,7 @@ namespace sholan.Compiler
 
         public Kernel()
         {
+            this.FileStack = new Stack<string>();
             PushScope().MemorySpace = 0;
         }
 
@@ -311,7 +312,7 @@ namespace sholan.Compiler
                     this.Emit(Opcode.PLABL, "\"" + label + "\"");
                     this.Emit(Opcode.PMMX);
                     this.EmitPush("\"" + Path.Combine(Path.GetDirectoryName(import), Path.GetFileNameWithoutExtension(import)).Replace('\\', '/') + ".sxl\"");
-                    this.Emit(Opcode.IMPRT).SetDebug(-1, -1, DebugType.Import, import);
+                    this.Emit(Opcode.IMPRT).SetDebug(this.FileStack.Peek(), -1, -1, DebugType.Import, import);
                     this.Emit(Opcode.JUMP);
                     this.Emit(Opcode.LABEL, label);
                 }
@@ -343,6 +344,8 @@ namespace sholan.Compiler
                         Function = "+entry",
                         Arguments = new List<ICompileNode>()
                     };
+                    node.PrePass(this);
+                    node.PreCompile(this);
                     node.Compile(this);
                 }
 
@@ -357,7 +360,7 @@ namespace sholan.Compiler
         public void EndCompile(bool halt = false)
         {
             if (halt)
-                this.Emit(Opcode.HALT).SetDebug(-1, -1, DebugType.Raw, "end-compile");
+                this.Emit(Opcode.HALT).SetDebug(this.FileStack.Peek(), -1, -1, DebugType.Raw, "end-compile");
         }
 
         public void Write(string file)

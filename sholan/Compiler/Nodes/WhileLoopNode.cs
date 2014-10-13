@@ -67,7 +67,7 @@ namespace sholan.Compiler.Nodes
             k.RegisterSymbol(breakSymbol);
 
             k.Emit(Opcode.LABEL, whileLabel).Comment = "while loop";
-            k.Emit(Opcode.NOOP).SetDebug(Line, Column, DebugType.WhileLoop, "");
+            k.Emit(Opcode.NOOP).SetDebug(File, Line, Column, DebugType.WhileLoop, "");
 
             this.Check.Compile(k);
 

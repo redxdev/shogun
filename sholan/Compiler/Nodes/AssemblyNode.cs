@@ -30,7 +30,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Emit(this.Operation).SetDebug(Line, Column, DebugType.Raw, "");
+            k.Emit(this.Operation).SetDebug(File, Line, Column, DebugType.Raw, "");
         }
     }
 }

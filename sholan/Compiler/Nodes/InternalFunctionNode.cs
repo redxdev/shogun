@@ -82,7 +82,7 @@ namespace sholan.Compiler.Nodes
             }
 
             k.Emit(Opcode.LABEL, symbol.AsmName).Comment = "function " + this.Function; // function label
-            k.Emit(Opcode.NOOP).SetDebug(Line, Column, DebugType.Function, this.Function);
+            k.Emit(Opcode.NOOP).SetDebug(File, Line, Column, DebugType.Function, this.Function);
 
             k.EmitPush(scope.MemorySpace.ToString() + "u").Comment = "allocate function parameter memory"; // allocate memory space for arguments and return location
             k.Emit(Opcode.ALLOC);

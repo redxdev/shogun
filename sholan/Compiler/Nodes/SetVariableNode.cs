@@ -64,7 +64,7 @@ namespace sholan.Compiler.Nodes
             if (symbol.SScope == k.CurrentScope)
             {
                 k.EmitPush(symbol.Id.ToString() + "u").Comment = "store into variable " + this.VariableName;
-                k.Emit(Opcode.STLO).SetDebug(Line, Column, DebugType.Set, this.VariableName);
+                k.Emit(Opcode.STLO).SetDebug(File, Line, Column, DebugType.Set, this.VariableName);
             }
             else
             {
@@ -72,7 +72,7 @@ namespace sholan.Compiler.Nodes
                 mem -= symbol.Id;
 
                 k.EmitPush(mem.ToString() + "u").Comment = "store into variable " + this.VariableName;
-                k.Emit(Opcode.STNLO).SetDebug(Line, Column, DebugType.Set, this.VariableName);
+                k.Emit(Opcode.STNLO).SetDebug(File, Line, Column, DebugType.Set, this.VariableName);
             }
         }
     }

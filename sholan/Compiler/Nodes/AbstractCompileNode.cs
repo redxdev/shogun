@@ -40,6 +40,8 @@ namespace sholan.Compiler.Nodes
 
         public AbstractCompileNode(int line, int col)
         {
+            this.Line = line;
+            this.Column = col;
             this.Attributes = new NodeAttributes();
         }
 

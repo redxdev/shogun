@@ -51,7 +51,7 @@ namespace sholan.Compiler.Nodes
         public override void Compile(Kernel k)
         {
             k.EmitPush("1u");
-            k.Emit(Opcode.ALLOC).SetDebug(Line, Column, DebugType.Define, this.VariableName);
+            k.Emit(Opcode.ALLOC).SetDebug(File, Line, Column, DebugType.Define, this.VariableName);
             k.CurrentScope.MemorySpace += 1;
 
             Symbol symbol = new Symbol()
@@ -74,7 +74,7 @@ namespace sholan.Compiler.Nodes
             }
 
             k.EmitPush(symbol.Id.ToString() + "u");
-            k.Emit(Opcode.STLO).SetDebug(Line, Column, DebugType.Set, this.VariableName);
+            k.Emit(Opcode.STLO).SetDebug(File, Line, Column, DebugType.Set, this.VariableName);
         }
     }
 }
