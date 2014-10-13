@@ -5,8 +5,8 @@
 
 #define SVM_LIBRARY
 
-#define SVM_VERSION_STR "0.2.1.1-dev"
-#define SVM_VERSION (Shogun::UInt32)24
+#define SVM_VERSION_STR "0.2.2-dev"
+#define SVM_VERSION (Shogun::UInt32)25
 
 #define SVM_HEADER_ID "svmo"
 
