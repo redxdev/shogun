@@ -572,7 +572,7 @@ namespace Shogun
 
 			if (hasDebug)
 			{
-				UInt32 len = this->debug->string.size();
+				UInt32 len = this->debug->string.size() + 1;
 				stream.write(reinterpret_cast<char*>(&len), sizeof(len));
 				stream.write(this->debug->string.c_str(), len);
 			}
