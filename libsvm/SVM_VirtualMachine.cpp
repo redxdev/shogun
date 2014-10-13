@@ -75,19 +75,19 @@ namespace Shogun
 
 	void VirtualMachine::dump()
 	{
-		dumpStack(std::cerr);
-		
+		std::cerr << "Dumping virtual machine to shogun.dump... ";
+
 		std::ofstream dump;
 		dump.open("shogun.dump", std::ios::out | std::ios::trunc);
 		if (!dump.is_open()) {
-			std::cerr << "Unable to open shogun.dump to output dump." << std::endl;
+			std::cerr << std::endl << "Unable to open shogun.dump to output dump." << std::endl;
 			return;
 		}
 
 		dumpStack(dump);
 		dumpHeap(dump);
 
-		std::cerr << "Full dump at shogun.dump" << std::endl;
+		std::cerr << "done" << std::endl;
 	}
 
 	void VirtualMachine::dumpStack(std::ostream& stream)
