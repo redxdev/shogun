@@ -99,8 +99,8 @@ namespace sholan.Compiler.Nodes
                 this.Arguments[i].Compile(k);
             }
 
-            k.EmitPush('"' + this.Function + '"').Comment = "function name";
-            k.Emit(Opcode.ECALL).Comment = "call function";
+            k.EmitPush('"' + this.Function + '"');
+            k.Emit(Opcode.ECALL).SetDebug(Line, Column, DebugType.ECall, this.Function);
         }
 
         protected void CompileIntern(Kernel k)
@@ -113,8 +113,8 @@ namespace sholan.Compiler.Nodes
             uint returnId = k.CurrentScope.RequestLabelId();
 
             k.CurrentScope.PushMemory(k);
-            k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call function " + this.Function;
-            k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"');
+            k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"");
+            k.Emit(Opcode.GOTO, '"' + k.Lookup(this.Function).AsmName + '"').SetDebug(Line, Column, DebugType.Call, this.Function);
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
             k.CurrentScope.PopMemory(k);
@@ -129,7 +129,7 @@ namespace sholan.Compiler.Nodes
 
             uint returnId = k.CurrentScope.RequestLabelId();
 
-            k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call library function " + this.Function;
+            k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"");
             var rvn = new RetrieveVariableNode(-1, -1)
                 {
                     VariableName = this.Function
@@ -138,7 +138,7 @@ namespace sholan.Compiler.Nodes
             rvn.PreCompile(k);
             rvn.Compile(k);
             k.CurrentScope.PushMemory(k);
-            k.Emit(Opcode.JUMP).Comment = "call function " + this.Function;
+            k.Emit(Opcode.JUMP).SetDebug(Line, Column, DebugType.LCall, this.Function);
 
             k.Emit(Opcode.LABEL, "sl_r_" + k.GetScopeName() + "_" + returnId.ToString()).Comment = "return point from " + this.Function;
             k.CurrentScope.PopMemory(k);

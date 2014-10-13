@@ -66,6 +66,7 @@ namespace sholan.Compiler.Nodes
             k.RegisterSymbol(breakSymbol);
 
             k.Emit(Opcode.LABEL, doWhileLabel).Comment = "do while loop";
+            k.Emit(Opcode.NOOP).SetDebug(Line, Column, DebugType.DoLoop, "");
 
             scope.PushMemory(k);
 

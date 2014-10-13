@@ -94,6 +94,7 @@ namespace sholan.Compiler.Nodes
             k.RegisterSymbol(breakSymbol);
 
             k.Emit(Opcode.LABEL, forLabel).Comment = "for loop";
+            k.Emit(Opcode.NOOP).SetDebug(Line, Column, DebugType.ForLoop, "");
 
             this.Check.Compile(k);
 

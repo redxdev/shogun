@@ -42,7 +42,7 @@ namespace sholan.Compiler.Nodes
             k.EmitPush(mem + "u").Comment = "deallocate scope memory";
             k.Emit(Opcode.DEALLOC);
 
-            k.Emit(Opcode.GOTO, "\"" + breakSymbol.AsmName + "\"");
+            k.Emit(Opcode.GOTO, "\"" + breakSymbol.AsmName + "\"").SetDebug(Line, Column, DebugType.Break, "");
         }
     }
 }

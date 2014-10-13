@@ -38,7 +38,7 @@ namespace sholan.Compiler.Nodes
             if (symbol.SScope == k.CurrentScope)
             {
                 k.EmitPush(symbol.Id.ToString() + "u").Comment = "retrieve variable " + this.VariableName;
-                k.Emit(Opcode.LDLO);
+                k.Emit(Opcode.LDLO).SetDebug(Line, Column, DebugType.Retrieve, this.VariableName);
             }
             else
             {
@@ -46,7 +46,7 @@ namespace sholan.Compiler.Nodes
                 mem -= symbol.Id;
 
                 k.EmitPush(mem.ToString() + "u").Comment = "retrieve variable " + this.VariableName;
-                k.Emit(Opcode.LDNLO);
+                k.Emit(Opcode.LDNLO).SetDebug(Line, Column, DebugType.Retrieve, this.VariableName);
             }
         }
     }

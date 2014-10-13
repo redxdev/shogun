@@ -70,7 +70,7 @@ namespace sholan.Compiler.Nodes
             k.EmitPush(mem + "u").Comment = "deallocate function memory";
             k.Emit(Opcode.DEALLOC);
 
-            k.Emit(Opcode.JUMP).Comment = "return from function";
+            k.Emit(Opcode.JUMP).SetDebug(Line, Column, DebugType.Return, "");
         }
     }
 }

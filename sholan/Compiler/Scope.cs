@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -77,10 +78,10 @@ namespace sholan.Compiler
             if (this.MemorySpace == 0)
                 return;
 
-            k.Emit(Opcode.PMMX).Comment = "push memory for " + this.Name;
+            k.Emit(Opcode.PMMX);
             k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.AADD);
-            k.Emit(Opcode.SMMX);
+            k.Emit(Opcode.SMMX).SetDebug(-1, -1, DebugType.PushMem, this.Name);
         }
 
         public void PopMemory(Kernel k, bool clearPush = true)
@@ -94,10 +95,10 @@ namespace sholan.Compiler
             if (this.MemorySpace == 0)
                 return;
 
-            k.EmitPush(this.MemorySpace.ToString() + "u").Comment = "pop memory for " + this.Name;
+            k.EmitPush(this.MemorySpace.ToString() + "u");
             k.Emit(Opcode.PMMX);
             k.Emit(Opcode.ASUB);
-            k.Emit(Opcode.SMMX);
+            k.Emit(Opcode.SMMX).SetDebug(-1, -1, DebugType.PopMem, this.Name);
         }
 
         public void Popped()

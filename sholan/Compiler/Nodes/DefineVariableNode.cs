@@ -50,8 +50,8 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.EmitPush("1u").Comment = "allocate variable " + this.VariableName;
-            k.Emit(Opcode.ALLOC);
+            k.EmitPush("1u");
+            k.Emit(Opcode.ALLOC).SetDebug(Line, Column, DebugType.Define, this.VariableName);
             k.CurrentScope.MemorySpace += 1;
 
             Symbol symbol = new Symbol()
@@ -73,8 +73,8 @@ namespace sholan.Compiler.Nodes
                 this.Value.Compile(k);
             }
 
-            k.EmitPush(symbol.Id.ToString() + "u").Comment = "store into variable";
-            k.Emit(Opcode.STLO);
+            k.EmitPush(symbol.Id.ToString() + "u");
+            k.Emit(Opcode.STLO).SetDebug(Line, Column, DebugType.Set, this.VariableName);
         }
     }
 }

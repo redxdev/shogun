@@ -33,7 +33,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Emit(Opcode.NOOP).Comment = "begin user section";
+            k.Emit(Opcode.NOOP).SetDebug(Line, Column, DebugType.Raw, "user");
             k.Emit(new Operation() { Raw = this.Assembly });
             k.Emit(Opcode.NOOP).Comment = "end user section";
         }

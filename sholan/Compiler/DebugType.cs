@@ -8,14 +8,26 @@ namespace sholan.Compiler
 {
     public enum DebugType
     {
-        NONE,
-        RAW, // assembly
-        RETRIEVE,
-        CALL,
-        ECALL,
-        BRANCH,
-        FOR_LOOP,
-        WHILE_LOOP,
-        DO_LOOP
+        None,
+        Raw, // assembly
+        Retrieve,
+        Call,
+        ECall,
+        LCall,
+        Branch,
+        ForLoop,
+        WhileLoop,
+        DoLoop,
+        Break,
+        Return,
+        Value,
+        Debug,
+        Define,
+        Set,
+        PushMem,
+        PopMem,
+        Function,
+        Operation,
+        Import
     }
 }

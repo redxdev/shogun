@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\CompileException.cs" />
+    <Compile Include="Compiler\DebugType.cs" />
     <Compile Include="Compiler\Nodes\BreakNode.cs" />
     <Compile Include="Compiler\Nodes\BuildExportsNode.cs" />
     <Compile Include="Compiler\Nodes\ConstantBoolNode.cs" />

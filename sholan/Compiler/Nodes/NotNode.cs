@@ -40,7 +40,7 @@ namespace sholan.Compiler.Nodes
         {
             this.Value.Compile(k);
 
-            k.Emit(Opcode.NOT);
+            k.Emit(Opcode.NOT).SetDebug(Line, Column, DebugType.Operation, "not");
         }
     }
 }

@@ -311,7 +311,7 @@ namespace sholan.Compiler
                     this.Emit(Opcode.PLABL, "\"" + label + "\"");
                     this.Emit(Opcode.PMMX);
                     this.EmitPush("\"" + Path.Combine(Path.GetDirectoryName(import), Path.GetFileNameWithoutExtension(import)).Replace('\\', '/') + ".sxl\"");
-                    this.Emit(Opcode.IMPRT);
+                    this.Emit(Opcode.IMPRT).SetDebug(-1, -1, DebugType.Import, import);
                     this.Emit(Opcode.JUMP);
                     this.Emit(Opcode.LABEL, label);
                 }
@@ -356,8 +356,8 @@ namespace sholan.Compiler
 
         public void EndCompile(bool halt = false)
         {
-            if(halt)
-                this.Emit(Opcode.HALT).Comment = "end compile (halt=true)";
+            if (halt)
+                this.Emit(Opcode.HALT).SetDebug(-1, -1, DebugType.Raw, "end-compile");
         }
 
         public void Write(string file)
