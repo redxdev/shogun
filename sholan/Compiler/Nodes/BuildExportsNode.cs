@@ -8,8 +8,14 @@ namespace sholan.Compiler.Nodes
 {
     public class BuildExportsNode : AbstractCompileNode
     {
+        public BuildExportsNode(int line, int col)
+            : base(line, col)
+        {
+        }
+
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
             k.IsBuildingExports = true;
         }
 

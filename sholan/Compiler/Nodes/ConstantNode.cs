@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ConstantNode()
-            : base()
+        public ConstantNode(int line, int col)
+            : base(line, col)
         {
             this.Value = null;
 
@@ -26,6 +26,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

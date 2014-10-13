@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public RetrieveVariableNode()
-            : base()
+        public RetrieveVariableNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("variable")
@@ -24,6 +24,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

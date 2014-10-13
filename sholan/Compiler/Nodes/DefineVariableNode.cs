@@ -20,8 +20,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public DefineVariableNode()
-            : base()
+        public DefineVariableNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("define-var");
@@ -29,6 +29,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             if(this.Value != null)
             {
                 this.Value.Attributes

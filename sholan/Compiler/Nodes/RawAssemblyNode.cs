@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public RawAssemblyNode()
-            : base()
+        public RawAssemblyNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("assembly");
@@ -23,10 +23,12 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void Compile(Kernel k)

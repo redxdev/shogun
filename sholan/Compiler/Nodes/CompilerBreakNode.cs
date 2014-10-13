@@ -9,8 +9,8 @@ namespace sholan.Compiler.Nodes
 {
     public class CompilerBreakNode : AbstractCompileNode
     {
-        public CompilerBreakNode()
-            : base()
+        public CompilerBreakNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("debug")
@@ -19,6 +19,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

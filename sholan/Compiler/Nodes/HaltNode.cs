@@ -8,8 +8,8 @@ namespace sholan.Compiler.Nodes
 {
     public class HaltNode : AbstractCompileNode
     {
-        public HaltNode()
-            : base()
+        public HaltNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("halt")
@@ -19,6 +19,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

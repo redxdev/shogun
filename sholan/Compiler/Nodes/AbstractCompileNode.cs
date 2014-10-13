@@ -38,12 +38,15 @@ namespace sholan.Compiler.Nodes
             protected set;
         }
 
-        public AbstractCompileNode()
+        public AbstractCompileNode(int line, int col)
         {
             this.Attributes = new NodeAttributes();
         }
 
-        public abstract void PrePass(Kernel k);
+        public virtual void PrePass(Kernel k)
+        {
+            this.File = k.FileStack.Peek();
+        }
 
         public abstract void PreCompile(Kernel k);
 

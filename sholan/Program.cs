@@ -27,9 +27,12 @@ namespace sholan
             Console.WriteLine("Parsing input...");
             ICompileNode root = null;
 
+            string file = Path.GetFullPath(args[0]);
+            kernel.FileStack.Push(file);
+
             try
             {
-                root = LanguageUtilities.ParseFile(args[0]);
+                root = LanguageUtilities.ParseFile(file);
             }
             catch(Exception e)
             {

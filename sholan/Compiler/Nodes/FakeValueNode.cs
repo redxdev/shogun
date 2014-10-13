@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public FakeValueNode()
-            : base()
+        public FakeValueNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("value");
@@ -23,6 +23,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

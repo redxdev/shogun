@@ -20,8 +20,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ExternalFunctionNode()
-            : base()
+        public ExternalFunctionNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("function")
@@ -30,6 +30,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

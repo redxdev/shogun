@@ -31,6 +31,9 @@ namespace Shogun
 			case DIRECTIVE:
 				return "DIRECTIVE";
 
+			case DEBUG_STR:
+				return "DEBUG_STR";
+
 			case END:
 				return "END";
 			}
@@ -170,6 +173,30 @@ namespace Shogun
 
 						tokens.push_back(
 							Token(isAddress ? TokenType::ADDRESS : TokenType::NUMBER, value, currentLine, col));
+
+						--it;
+						--currentCol;
+					}
+					else if (current == '%')
+					{
+						String value;
+						UInt32 col = currentCol;
+						++it;
+						++currentCol;
+						while (it != line.end())
+						{
+							current = *it;
+							if (current == ';')
+							{
+								break;
+							}
+
+							value += current;
+							++it;
+							++currentCol;
+						}
+
+						tokens.push_back(Token(TokenType::DEBUG_STR, value, currentLine, col));
 
 						--it;
 						--currentCol;

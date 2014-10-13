@@ -525,29 +525,42 @@ namespace Shogun
 
 	String Object::getReadableString() const
 	{
+		String result;
+
 		switch (this->getNativeType())
 		{
 		default:
 			throw ObjectConversionException(FORMAT("Unknown DataType %u", this->getNativeType()));
 
 		case NIL:
-			return "nil";
+			result = "nil";
+			break;
 
 		case BOOLEAN:
 		case NUMBER:
 		case USERDATA:
-			return getString();
+			result = getString();
+			break;
 
 		case ADDRESS:
 		{
 			String op = isOpcode(getAddress()) ? opcodeToString((Opcode)getAddress()) : "?";
 
-			return FORMAT("%u[%s]", getAddress(), op.c_str());
+			result = FORMAT("%u[%s]", getAddress(), op.c_str());
+			break;
 		}
 
 		case STRING:
-			return "\"" + getString() + "\"";
+			result = "\"" + getString() + "\"";
+			break;
 		}
+
+		if (this->debug != 0)
+		{
+			result.append(FORMAT(" %%%s", this->debug->string.c_str()));
+		}
+
+		return result;
 	}
 
 	void Object::writeBinary(std::ostream& stream, bool debug)
@@ -679,6 +692,16 @@ namespace Shogun
 			break;
 		}
 		}
+	}
+
+	void Object::setDebug(Object::DebugInfo* debug)
+	{
+		this->debug = debug;
+	}
+
+	Object::DebugInfo* Object::getDebug()
+	{
+		return this->debug;
 	}
 
 	void Object::cleanup()

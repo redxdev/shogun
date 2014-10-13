@@ -26,8 +26,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public IfNode()
-            : base()
+        public IfNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("if");
@@ -35,6 +35,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             this.Check.Attributes
                 .Check("value");
 

@@ -32,8 +32,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ForLoopNode()
-            : base()
+        public ForLoopNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("loop")
@@ -42,6 +42,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             this.Check.Attributes
                 .Check("value");
 

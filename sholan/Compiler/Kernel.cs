@@ -87,6 +87,12 @@ namespace sholan.Compiler
             }
         }
 
+        public Stack<string> FileStack
+        {
+            get;
+            set;
+        }
+
         public List<Symbol> Exports
         {
             get
@@ -226,6 +232,7 @@ namespace sholan.Compiler
             this.AddImportPath(fileDir);
 
             PushImportMode(mode);
+            this.FileStack.Push(fullPath);
 
             if (mode == ImportMode.Library)
                 this.importedLibraries.Add(file);
@@ -240,6 +247,7 @@ namespace sholan.Compiler
                 throw new CompileException("Encountered exception while including " + fullPath, e);
             }
 
+            this.FileStack.Pop();
             PopImportMode();
 
             this.RemoveImportPath(fileDir);
@@ -330,7 +338,7 @@ namespace sholan.Compiler
                 }
                 else
                 {
-                    FunctionCallNode node = new FunctionCallNode()
+                    FunctionCallNode node = new FunctionCallNode(-1, -1)
                     {
                         Function = "+entry",
                         Arguments = new List<ICompileNode>()

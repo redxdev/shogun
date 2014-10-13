@@ -38,7 +38,7 @@ compileUnit returns [ICompileNode rootNode]
 statements returns [TreeNode node]
 	:
 	{
-		$node = new TreeNode()
+		$node = new TreeNode(-1, -1)
 			{
 				Children = new LinkedList<ICompileNode>()
 			};
@@ -79,10 +79,10 @@ statement returns [ICompileNode node]
 stm_directive returns [ICompileNode node]
 	:
 	(
-		directive_debug_compiler { $node = new PlaceholderNode(); }
+		directive_debug_compiler { $node = new PlaceholderNode($directive_debug_compiler.start.Line, $directive_debug_compiler.start.Column); }
 	|	directive_debug_break { $node = $directive_debug_break.node; }
 	|	directive_compiler_break { $node = $directive_compiler_break.node; }
-	|	directive_build_exports { $node = new BuildExportsNode(); }
+	|	directive_build_exports { $node = new BuildExportsNode($directive_build_exports.start.Line, $directive_build_exports.start.Column); }
 	)
 	;
 
@@ -92,11 +92,11 @@ directive_debug_compiler
 	;
 
 directive_debug_break returns [DebugBreakNode node]
-	:	DIRECTIVE BREAK { $node = new DebugBreakNode(); }
+	:	DIRECTIVE BREAK { $node = new DebugBreakNode(($DIRECTIVE).Line, ($DIRECTIVE).Column); }
 	;
 
 directive_compiler_break returns [CompilerBreakNode node]
-	:	DIRECTIVE COMPILER_BREAK { $node = new CompilerBreakNode(); }
+	:	DIRECTIVE COMPILER_BREAK { $node = new CompilerBreakNode(($DIRECTIVE).Line, ($DIRECTIVE).Column); }
 	;
 
 directive_build_exports
@@ -106,7 +106,7 @@ directive_build_exports
 stm_import_file returns [ImportFileNode node]
 	:	IMPORT STRING
 	{
-		$node = new ImportFileNode()
+		$node = new ImportFileNode(($IMPORT).Line, ($IMPORT).Column)
 			{
 				Filepath = $STRING.text.Substring(1, $STRING.text.Length - 2),
 				Mode = ImportMode.Inherit
@@ -122,7 +122,7 @@ stm_extern_func returns [ExternalFunctionNode node]
 	:
 		EXTERN FUNCTION func=IDENT
 	{
-		$node = new ExternalFunctionNode()
+		$node = new ExternalFunctionNode(($EXTERN).Line, ($EXTERN).Column)
 			{
 				SymbolName = $func.text,
 				Line = $func.line,
@@ -143,7 +143,7 @@ stm_call_func returns [FunctionCallNode node]
 	:
 		IDENT
 	{
-		$node = new FunctionCallNode()
+		$node = new FunctionCallNode(($IDENT).Line, ($IDENT).Column)
 			{
 				Function = $IDENT.text,
 				Arguments = new List<ICompileNode>()
@@ -162,7 +162,7 @@ stm_call_func returns [FunctionCallNode node]
 stm_define_func returns [InternalFunctionNode node]
 	:	FUNCTION name=IDENT
 	{
-		$node = new InternalFunctionNode()
+		$node = new InternalFunctionNode(($FUNCTION).Line, ($FUNCTION).Column)
 			{
 				Function = $name.text,
 				Arguments = new List<string>()
@@ -184,31 +184,31 @@ stm_define_func returns [InternalFunctionNode node]
 stm_define_entry returns [InternalFunctionNode node]
 	:	ENTRY
 	{
-		$node = new InternalFunctionNode()
+		$node = new InternalFunctionNode(($ENTRY).Line, ($ENTRY).Column)
 			{
 				Function = "+entry",
 				Arguments = new List<string>()
 			};
 	}
 		BLOCK_START
-		stms=statements { $stms.node.Children.AddLast(new HaltNode()); $node.Body = $stms.node; }
-		BLOCK_END
+		stms=statements
+		BLOCK_END { $stms.node.Children.AddLast(new HaltNode(($BLOCK_END).Line, ($BLOCK_END).Column)); $node.Body = $stms.node; }
 	;
 
 stm_return returns [ReturnNode node]
-	:	{ $node = new ReturnNode(); }
-		RETURN
+	:	
+		RETURN { $node = new ReturnNode(($RETURN).Line, ($RETURN).Column); }
 	(
 		expression { $node.Value = $expression.node; }
 	)?
 	;
 
 stm_break returns [BreakNode node]
-	:	BREAK { $node = new BreakNode(); }
+	:	BREAK { $node = new BreakNode(($BREAK).Line, ($BREAK).Column); }
 	;
 
 stm_variable_def returns [DefineVariableNode node]
-	:	VAR_DEF IDENT { $node = new DefineVariableNode() { VariableName = $IDENT.text }; }
+	:	VAR_DEF IDENT { $node = new DefineVariableNode(($VAR_DEF).Line, ($VAR_DEF).Column) { VariableName = $IDENT.text }; }
 	(
 		EQUAL
 		expression { $node.Value = $expression.node; }
@@ -216,24 +216,24 @@ stm_variable_def returns [DefineVariableNode node]
 	;
 
 stm_assembly returns [RawAssemblyNode node]
-	:	ASSEMBLY STRING_EXT { $node = new RawAssemblyNode() { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; }
-	|	ASSEMBLY VALUE STRING_EXT { $node = new RawAssemblyNode() { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; $node.Attributes.Has("value"); }
+	:	ASSEMBLY STRING_EXT { $node = new RawAssemblyNode(($ASSEMBLY).Line, ($ASSEMBLY).Column) { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; }
+	|	ASSEMBLY VALUE STRING_EXT { $node = new RawAssemblyNode(($ASSEMBLY).Line, ($ASSEMBLY).Column) { Assembly = $STRING_EXT.text.Substring(2, $STRING_EXT.text.Length - 4) }; $node.Attributes.Has("value"); }
 	;
 
 stm_assembly_var returns [RetrieveVariableNode node]
-	:	ASSEMBLY VAR_DEF IDENT { $node = new RetrieveVariableNode() { VariableName = $IDENT.text }; }
+	:	ASSEMBLY VAR_DEF IDENT { $node = new RetrieveVariableNode(($ASSEMBLY).Line, ($ASSEMBLY).Column) { VariableName = $IDENT.text }; }
 	;
 
 stm_halt returns [HaltNode node]
-	:	HALT { $node = new HaltNode(); }
+	:	HALT { $node = new HaltNode(($HALT).Line, ($HALT).Column); }
 	;
 
 stm_variable_set returns [SetVariableNode node]
-	:	IDENT EQUAL expression { $node = new SetVariableNode() { VariableName = $IDENT.text, Value = $expression.node }; }
+	:	IDENT EQUAL expression { $node = new SetVariableNode(($IDENT).Line, ($IDENT).Column) { VariableName = $IDENT.text, Value = $expression.node }; }
 	;
 
 stm_if returns [IfNode node]
-	:	S_IF GROUP_START expression GROUP_END { $node = new IfNode() { Check = $expression.node }; }
+	:	S_IF GROUP_START expression GROUP_END { $node = new IfNode(($S_IF).Line, ($S_IF).Column) { Check = $expression.node }; }
 	(
 		stm=statement { $node.BranchTrue = $stm.node; }
 	|	BLOCK_START
@@ -254,7 +254,7 @@ stm_if returns [IfNode node]
 stm_for_loop returns [ForLoopNode node]
 	:	S_FOR GROUP_START init=statements SECTION check=expression SECTION incr=statements GROUP_END
 		{
-			$node = new ForLoopNode()
+			$node = new ForLoopNode(($S_FOR).Line, ($S_FOR).Column)
 				{
 					Init = $init.node,
 					Check = $check.node,
@@ -273,7 +273,7 @@ stm_for_loop returns [ForLoopNode node]
 stm_while_loop returns [WhileLoopNode node]
 	:	S_WHILE GROUP_START check=expression GROUP_END
 		{
-			$node = new WhileLoopNode()
+			$node = new WhileLoopNode(($S_WHILE).Line, ($S_WHILE).Column)
 				{
 					Check = $check.node
 				};
@@ -289,7 +289,7 @@ stm_while_loop returns [WhileLoopNode node]
 stm_do_while_loop returns [DoWhileLoopNode node]
 	:	S_DO
 		{
-			$node = new DoWhileLoopNode();
+			$node = new DoWhileLoopNode(($S_DO).Line, ($S_DO).Column);
 		}
 	(
 		stm=statement { $node.Body = $stm.node; }
@@ -306,24 +306,36 @@ expression returns [ICompileNode node]
 	;
 
 orExpr returns [ExpressionNode node]
-	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=andExpr { $node.Values.Add($a.node); }
+	:
+		a=andExpr
+		{
+			$node = new ExpressionNode($a.start.Column, $a.start.Line) { Values = new List<ICompileNode>(), Ops = new List<Opcode>() };
+			$node.Values.Add($a.node);
+		}
 	(
 		OR OR b=andExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.OR); }
 	)*
 	;
 
 andExpr returns [ExpressionNode node]
-	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=equalityExpr { $node.Values.Add($a.node); }
+	:
+		a=equalityExpr
+		{
+			$node = new ExpressionNode($a.start.Column, $a.start.Line) { Values = new List<ICompileNode>(), Ops = new List<Opcode>() };
+			$node.Values.Add($a.node);
+		}
 	(
 		AND AND b=equalityExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.AND); }
 	)*
 	;
 
 equalityExpr returns [ExpressionNode node]
-	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=concatExpr { $node.Values.Add($a.node); }
+	:
+		a=concatExpr
+		{
+			$node = new ExpressionNode($a.start.Column, $a.start.Line) { Values = new List<ICompileNode>(), Ops = new List<Opcode>() };
+			$node.Values.Add($a.node);
+		}
 	(
 		EQUAL EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.EQ); }
 	|	EQUAL EQUAL EQUAL b=concatExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.TEQ); }
@@ -337,16 +349,24 @@ equalityExpr returns [ExpressionNode node]
 	;
 
 concatExpr returns [ExpressionNode node]
-	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=addExpr { $node.Values.Add($a.node); }
+	:
+		a=addExpr
+		{
+			$node = new ExpressionNode($a.start.Column, $a.start.Line) { Values = new List<ICompileNode>(), Ops = new List<Opcode>() };
+			$node.Values.Add($a.node);
+		}
 	(
 		DOT DOT b=addExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.CONCAT); }
 	)*
 	;
 
 addExpr returns [ExpressionNode node]
-	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=mulExpr { $node.Values.Add($a.node); }
+	:
+		a=mulExpr
+		{
+			$node = new ExpressionNode($a.start.Column, $a.start.Line) { Values = new List<ICompileNode>(), Ops = new List<Opcode>() };
+			$node.Values.Add($a.node);
+		}
 	(
 		PLUS b=mulExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.ADD); }
 	|	MINUS b=mulExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.SUB); }
@@ -354,8 +374,12 @@ addExpr returns [ExpressionNode node]
 	;
 
 mulExpr returns [ExpressionNode node]
-	:	{ $node = new ExpressionNode() { Values = new List<ICompileNode>(), Ops = new List<Opcode>() }; }
-		a=notExpr { $node.Values.Add($a.node); }
+	:
+		a=notExpr
+		{
+			$node = new ExpressionNode($a.start.Column, $a.start.Line) { Values = new List<ICompileNode>(), Ops = new List<Opcode>() };
+			$node.Values.Add($a.node);
+		}
 	(
 		MUL b=notExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.MUL); }
 	|	DIV b=notExpr { $node.Values.Add($b.node); $node.Ops.Add(Opcode.DIV); }
@@ -364,18 +388,18 @@ mulExpr returns [ExpressionNode node]
 	;
 
 notExpr returns [ICompileNode node]
-	:	NOT atom { $node = new NotNode() { Value = $atom.node }; }
+	:	NOT atom { $node = new NotNode(($NOT).Line, ($NOT).Column) { Value = $atom.node }; }
 	|	atom { $node = $atom.node; }
 	;
 
 atom returns [ICompileNode node]
 	:
-		NIL { $node = new NilValueNode(); }
-	|	STRING { $node = new ConstantNode() { Value = $STRING.text }; }
-	|	NUMBER { $node = new ConstantNode() { Value = $NUMBER.text }; }
-	|	B_TRUE { $node = new ConstantBoolNode() { Value = true }; }
-	|	B_FALSE { $node = new ConstantBoolNode() { Value = false }; }
-	|	IDENT { $node = new RetrieveVariableNode() { VariableName = $IDENT.text }; }
+		NIL { $node = new NilValueNode(($NIL).Line, ($NIL).Column); }
+	|	STRING { $node = new ConstantNode(($STRING).Line, ($STRING).Column) { Value = $STRING.text }; }
+	|	NUMBER { $node = new ConstantNode(($NUMBER).Line, ($NUMBER).Column) { Value = $NUMBER.text }; }
+	|	B_TRUE { $node = new ConstantBoolNode(($B_TRUE).Line, ($B_TRUE).Column) { Value = true }; }
+	|	B_FALSE { $node = new ConstantBoolNode(($B_FALSE).Line, ($B_FALSE).Column) { Value = false }; }
+	|	IDENT { $node = new RetrieveVariableNode(($IDENT).Line, ($IDENT).Column) { VariableName = $IDENT.text }; }
 	|	GROUP_START expression GROUP_END { $node = $expression.node; }
 	|	statement { $node = $statement.node; $node.UseReturn = true; }
 	;

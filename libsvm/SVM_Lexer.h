@@ -21,6 +21,7 @@ namespace Shogun
 			ADDRESS,
 			STRING,
 			DIRECTIVE,
+			DEBUG_STR,
 			END
 		};
 

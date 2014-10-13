@@ -26,8 +26,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public InternalFunctionNode()
-            : base()
+        public InternalFunctionNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("function")
@@ -36,6 +36,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             if (this.Body != null)
                 this.Body.PrePass(k);
         }
@@ -116,7 +118,7 @@ namespace sholan.Compiler.Nodes
             if (this.Body != null)
                 this.Body.Compile(k);
 
-            new ReturnNode().Compile(k);
+            new ReturnNode(-1, -1).Compile(k);
 
             k.PopScope();
 

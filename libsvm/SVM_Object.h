@@ -107,6 +107,10 @@ namespace Shogun
 
 		void readBinary(std::istream& stream, bool debug);
 
+		void setDebug(DebugInfo* debug);
+
+		DebugInfo* getDebug();
+
 	private:
 		union
 		{

@@ -20,8 +20,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public FunctionCallNode()
-            : base()
+        public FunctionCallNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("function-call")
@@ -30,6 +30,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             foreach (ICompileNode node in this.Arguments)
             {
                 node.Attributes
@@ -128,7 +130,7 @@ namespace sholan.Compiler.Nodes
             uint returnId = k.CurrentScope.RequestLabelId();
 
             k.Emit(Opcode.PLABL, "\"sl_r_" + k.GetScopeName() + "_" + returnId.ToString() + "\"").Comment = "call library function " + this.Function;
-            var rvn = new RetrieveVariableNode()
+            var rvn = new RetrieveVariableNode(-1, -1)
                 {
                     VariableName = this.Function
                 };

@@ -20,8 +20,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ExpressionNode()
-            : base()
+        public ExpressionNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("value")
@@ -30,6 +30,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             foreach (ICompileNode node in this.Values)
             {
                 node.Attributes

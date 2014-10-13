@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ReturnNode()
-            : base()
+        public ReturnNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("return");
@@ -23,6 +23,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             if (this.Value != null)
             {
                 this.Value.Attributes
@@ -49,7 +51,7 @@ namespace sholan.Compiler.Nodes
             else
                 k.Emit(Opcode.PUSHNIL);
 
-            new RetrieveVariableNode() { VariableName = "+return" }.Compile(k);
+            new RetrieveVariableNode(-1, -1) { VariableName = "+return" }.Compile(k);
 
             uint mem = 0;
             Scope current = k.CurrentScope;

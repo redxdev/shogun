@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public NotNode()
-            : base()
+        public NotNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("value");
@@ -23,6 +23,8 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             this.Value.Attributes
                 .Check("value");
 

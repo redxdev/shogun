@@ -26,6 +26,12 @@ namespace sholan.Compiler
             set;
         }
 
+        public string Debug
+        {
+            get;
+            set;
+        }
+
         public string Raw
         {
             get;
@@ -40,17 +46,32 @@ namespace sholan.Compiler
             switch(this.Op)
             {
                 case Opcode.LABEL:
-                    return string.Format("{0}:{1}", this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
+                    return string.Format("{0}:{1}", this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment)); // debug doesn't work on labels
 
                 case Opcode.NEQ:
-                    return string.Format("\tEQ{0}\nNOT", string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
+                    return string.Format("\tEQ{0}{1}\nNOT", string.IsNullOrEmpty(this.Debug) ? "" : (" %" + this.Debug), string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
 
                 case Opcode.NTEQ:
-                    return string.Format("\tTEQ{0}\nNOT", string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
+                    return string.Format("\tTEQ{0}{1}\nNOT", string.IsNullOrEmpty(this.Debug) ? "" : (" %" + this.Debug), string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
 
                 default:
-                    return string.Format("\t{0} {1}{2}", this.Op.ToString(), this.Argument, string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
+                    return string.Format("\t{0} {1}{2}{3}",
+                        this.Op.ToString(), this.Argument,
+                        string.IsNullOrEmpty(this.Debug) ? "" : (" %" + this.Debug),
+                        string.IsNullOrEmpty(this.Comment) ? "" : (" ; " + this.Comment));
             }
+        }
+
+        public Operation SetDebug(int line, int col, DebugType type, string data)
+        {
+            this.Debug = string.Format("{0}.{1}:{2}:{3}", line, col, type, data);
+            return this;
+        }
+
+        public Operation SetComment(string comment)
+        {
+            this.Comment = comment;
+            return this;
         }
     }
 

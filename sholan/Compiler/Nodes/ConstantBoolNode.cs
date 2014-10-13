@@ -14,8 +14,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ConstantBoolNode()
-            : base()
+        public ConstantBoolNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("value")
@@ -24,6 +24,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

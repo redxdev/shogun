@@ -77,16 +77,17 @@ namespace Shogun
 	{
 		dumpStack(std::cerr);
 		
-		std::ofstream heap;
-		heap.open("svm_heap.dump", std::ios::out | std::ios::trunc);
-		if (!heap.is_open()) {
-			std::cerr << "Unable to open svm_heap.dump to output heap." << std::endl;
+		std::ofstream dump;
+		dump.open("shogun.dump", std::ios::out | std::ios::trunc);
+		if (!dump.is_open()) {
+			std::cerr << "Unable to open shogun.dump to output dump." << std::endl;
 			return;
 		}
 
-		dumpHeap(heap);
+		dumpStack(dump);
+		dumpHeap(dump);
 
-		std::cerr << "Heap dumped to svm_heap.dump" << std::endl;
+		std::cerr << "Full dump at shogun.dump" << std::endl;
 	}
 
 	void VirtualMachine::dumpStack(std::ostream& stream)

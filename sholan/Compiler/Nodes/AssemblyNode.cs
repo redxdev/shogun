@@ -14,8 +14,14 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
+        public AssemblyNode(int line, int col)
+            : base(line, col)
+        {
+        }
+
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)
@@ -24,7 +30,7 @@ namespace sholan.Compiler.Nodes
 
         public override void Compile(Kernel k)
         {
-            k.Emit(this.Operation);
+            k.Emit(this.Operation).SetDebug(Line, Column, DebugType.RAW, "");
         }
     }
 }

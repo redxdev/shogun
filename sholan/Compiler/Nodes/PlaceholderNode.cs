@@ -8,8 +8,8 @@ namespace sholan.Compiler.Nodes
 {
     public class PlaceholderNode : AbstractCompileNode
     {
-        public PlaceholderNode()
-            : base()
+        public PlaceholderNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("placeholder");
@@ -17,6 +17,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)

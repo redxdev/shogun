@@ -76,9 +76,13 @@ namespace Shogun
 				switch (opcode)
 				{
 				default:
-					compile.list.push_back(createObject(opcode));
+				{
+					ObjectPtr op = createObject(opcode);
+					op->setDebug(this->debug);
+					compile.list.push_back(op);
 					compile.list.splice(compile.list.end(), arguments);
 					break;
+				}
 
 				case GOTO:
 				case GOTOF:
@@ -90,7 +94,9 @@ namespace Shogun
 					UInt32 label = found->second;
 					compile.list.push_back(createObject((UInt32)Opcode::PUSH));
 					compile.list.push_back(createObject(label + VirtualMachine::getReservedAllocation()));
-					compile.list.push_back(createObject((UInt32)(opcode == Opcode::GOTO ? Opcode::JUMP : Opcode::JUMPF)));
+					ObjectPtr jmp = createObject((UInt32)(opcode == Opcode::GOTO ? Opcode::JUMP : Opcode::JUMPF));
+					jmp->setDebug(this->debug);
+					compile.list.push_back(jmp);
 					break;
 				}
 
@@ -101,7 +107,9 @@ namespace Shogun
 						throw LabelException(FORMAT("Unknown label %s", arguments.begin()->get()->getString().c_str()));
 
 					UInt32 label = found->second;
-					compile.list.push_back(createObject((UInt32)Opcode::PUSH));
+					ObjectPtr psh = createObject((UInt32)Opcode::PUSH);
+					psh->setDebug(this->debug);
+					compile.list.push_back(psh);
 					compile.list.push_back(createObject(label + VirtualMachine::getReservedAllocation()));
 					break;
 				}
@@ -123,10 +131,20 @@ namespace Shogun
 				return arguments;
 			}
 
+			void setDebug(Object::DebugInfo* debug) {
+				this->debug = debug;
+			}
+
+			Object::DebugInfo* getDebug() {
+				return this->debug;
+			}
+
 		private:
 			UInt32 opcode;
 
 			CompileList arguments;
+
+			Object::DebugInfo* debug = 0;
 		};
 
 		class LabelNode : public Node

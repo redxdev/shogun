@@ -14,14 +14,16 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public TreeNode()
-            : base()
+        public TreeNode(int line, int col)
+            : base(line, col)
         {
             this.Children = new LinkedList<ICompileNode>();
         }
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
+
             foreach(ICompileNode node in this.Children)
             {
                 node.PrePass(k);

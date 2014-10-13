@@ -100,6 +100,14 @@ namespace Shogun
 					node->getArguments().push_back(object);
 					break;
 				}
+
+				case DEBUG_STR:
+				{
+					Object::DebugInfo* debug = new Object::DebugInfo();
+					debug->string = token.value;
+					node->setDebug(debug);
+					break;
+				}
 				}
 			}
 		}

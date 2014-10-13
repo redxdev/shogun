@@ -20,8 +20,8 @@ namespace sholan.Compiler.Nodes
             set;
         }
 
-        public ImportFileNode()
-            : base()
+        public ImportFileNode(int line, int col)
+            : base(line, col)
         {
             this.Attributes
                 .Has("import");
@@ -29,6 +29,7 @@ namespace sholan.Compiler.Nodes
 
         public override void PrePass(Kernel k)
         {
+            base.PrePass(k);
         }
 
         public override void PreCompile(Kernel k)
