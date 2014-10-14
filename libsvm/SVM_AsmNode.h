@@ -73,10 +73,12 @@ namespace Shogun
 
 			virtual void compile(CompileInfo& compile) override
 			{
+				Object::DebugInfo* opcodeDebug = new Object::DebugInfo();
+				opcodeDebug->string = "!opcode!";
+
 				if (this->debug == 0)
 				{
-					this->debug = new Object::DebugInfo();
-					this->debug->string = "!opcode!";
+					this->debug = opcodeDebug;
 				}
 
 				switch (opcode)
@@ -98,7 +100,9 @@ namespace Shogun
 						throw LabelException(FORMAT("Unknown label %s", arguments.begin()->get()->getString().c_str()));
 
 					UInt32 label = found->second;
-					compile.list.push_back(createObject((UInt32)Opcode::PUSH));
+					ObjectPtr psh = createObject((UInt32)Opcode::PUSH);
+					psh->setDebug(opcodeDebug);
+					compile.list.push_back(psh);
 					compile.list.push_back(createObject(label + VirtualMachine::getReservedAllocation()));
 					ObjectPtr jmp = createObject((UInt32)(opcode == Opcode::GOTO ? Opcode::JUMP : Opcode::JUMPF));
 					jmp->setDebug(this->debug);
@@ -167,7 +171,11 @@ namespace Shogun
 
 			virtual void compile(CompileInfo& compile) override
 			{
-				compile.list.push_back(createObject((UInt32)Opcode::NOOP));
+				ObjectPtr noop = createObject((UInt32)Opcode::NOOP);
+				Object::DebugInfo* debug = new Object::DebugInfo();
+				debug->string = "!opcode!";
+				noop->setDebug(debug);
+				compile.list.push_back(noop);
 			}
 
 			void setLabel(String label)
