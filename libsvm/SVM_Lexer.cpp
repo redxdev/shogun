@@ -186,7 +186,7 @@ namespace Shogun
 						while (it != line.end())
 						{
 							current = *it;
-							if (current == ';' || current == '\n' || current == '\r')
+							if (current == '\n' || current == '\r')
 							{
 								break;
 							}
