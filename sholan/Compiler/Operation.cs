@@ -43,6 +43,10 @@ namespace sholan.Compiler
             if (this.Raw != null)
                 return this.Raw;
 
+
+            if (!string.IsNullOrEmpty(this.Debug))
+                this.Debug = this.Debug.Replace("\n", "\\n").Replace("\r", "\\r");
+
             switch(this.Op)
             {
                 case Opcode.LABEL:
