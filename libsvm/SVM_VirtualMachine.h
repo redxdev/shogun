@@ -69,6 +69,8 @@ namespace Shogun
 
 		void run();
 
+		void step();
+
 		void dump();
 
 		void dumpStack(std::ostream& stream);

@@ -67,10 +67,15 @@ namespace Shogun
 		this->running = true;
 		while (this->running)
 		{
-			UInt32 opcode = memory.get(getRegPri())->getAddress();
-			executeOperation(this, (Opcode)opcode);
-			this->setRegPri(this->getRegPri() + 1);
+			this->step();
 		}
+	}
+
+	void VirtualMachine::step()
+	{
+		UInt32 opcode = memory.get(getRegPri())->getAddress();
+		executeOperation(this, (Opcode)opcode);
+		this->setRegPri(this->getRegPri() + 1);
 	}
 
 	void VirtualMachine::dump()
