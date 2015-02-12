@@ -35,6 +35,11 @@ namespace sholan.Compiler.Nodes
         {
             Symbol symbol = k.Lookup(this.VariableName);
 
+            if (symbol.SType != Symbol.Type.Variable)
+            {
+                throw new CompileException(String.Format("Symbol {0} is not a variable", this.VariableName));
+            }
+
             if (symbol.SScope == k.CurrentScope)
             {
                 k.EmitPush(symbol.Id.ToString() + "u").Comment = "retrieve variable " + this.VariableName;
